@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/HelloLWLGL/src"/>
+	<classpathentry kind="lib" path="/HelloLWLGL/lib/lwjgl.jar"/>
+	<classpathentry kind="lib" path="/HelloLWLGL/lib/lwjgl_util.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Implementation"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Framework"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
