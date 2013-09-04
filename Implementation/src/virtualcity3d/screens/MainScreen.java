@@ -19,7 +19,7 @@ import static org.lwjgl.opengl.GL11.*;
  * To change this template use File | Settings | File Templates.
  */
 public class MainScreen extends BaseScreen {
-    private static final String MODEL_LOCATION = "bunny.obj";
+    private static final String MODEL_LOCATION = "cube.obj";
     private Model model;
 
     public MainScreen(Program program) {
@@ -31,14 +31,14 @@ public class MainScreen extends BaseScreen {
         //To change body of implemented methods use File | Settings | File Templates.
 
         try {
-            model = OBJLoader.loadModel(new File(MODEL_LOCATION));
+            model = OBJLoader.loadTexturedModel(new File(MODEL_LOCATION));
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
         double scaleFactor = 0.1;
 
-//        model.enableStates();
+        model.enableStates();
 
         glScaled(scaleFactor, scaleFactor, scaleFactor);
 
