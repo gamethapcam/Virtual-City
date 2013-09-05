@@ -1,7 +1,6 @@
 package main;
 
-import framework.classes.Program;
-import program2d.program.Program2D;
+import framework.core.architecture.Program;
 import virtualcity3d.VirtualCity;
 
 public class Main {

@@ -1,7 +1,7 @@
 package program2d.program;
 
-import framework.classes.Program;
-import framework.interfaces.Screen;
+import framework.core.architecture.Program;
+import framework.core.architecture.Screen;
 import program2d.screens.Screen2D;
 
 /**

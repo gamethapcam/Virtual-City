@@ -1,7 +1,9 @@
 package virtualcity3d.screens;
 
-import framework.classes.BaseScreen;
-import framework.classes.Program;
+import framework.core.architecture.BaseScreen;
+import framework.core.architecture.Program;
+import framework.core.camera.Camera2D;
+import framework.core.camera.OrthographicCamera;
 import framework.objloader.Model;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -25,13 +27,25 @@ public class MainScreen extends BaseScreen {
     public void init() {
         //To change body of implemented methods use File | Settings | File Templates.
 
+        OrthographicCamera camera = new Camera2D();
+        camera.initialize();
     }
 
     @Override
     public void onDraw() {
+
+        float step = 0.5f;
+
         // Clear the screen and depth mPixelBuffer
         glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(1f, 0, 0, 1.f);
+        glClearColor(1f, 1f, 0, 1.f);
+        glColor3f(0f, 1f, 1.f);
+
+        glBegin(GL_TRIANGLES);
+            glVertex2d(-step,-step);
+            glVertex2d(step,-step);
+            glVertex2d(0,step);
+        glEnd();
 
 
     }

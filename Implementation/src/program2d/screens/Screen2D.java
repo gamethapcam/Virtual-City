@@ -1,10 +1,10 @@
 package program2d.screens;
 
 import org.lwjgl.BufferUtils;
-import framework.classes.BaseScreen;
-import framework.classes.MouseInputProcessor;
-import framework.classes.Program;
-import framework.interfaces.MouseInputProcessorListener;
+import framework.core.architecture.BaseScreen;
+import framework.core.input.mouse.MouseInputProcessor;
+import framework.core.architecture.Program;
+import framework.core.input.mouse.MouseInputProcessorListener;
 import org.lwjgl.util.Point;
 
 import java.nio.ByteBuffer;

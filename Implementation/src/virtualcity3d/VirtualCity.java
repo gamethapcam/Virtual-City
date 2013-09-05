@@ -1,7 +1,7 @@
 package virtualcity3d;
 
-import framework.classes.Program;
-import framework.interfaces.Screen;
+import framework.core.architecture.Program;
+import framework.core.architecture.Screen;
 import virtualcity3d.screens.MainScreen;
 
 /**
