@@ -63,7 +63,6 @@ public abstract class Program {
      * Here goes rendering and Input Pooling Loop
      */
     public void run() {
-        mScreen.init();
 
         while (!Display.isCloseRequested()) {
 
@@ -91,6 +90,7 @@ public abstract class Program {
 
     public void setScreen(Screen screen) {
         mScreen = screen;
+        mScreen.init();
     }
 
     public final Point getScreenSize() {
