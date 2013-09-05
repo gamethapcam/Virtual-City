@@ -8,4 +8,9 @@ package framework.core.camera;
  * To change this template use File | Settings | File Templates.
  */
 public interface PerspectiveCamera extends Camera{
+
+    public void moveAroundCenterRght(double distance);
+    public void moveAroundCenterLeft(double distance);
+    public void moveAroundCenterUp(double distance);
+    public void moveAroundCenterDown(double distance);
 }

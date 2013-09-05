@@ -10,8 +10,5 @@ package framework.core.camera;
 public interface Camera {
 
     public void initialize();
-    public void panRight(double panDistance);
-    public void panLeft(double panDistance);
-    public void panUp(double panDistance);
-    public void panDown(double panDistance);
+
 }

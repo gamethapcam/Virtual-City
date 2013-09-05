@@ -13,4 +13,8 @@ import javafx.geometry.Rectangle2D;
 public interface OrthographicCamera extends Camera{
 
     public Rectangle2D getVisibleArea();
+    public void panRight(double panDistance);
+    public void panLeft(double panDistance);
+    public void panUp(double panDistance);
+    public void panDown(double panDistance);
 }
