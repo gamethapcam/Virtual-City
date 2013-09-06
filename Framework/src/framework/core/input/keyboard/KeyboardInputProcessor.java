@@ -39,6 +39,12 @@ public class KeyboardInputProcessor extends FrameworkObject {
             case Keyboard.KEY_W:
                 onKeyReleased(KeyboardKeys.W);
                 break;
+            case Keyboard.KEY_Q:
+                onKeyReleased(KeyboardKeys.Q);
+                break;
+            case Keyboard.KEY_E:
+                onKeyReleased(KeyboardKeys.E);
+                break;
         }
     }
 
@@ -55,6 +61,12 @@ public class KeyboardInputProcessor extends FrameworkObject {
                 break;
             case Keyboard.KEY_W:
                 onKeyPressed(KeyboardKeys.W);
+                break;
+            case Keyboard.KEY_Q:
+                onKeyPressed(KeyboardKeys.Q);
+                break;
+            case Keyboard.KEY_E:
+                onKeyPressed(KeyboardKeys.E);
                 break;
         }
     }

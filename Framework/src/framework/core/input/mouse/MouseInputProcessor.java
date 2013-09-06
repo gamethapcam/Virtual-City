@@ -50,9 +50,6 @@ public class MouseInputProcessor extends FrameworkObject  {
     }
 
 
-
-
-
     public static void pollMouseInput() {
         for (int i = 0; i < MOUSE_BUTTONS_COUNT; i++) {
             pollMouseKey(i);

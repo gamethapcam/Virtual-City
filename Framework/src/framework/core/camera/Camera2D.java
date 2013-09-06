@@ -2,6 +2,7 @@ package framework.core.camera;
 
 import javafx.geometry.Rectangle2D;
 import org.lwjgl.opengl.GL11;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,11 +39,23 @@ public class Camera2D implements OrthographicCamera {
     }
 
     @Override
-    public void initialize() {
+    public void initializePerspective() {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
         GL11.glOrtho(mOrthoLeft, mOrthoRight, mOrthoBottom, mOrthoTop, mOrthoNear, mOrthoFar);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
+    }
+
+    @Override
+    public void lookThrough() {
+
+        //call to init perspective
+        initializePerspective();
+    }
+
+    @Override
+    public void resetPosition() {
+        throw new NotImplementedException();
     }
 
     @Override
@@ -51,7 +64,7 @@ public class Camera2D implements OrthographicCamera {
         mOrthoRight += panDistance;
 
         //reset projection
-        initialize();
+        initializePerspective();
     }
 
     @Override
@@ -60,7 +73,7 @@ public class Camera2D implements OrthographicCamera {
         mOrthoRight -= panDistance;
 
         //reset projection
-        initialize();
+        initializePerspective();
     }
 
     @Override
@@ -69,7 +82,7 @@ public class Camera2D implements OrthographicCamera {
         mOrthoBottom += panDistance;
 
         //reset projection
-        initialize();
+        initializePerspective();
     }
 
     @Override
@@ -78,7 +91,7 @@ public class Camera2D implements OrthographicCamera {
         mOrthoBottom -= panDistance;
 
         //reset projection
-        initialize();
+        initializePerspective();
     }
 
     @Override

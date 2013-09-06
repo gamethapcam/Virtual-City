@@ -16,18 +16,18 @@ import org.lwjgl.util.Point;
  */
 public class FirstPersonCamera extends Camera3D {
 
-    public static final double STEP = 0.6;
+    public static final float STEP = 0.6f;
     private boolean mMovingBackwards;
     private boolean mMovingForward;
     private boolean mRotateRight;
     private boolean mRotateLeft;
     private boolean mElevate;
     private boolean mLower;
-    private float mRoationSpeed = 300;
+    private boolean mYawEnabled;
+    private boolean mPitchEnabled;
 
-
-    public FirstPersonCamera() {
-        super();
+    public FirstPersonCamera(int x, int y, int z) {
+        super(x,y,z);
 
         KeyboardInputProcessor.setKeyboardKeyListener(new KeyboardKeyListener() {
             @Override
@@ -44,6 +44,12 @@ public class FirstPersonCamera extends Camera3D {
                         break;
                     case D:
                         mRotateRight = true;
+                        break;
+                    case Q:
+                        mPitchEnabled = true;
+                        break;
+                    case E:
+                        mYawEnabled = true;
                         break;
                 }
             }
@@ -63,6 +69,12 @@ public class FirstPersonCamera extends Camera3D {
                         break;
                     case D:
                         mRotateRight = false;
+                        break;
+                    case Q:
+                        mPitchEnabled = false;
+                        break;
+                    case E:
+                        mYawEnabled = false;
                         break;
                 }
             }
@@ -90,75 +102,39 @@ public class FirstPersonCamera extends Camera3D {
         });
     }
 
-    @Override
-    public void updatePosition() {
+
+    private void listenForMovementChange() {
 
         if (mMovingForward) {
-            moveForward();
+            walkForward(STEP);
         } else if (mMovingBackwards) {
-            moveBackward();
+            walkBackwards(STEP);
         }
 
         if (mElevate) {
-            elevate();
+            elevate(STEP);
         } else if (mLower) {
-            lower();
+            lower(STEP);
         }
 
         if (mRotateRight) {
-            rotateRight();
+            strafeRight(STEP);
         } else if (mRotateLeft) {
-            rotateLeft();
+            strafeLeft(STEP);
         }
 
-        super.updatePosition();
-    }
-
-    private void rotateLeft() {
-        mHorizontalRotationAngle -= 0.01;
-        mLineOfSight.x = ((float) Math.sin(mHorizontalRotationAngle) * mRoationSpeed);
-        mLineOfSight.z = ((float) -Math.cos(mHorizontalRotationAngle) * mRoationSpeed);
-    }
-
-    private void rotateRight() {
-        mHorizontalRotationAngle += 0.01;
-        mLineOfSight.x = ((float) Math.sin(mHorizontalRotationAngle) * mRoationSpeed);
-        mLineOfSight.z = ((float) -Math.cos(mHorizontalRotationAngle) * mRoationSpeed);
-    }
-
-    private void lower() {
-        mEyePosition.y -= STEP;
-    }
-
-    private void elevate() {
-        mEyePosition.y += STEP;
-    }
-
-    private void moveBackward() {
-        mEyePosition.z += STEP;
-    }
-
-    private void moveForward() {
-        mEyePosition.z -= STEP;
+        if (mYawEnabled) {
+            yaw(STEP);
+        } else if (mPitchEnabled) {
+            pitch(STEP);
+        }
     }
 
     @Override
-    public void moveAroundCenterRght(double distance) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void lookThrough() {
+        listenForMovementChange();
+        super.lookThrough();
     }
 
-    @Override
-    public void moveAroundCenterLeft(double distance) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 
-    @Override
-    public void moveAroundCenterUp(double distance) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void moveAroundCenterDown(double distance) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

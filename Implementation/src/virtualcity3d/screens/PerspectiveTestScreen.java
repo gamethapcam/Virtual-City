@@ -27,8 +27,8 @@ public class PerspectiveTestScreen extends BaseScreen {
     public void init() {
         //To change body of implemented methods use File | Settings | File Templates.
 
-        mCamera = new FirstPersonCamera();
-        mCamera.initialize();
+        mCamera = new FirstPersonCamera(0,-1,-7);
+        mCamera.initializePerspective();
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
@@ -41,10 +41,10 @@ public class PerspectiveTestScreen extends BaseScreen {
         glClearColor(0f, 0.3f, 0.f, 1.f);
         glLoadIdentity();
 
-        glColor3f(1f, 1f, 1.f);
+        //translate view according to camera
+        mCamera.lookThrough();
 
-        //update view position
-        mCamera.updatePosition();
+        glColor3f(1f, 0.5f, 1.f);
 
         //render grid mesh
         SimpleShapesRenderer.renderGridMesh(500);

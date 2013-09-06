@@ -29,7 +29,7 @@ public abstract class Program {
         lastFpsTime += delta;
         fps++;
 
-        // update our FPS counter if a second has passed
+        // listenForMovementChange our FPS counter if a second has passed
         if (lastFpsTime >= 1000) {
             Display.setTitle(getClass().getSimpleName() + " (FPS: " + fps + ")");
             lastFpsTime = 0;

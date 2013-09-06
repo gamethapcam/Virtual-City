@@ -9,6 +9,12 @@ package framework.core.camera;
  */
 public interface Camera {
 
-    public void initialize();
+    public void initializePerspective();
+
+    //translates and rotate the matrix so that it looks through the camera
+    //this dose basic what gluLookAt() does
+    void lookThrough();
+
+    void resetPosition();
 
 }

@@ -32,7 +32,7 @@ public class OrthoTestScreen extends BaseScreen {
         //To change body of implemented methods use File | Settings | File Templates.
 
         mCamera = new Camera2D();
-        mCamera.initialize();
+        mCamera.initializePerspective();
 
         KeyboardInputProcessor.setKeyboardKeyListener(new KeyboardKeyListener() {
             @Override

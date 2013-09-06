@@ -15,23 +15,20 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public abstract class Camera3D extends FrameworkObject implements PerspectiveCamera {
 
-
     public static final int NEAR = 1;
     public static final int FAR = 500;
     public static final float FIELD_OF_VIEW = 45.0f;
+    protected Vector3f mPosition = new Vector3f();
+    protected float yaw = 0.0f;
+    protected float pitch = 0.0f;
+    private Vector3f mInitialPosition;
 
-    protected Vector3f mEyePosition = new Vector3f();
-    protected Vector3f mLookAtPosition = new Vector3f();
-    protected Vector3f mUpPosition = new Vector3f();
-    protected Vector3f mLineOfSight = new Vector3f();
-    protected double mHorizontalRotationAngle;
-
-
-    public Camera3D() {
+    public Camera3D(float x, float y, float z) {
+        mInitialPosition = new Vector3f(x, y, z);
     }
 
     @Override
-    public void initialize() {
+    public void initializePerspective() {
 
         //set up projection
         GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -39,20 +36,84 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
         GLU.gluPerspective(FIELD_OF_VIEW, (float) Configs.DISPLAY_WITH / Configs.DISPLAY_HEIGHT, NEAR, FAR);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
-
         //set camera position
-        mEyePosition.set(0,5,50);
-        mLookAtPosition.set(0,0,-1);
-        mUpPosition.set(0,1,0);
+        mPosition.set(mInitialPosition.x, mInitialPosition.y, mInitialPosition.z);
 
-
-        updatePosition();
     }
 
-    public void updatePosition() {
-        GLU.gluLookAt(mEyePosition.x, mEyePosition.y, mEyePosition.z,
-                mLookAtPosition.x + mLineOfSight.x, mLookAtPosition.y, mLookAtPosition.z + mLineOfSight.z,
-                mUpPosition.x, mUpPosition.y, mUpPosition.z);
+    //increment the camera's current yaw rotation
+    @Override
+    public void yaw(float amount) {
+        //increment the yaw by the amount param
+        yaw += amount;
+    }
+
+    //increment the camera's current yaw rotation
+    @Override
+    public void pitch(float amount) {
+        //increment the pitch by the amount param
+        pitch += amount;
+    }
+
+    //moves the camera forward relative to its current rotation (yaw)
+    @Override
+    public void walkForward(float distance) {
+        mPosition.x -= distance * (float) Math.sin(Math.toRadians(yaw));
+        mPosition.z += distance * (float) Math.cos(Math.toRadians(yaw));
+    }
+
+    //moves the camera backward relative to its current rotation (yaw)
+    @Override
+    public void walkBackwards(float distance) {
+        mPosition.x += distance * (float) Math.sin(Math.toRadians(yaw));
+        mPosition.z -= distance * (float) Math.cos(Math.toRadians(yaw));
+    }
+
+    //strafes the camera left relitive to its current rotation (yaw)
+    @Override
+    public void strafeLeft(float distance) {
+        mPosition.x -= distance * (float) Math.sin(Math.toRadians(yaw - 90));
+        mPosition.z += distance * (float) Math.cos(Math.toRadians(yaw - 90));
+    }
+
+    //strafes the camera right relitive to its current rotation (yaw)
+    @Override
+    public void strafeRight(float distance) {
+        mPosition.x -= distance * (float) Math.sin(Math.toRadians(yaw + 90));
+        mPosition.z += distance * (float) Math.cos(Math.toRadians(yaw + 90));
+    }
+
+    @Override
+    public void lower(float distance) {
+
+        mPosition.y += distance;
+
+        //constrain
+        if (mPosition.y > mInitialPosition.y) {
+            mPosition.y = mInitialPosition.y;
+        }
+    }
+
+    @Override
+    public void elevate(float distance) {
+        mPosition.y -= distance;
+    }
+
+    //translates and rotate the matrix so that it looks through the camera
+    //this dose basic what gluLookAt() does
+    @Override
+    public void lookThrough() {
+        //roatate the pitch around the X axis
+        GL11.glRotatef(pitch, 1.0f, 0.0f, 0.0f);
+        //roatate the yaw around the Y axis
+        GL11.glRotatef(yaw, 0.0f, 1.0f, 0.0f);
+        //translate to the position vector's location
+        GL11.glTranslatef(mPosition.x, mPosition.y, mPosition.z);
+    }
+
+    @Override
+    public void resetPosition() {
+        mPosition.set(mInitialPosition.x, mInitialPosition.y, mInitialPosition.z);
     }
 
 }
