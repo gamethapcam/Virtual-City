@@ -2,6 +2,7 @@ package framework.utills;
 
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
+import org.lwjgl.util.vector.Vector2f;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -69,5 +70,18 @@ public class SimpleShapesRenderer {
         s.setDrawStyle(GLU.GLU_FILL);
         s.setNormals(GLU.GLU_SMOOTH);
         s.draw(radius, slices, stacks);
+    }
+
+    public static void renderSimpleFloor(Vector2f leftTopCorner,Vector2f rightBottomCorner) {
+
+        int yPosition = 0;
+        glBegin(GL_QUADS);
+        {
+            glVertex3f(leftTopCorner.x, yPosition, leftTopCorner.y);
+            glVertex3f(rightBottomCorner.x, yPosition, leftTopCorner.y);
+            glVertex3f(rightBottomCorner.x, yPosition, rightBottomCorner.y);
+            glVertex3f(leftTopCorner.x, yPosition, rightBottomCorner.y);
+        }
+        glEnd();
     }
 }

@@ -54,6 +54,13 @@ public class Screen2D extends BaseScreen {
                 drawHill(point.getX(), point.getY());
             }
         }
+
+        @Override
+        public void onMousePositionChange(int dx, int dy, int newX, int newY) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+
     };
 
     public Screen2D(Program program) {

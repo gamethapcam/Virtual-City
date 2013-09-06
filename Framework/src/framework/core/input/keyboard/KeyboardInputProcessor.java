@@ -50,6 +50,9 @@ public class KeyboardInputProcessor extends FrameworkObject {
 
     private static void pollPressedKeys() {
         switch (Keyboard.getEventKey()) {
+            case Keyboard.KEY_ESCAPE:
+                exitProgram();
+                break;
             case Keyboard.KEY_A:
                 onKeyPressed(KeyboardKeys.A);
                 break;
@@ -69,6 +72,10 @@ public class KeyboardInputProcessor extends FrameworkObject {
                 onKeyPressed(KeyboardKeys.E);
                 break;
         }
+    }
+
+    private static void exitProgram() {
+        System.exit(0);
     }
 
     private static void onKeyReleased(KeyboardKeys key) {

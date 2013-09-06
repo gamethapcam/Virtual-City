@@ -16,7 +16,8 @@ import org.lwjgl.util.Point;
  */
 public class FirstPersonCamera extends Camera3D {
 
-    public static final float STEP = 0.6f;
+    public static final float STEP = 0.3f;
+    public static final float ROTATION_SPEED = 3f;
     private boolean mMovingBackwards;
     private boolean mMovingForward;
     private boolean mRotateRight;
@@ -26,8 +27,9 @@ public class FirstPersonCamera extends Camera3D {
     private boolean mYawEnabled;
     private boolean mPitchEnabled;
 
+
     public FirstPersonCamera(int x, int y, int z) {
-        super(x,y,z);
+        super(x, y, z);
 
         KeyboardInputProcessor.setKeyboardKeyListener(new KeyboardKeyListener() {
             @Override
@@ -99,6 +101,21 @@ public class FirstPersonCamera extends Camera3D {
                     mLower = false;
                 }
             }
+
+            @Override
+            public void onMousePositionChange(int dx, int dy, int newX, int newY) {
+
+                if (dx != 0) {
+                    int direction = (dx > 0) ? 1 : -1;
+                    yaw(direction * ROTATION_SPEED);
+                }
+
+                if (dy != 0) {
+                    int direction = (dy < 0) ? 1 : -1;
+                    pitch(direction * ROTATION_SPEED);
+                }
+            }
+
         });
     }
 

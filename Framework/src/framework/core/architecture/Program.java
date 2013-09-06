@@ -2,8 +2,11 @@ package framework.core.architecture;
 
 import framework.configurations.Configs;
 import framework.core.input.InputPoller;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
+import org.lwjgl.input.Cursor;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.Point;
@@ -19,8 +22,21 @@ public abstract class Program {
 
     public Program() {
         createDisplay(Configs.DISPLAY_WITH, Configs.DISPLAY_HEIGHT);
+
+        if (Configs.HIDE_DEFAULT_CURSOR) {
+            hideCursor();
+        }
+
         setScreenSize(new Point(Configs.DISPLAY_WITH, Configs.DISPLAY_HEIGHT));
         setScreen(createScreen());
+    }
+
+    private void hideCursor() {
+        try {
+            Mouse.setNativeCursor(new Cursor(1, 1, 0, 0, 1, BufferUtils.createIntBuffer(1), null));
+        } catch (LWJGLException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     public void calculateFps(long delta) {
@@ -51,7 +67,12 @@ public abstract class Program {
 
     private void createDisplay(int width, int height) {
         try {
-            Display.setDisplayMode(new DisplayMode(width, height));
+            if (Configs.FULL_SCREEN) {
+                Display.setFullscreen(Configs.FULL_SCREEN);
+            } else {
+                Display.setDisplayMode(new DisplayMode(width, height));
+            }
+
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();

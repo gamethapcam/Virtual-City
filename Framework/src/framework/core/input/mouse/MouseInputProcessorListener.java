@@ -12,4 +12,5 @@ import org.lwjgl.util.Point;
 public interface MouseInputProcessorListener {
     void onMouseButtonDown(MouseInputProcessor.MouseButton mouseButton, Point point);
     void onMouseButtonUp(MouseInputProcessor.MouseButton mouseButton, Point point);
+    void onMousePositionChange(int dx, int dy, int newX, int newY);
 }

@@ -5,6 +5,7 @@ import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
 import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector2f;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -38,16 +39,24 @@ public class PerspectiveTestScreen extends BaseScreen {
 
         // clear depth buffer and color
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        glClearColor(0f, 0.3f, 0.f, 1.f);
+        glClearColor(0, 0.5f, 0.5f, 1.f);
         glLoadIdentity();
 
         //translate view according to camera
         mCamera.lookThrough();
 
-        glColor3f(1f, 0.5f, 1.f);
+
+
+        glColor3f(0.7f, 1f,1f);
 
         //render grid mesh
-        SimpleShapesRenderer.renderGridMesh(500);
+        SimpleShapesRenderer.renderGridMesh(90);
+
+
+        glTranslated(0,-1,0);
+
+        glColor3f(0, 0.5f, 0.0f);
+        SimpleShapesRenderer.renderSimpleFloor(new Vector2f(-100,-100),new Vector2f(100,100));
 
         SimpleShapesRenderer.drawSnowMan();
 

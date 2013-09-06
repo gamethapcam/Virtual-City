@@ -3,6 +3,7 @@ package framework.core.input.mouse;
 import framework.core.architecture.FrameworkObject;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
+import org.lwjgl.util.vector.Vector2f;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,10 +12,12 @@ import org.lwjgl.util.Point;
  * Time: 16:11
  * To change this template use File | Settings | File Templates.
  */
-public class MouseInputProcessor extends FrameworkObject  {
+public class MouseInputProcessor extends FrameworkObject {
 
     public static final int MOUSE_BUTTONS_COUNT = 3;
     private static MouseInputProcessorListener mInputProcessorListener;
+    private static Vector2f mMousePosition = new Vector2f(Mouse.getX(), Mouse.getY());
+    private static boolean inMotion;
 
     /**
      * 0 - Left Mouse Button
@@ -53,6 +56,28 @@ public class MouseInputProcessor extends FrameworkObject  {
     public static void pollMouseInput() {
         for (int i = 0; i < MOUSE_BUTTONS_COUNT; i++) {
             pollMouseKey(i);
+            pollMousePositionChange();
+        }
+    }
+
+    private static void pollMousePositionChange() {
+
+        //calculate position change
+        int dx = (int) (Mouse.getX() - mMousePosition.x);
+        int dy = (int) (Mouse.getY() - mMousePosition.y);
+
+        //set new Position
+        mMousePosition.set(Mouse.getX(), Mouse.getY());
+
+
+        //notify listener of position change
+        if (mInputProcessorListener != null) {
+
+            if (dx != 0 || dy != 0) {
+                inMotion = true;
+                mInputProcessorListener.onMousePositionChange(dx, dy, Mouse.getX(), Mouse.getY());
+            }
+
         }
     }
 
@@ -68,12 +93,12 @@ public class MouseInputProcessor extends FrameworkObject  {
             if (!mMouseButtonsPressedArray[mouseKeyNum]) {
 
                 //notify listener of mouse key down
-                if(mInputProcessorListener != null){
+                if (mInputProcessorListener != null) {
                     mInputProcessorListener.onMouseButtonDown(MouseButton.fromValue(mouseKeyNum), mousePosition);
                 }
 
 
-                log("MOUSE " + MouseButton.fromValue(mouseKeyNum).toString() +  " DOWN  X:Y " + mousePosition.getX() + ":" + mousePosition.getY());
+                log("MOUSE " + MouseButton.fromValue(mouseKeyNum).toString() + " DOWN  X:Y " + mousePosition.getX() + ":" + mousePosition.getY());
 
                 //set as pressed
                 mMouseButtonsPressedArray[mouseKeyNum] = true;
@@ -86,11 +111,11 @@ public class MouseInputProcessor extends FrameworkObject  {
             if (mMouseButtonsPressedArray[mouseKeyNum]) {
 
                 //notify listener of mouse key down
-                if(mInputProcessorListener != null){
+                if (mInputProcessorListener != null) {
                     mInputProcessorListener.onMouseButtonUp(MouseButton.fromValue(mouseKeyNum), mousePosition);
                 }
 
-                log("MOUSE " + MouseButton.fromValue(mouseKeyNum).toString() +  " UP  X:Y " + mousePosition.getX() + ":" + mousePosition.getY());
+                log("MOUSE " + MouseButton.fromValue(mouseKeyNum).toString() + " UP  X:Y " + mousePosition.getX() + ":" + mousePosition.getY());
 
                 //set as unpressed
                 mMouseButtonsPressedArray[mouseKeyNum] = false;
