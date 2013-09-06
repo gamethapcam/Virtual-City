@@ -19,9 +19,12 @@ public class FirstPersonCamera extends Camera3D {
     public static final double STEP = 0.6;
     private boolean mMovingBackwards;
     private boolean mMovingForward;
+    private boolean mRotateRight;
+    private boolean mRotateLeft;
     private boolean mElevate;
     private boolean mLower;
-    private double mRotationAngle;
+    private float mRoationSpeed = 300;
+
 
     public FirstPersonCamera() {
         super();
@@ -36,6 +39,12 @@ public class FirstPersonCamera extends Camera3D {
                     case S:
                         mMovingBackwards = true;
                         break;
+                    case A:
+                        mRotateLeft = true;
+                        break;
+                    case D:
+                        mRotateRight = true;
+                        break;
                 }
             }
 
@@ -48,6 +57,12 @@ public class FirstPersonCamera extends Camera3D {
                         break;
                     case S:
                         mMovingBackwards = false;
+                        break;
+                    case A:
+                        mRotateLeft = false;
+                        break;
+                    case D:
+                        mRotateRight = false;
                         break;
                 }
             }
@@ -90,7 +105,25 @@ public class FirstPersonCamera extends Camera3D {
             lower();
         }
 
+        if (mRotateRight) {
+            rotateRight();
+        } else if (mRotateLeft) {
+            rotateLeft();
+        }
+
         super.updatePosition();
+    }
+
+    private void rotateLeft() {
+        mHorizontalRotationAngle -= 0.01;
+        mLineOfSight.x = ((float) Math.sin(mHorizontalRotationAngle) * mRoationSpeed);
+        mLineOfSight.z = ((float) -Math.cos(mHorizontalRotationAngle) * mRoationSpeed);
+    }
+
+    private void rotateRight() {
+        mHorizontalRotationAngle += 0.01;
+        mLineOfSight.x = ((float) Math.sin(mHorizontalRotationAngle) * mRoationSpeed);
+        mLineOfSight.z = ((float) -Math.cos(mHorizontalRotationAngle) * mRoationSpeed);
     }
 
     private void lower() {

@@ -23,6 +23,9 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
     protected Vector3f mEyePosition = new Vector3f();
     protected Vector3f mLookAtPosition = new Vector3f();
     protected Vector3f mUpPosition = new Vector3f();
+    protected Vector3f mLineOfSight = new Vector3f();
+    protected double mHorizontalRotationAngle;
+
 
     public Camera3D() {
     }
@@ -38,16 +41,17 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
 
 
         //set camera position
-        mEyePosition.set(0,10,50);
-        mLookAtPosition.set(0,0,0);
+        mEyePosition.set(0,5,50);
+        mLookAtPosition.set(0,0,-1);
         mUpPosition.set(0,1,0);
+
 
         updatePosition();
     }
 
     public void updatePosition() {
         GLU.gluLookAt(mEyePosition.x, mEyePosition.y, mEyePosition.z,
-                mLookAtPosition.x, mLookAtPosition.y, mLookAtPosition.z,
+                mLookAtPosition.x + mLineOfSight.x, mLookAtPosition.y, mLookAtPosition.z + mLineOfSight.z,
                 mUpPosition.x, mUpPosition.y, mUpPosition.z);
     }
 
