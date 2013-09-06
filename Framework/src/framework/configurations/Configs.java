@@ -9,11 +9,10 @@ package framework.configurations;
  */
 public class Configs {
 
-    public static final int DISPLAY_WITH = 600;
-    public static final int DISPLAY_HEIGHT = 600;
+    public static final int DISPLAY_WITH = 1000;
+    public static final int DISPLAY_HEIGHT = 700;
     public static final int FPS = 60;
     public static final boolean FRAMEWORK_LOGS_ENABLED = true;
     public static final boolean MOUSE_ENABLED = true;
     public static final boolean KEYBOARD_ENABLED = true;
-
 }

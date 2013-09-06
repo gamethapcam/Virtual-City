@@ -3,6 +3,9 @@ package framework.core.camera;
 import framework.core.input.keyboard.KeyboardInputProcessor;
 import framework.core.input.keyboard.KeyboardKeyListener;
 import framework.core.input.keyboard.KeyboardKeys;
+import framework.core.input.mouse.MouseInputProcessor;
+import framework.core.input.mouse.MouseInputProcessorListener;
+import org.lwjgl.util.Point;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,9 +16,12 @@ import framework.core.input.keyboard.KeyboardKeys;
  */
 public class FirstPersonCamera extends Camera3D {
 
-    public static final double STEP = 0.00001;
+    public static final double STEP = 0.6;
     private boolean mMovingBackwards;
     private boolean mMovingForward;
+    private boolean mElevate;
+    private boolean mLower;
+    private double mRotationAngle;
 
     public FirstPersonCamera() {
         super();
@@ -46,6 +52,27 @@ public class FirstPersonCamera extends Camera3D {
                 }
             }
         });
+
+        MouseInputProcessor.setMouseInputProcessorListener(new MouseInputProcessorListener() {
+            @Override
+            public void onMouseButtonDown(MouseInputProcessor.MouseButton mouseButton, Point point) {
+
+                if (mouseButton == MouseInputProcessor.MouseButton.LEFT_BUTTON) {
+                    mElevate = true;
+                } else if (mouseButton == MouseInputProcessor.MouseButton.RIGHT_BUTTON) {
+                    mLower = true;
+                }
+            }
+
+            @Override
+            public void onMouseButtonUp(MouseInputProcessor.MouseButton mouseButton, Point point) {
+                if (mouseButton == MouseInputProcessor.MouseButton.LEFT_BUTTON) {
+                    mElevate = false;
+                } else if (mouseButton == MouseInputProcessor.MouseButton.RIGHT_BUTTON) {
+                    mLower = false;
+                }
+            }
+        });
     }
 
     @Override
@@ -56,20 +83,30 @@ public class FirstPersonCamera extends Camera3D {
         } else if (mMovingBackwards) {
             moveBackward();
         }
-        else {
-            //don't update camera
-            return;
+
+        if (mElevate) {
+            elevate();
+        } else if (mLower) {
+            lower();
         }
 
         super.updatePosition();
     }
 
+    private void lower() {
+        mEyePosition.y -= STEP;
+    }
+
+    private void elevate() {
+        mEyePosition.y += STEP;
+    }
+
     private void moveBackward() {
-        mEyePosition.z -= STEP;
+        mEyePosition.z += STEP;
     }
 
     private void moveForward() {
-        mEyePosition.z += STEP;
+        mEyePosition.z -= STEP;
     }
 
     @Override

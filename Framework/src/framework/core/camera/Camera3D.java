@@ -1,6 +1,7 @@
 package framework.core.camera;
 
 import framework.configurations.Configs;
+import framework.core.architecture.FrameworkObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Vector3f;
@@ -12,11 +13,11 @@ import org.lwjgl.util.vector.Vector3f;
  * Time: 19:05
  * To change this template use File | Settings | File Templates.
  */
-public abstract class Camera3D implements PerspectiveCamera {
+public abstract class Camera3D extends FrameworkObject implements PerspectiveCamera {
 
 
     public static final int NEAR = 1;
-    public static final int FAR = 1000;
+    public static final int FAR = 500;
     public static final float FIELD_OF_VIEW = 45.0f;
 
     protected Vector3f mEyePosition = new Vector3f();
@@ -37,7 +38,7 @@ public abstract class Camera3D implements PerspectiveCamera {
 
 
         //set camera position
-        mEyePosition.set(0,0,50);
+        mEyePosition.set(0,10,50);
         mLookAtPosition.set(0,0,0);
         mUpPosition.set(0,1,0);
 
