@@ -86,17 +86,17 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
     @Override
     public void lower(float distance) {
 
-        mPosition.y += distance;
+        mPosition.y -= distance;
 
         //constrain
-        if (mPosition.y > mInitialPosition.y) {
+        if (mPosition.y < mInitialPosition.y) {
             mPosition.y = mInitialPosition.y;
         }
     }
 
     @Override
     public void elevate(float distance) {
-        mPosition.y -= distance;
+        mPosition.y += distance;
     }
 
     //translates and rotate the matrix so that it looks through the camera
@@ -108,7 +108,7 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
         //roatate the yaw around the Y axis
         GL11.glRotatef(yaw, 0.0f, 1.0f, 0.0f);
         //translate to the position vector's location
-        GL11.glTranslatef(mPosition.x, mPosition.y, mPosition.z);
+        GL11.glTranslatef(mPosition.x, -mPosition.y, mPosition.z);
     }
 
     @Override

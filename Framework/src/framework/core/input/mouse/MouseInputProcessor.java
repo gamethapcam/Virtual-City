@@ -3,7 +3,6 @@ package framework.core.input.mouse;
 import framework.core.architecture.FrameworkObject;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.Point;
-import org.lwjgl.util.vector.Vector2f;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +15,6 @@ public class MouseInputProcessor extends FrameworkObject {
 
     public static final int MOUSE_BUTTONS_COUNT = 3;
     private static MouseInputProcessorListener mInputProcessorListener;
-    private static Vector2f mMousePosition = new Vector2f(Mouse.getX(), Mouse.getY());
     private static boolean inMotion;
 
     /**
@@ -63,12 +61,8 @@ public class MouseInputProcessor extends FrameworkObject {
     private static void pollMousePositionChange() {
 
         //calculate position change
-        int dx = (int) (Mouse.getX() - mMousePosition.x);
-        int dy = (int) (Mouse.getY() - mMousePosition.y);
-
-        //set new Position
-        mMousePosition.set(Mouse.getX(), Mouse.getY());
-
+        int dx = Mouse.getDX();
+        int dy = Mouse.getDY();
 
         //notify listener of position change
         if (mInputProcessorListener != null) {

@@ -1,5 +1,6 @@
 package framework.core.camera;
 
+import framework.core.architecture.Program;
 import framework.core.input.keyboard.KeyboardInputProcessor;
 import framework.core.input.keyboard.KeyboardKeyListener;
 import framework.core.input.keyboard.KeyboardKeys;
@@ -16,7 +17,7 @@ import org.lwjgl.util.Point;
  */
 public class FirstPersonCamera extends Camera3D {
 
-    public static final float STEP = 0.3f;
+    public static final float MOVEMENT_SPEED = 5f;
     public static final float ROTATION_SPEED = 3f;
     private boolean mMovingBackwards;
     private boolean mMovingForward;
@@ -26,6 +27,7 @@ public class FirstPersonCamera extends Camera3D {
     private boolean mLower;
     private boolean mYawEnabled;
     private boolean mPitchEnabled;
+    private long mLastUpdateTime;
 
 
     public FirstPersonCamera(int x, int y, int z) {
@@ -105,6 +107,8 @@ public class FirstPersonCamera extends Camera3D {
             @Override
             public void onMousePositionChange(int dx, int dy, int newX, int newY) {
 
+                log("Mouse position X := " + newX);
+
                 if (dx != 0) {
                     int direction = (dx > 0) ? 1 : -1;
                     yaw(direction * ROTATION_SPEED);
@@ -120,36 +124,43 @@ public class FirstPersonCamera extends Camera3D {
     }
 
 
-    private void listenForMovementChange() {
+    private void listenForMovementChange(long deltaTime) {
+
+        float movementSpeed = MOVEMENT_SPEED * deltaTime / 1000;
+        float rotationSpeed = ROTATION_SPEED * deltaTime / 1000;
 
         if (mMovingForward) {
-            walkForward(STEP);
+            walkForward(movementSpeed);
         } else if (mMovingBackwards) {
-            walkBackwards(STEP);
+            walkBackwards(movementSpeed);
         }
 
         if (mElevate) {
-            elevate(STEP);
+            elevate(movementSpeed);
         } else if (mLower) {
-            lower(STEP);
+            lower(movementSpeed);
         }
 
         if (mRotateRight) {
-            strafeRight(STEP);
+            strafeRight(movementSpeed);
         } else if (mRotateLeft) {
-            strafeLeft(STEP);
+            strafeLeft(movementSpeed);
         }
 
         if (mYawEnabled) {
-            yaw(STEP);
+            yaw(rotationSpeed);
         } else if (mPitchEnabled) {
-            pitch(STEP);
+            pitch(rotationSpeed);
         }
     }
 
     @Override
     public void lookThrough() {
-        listenForMovementChange();
+
+        long deltaTime = Program.getTime() - mLastUpdateTime;
+        mLastUpdateTime = Program.getTime();
+
+        listenForMovementChange(deltaTime);
         super.lookThrough();
     }
 
