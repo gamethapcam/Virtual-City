@@ -16,7 +16,7 @@ public class Configs {
     public static final boolean MOUSE_ENABLED = true;
     public static final boolean KEYBOARD_ENABLED = true;
     public static final boolean FULL_SCREEN = true;
-    public static final boolean HIDE_DEFAULT_CURSOR = false;
+    public static final boolean HIDE_DEFAULT_CURSOR = true;
 
 
 
