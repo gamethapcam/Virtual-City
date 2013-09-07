@@ -6,6 +6,7 @@ import framework.core.input.keyboard.KeyboardKeyListener;
 import framework.core.input.keyboard.KeyboardKeys;
 import framework.core.input.mouse.MouseInputProcessor;
 import framework.core.input.mouse.MouseInputProcessorListener;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.Point;
 
 /**
@@ -107,7 +108,7 @@ public class FirstPersonCamera extends Camera3D {
             @Override
             public void onMousePositionChange(int dx, int dy, int newX, int newY) {
 
-                log("Mouse position X := " + newX);
+                log("Mouse position X := " + newX + " Display Max := " + Display.getWidth());
 
                 if (dx != 0) {
                     int direction = (dx > 0) ? 1 : -1;

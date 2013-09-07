@@ -2,6 +2,7 @@ package framework.core.input.mouse;
 
 import framework.core.architecture.FrameworkObject;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.Point;
 
 /**
@@ -63,6 +64,21 @@ public class MouseInputProcessor extends FrameworkObject {
         //calculate position change
         int dx = Mouse.getDX();
         int dy = Mouse.getDY();
+
+
+        //Make cursor reposition after it goes of the screen
+        int edgeOffset = 5;
+        if (Mouse.getX() > Display.getWidth() - edgeOffset) {
+            Mouse.setCursorPosition(edgeOffset, Mouse.getY());
+        } else if (Mouse.getX() < edgeOffset) {
+            Mouse.setCursorPosition(Display.getWidth()- edgeOffset, Mouse.getY());
+        }
+
+        if (Mouse.getY() > Display.getHeight() - edgeOffset) {
+            Mouse.setCursorPosition(Mouse.getX(), edgeOffset);
+        } else if (Mouse.getY() < edgeOffset) {
+            Mouse.setCursorPosition(Mouse.getX(),Display.getHeight() - edgeOffset);
+        }
 
         //notify listener of position change
         if (mInputProcessorListener != null) {
