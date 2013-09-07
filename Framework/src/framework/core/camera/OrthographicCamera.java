@@ -2,6 +2,7 @@ package framework.core.camera;
 
 
 import javafx.geometry.Rectangle2D;
+import org.lwjgl.util.vector.Vector2f;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,4 +18,5 @@ public interface OrthographicCamera extends Camera{
     public void panLeft(double panDistance);
     public void panUp(double panDistance);
     public void panDown(double panDistance);
+    public Vector2f screenToWorld(Vector2f screenCoordinates);
 }

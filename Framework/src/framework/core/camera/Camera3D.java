@@ -1,10 +1,12 @@
 package framework.core.camera;
 
-import framework.configurations.Configs;
 import framework.core.architecture.FrameworkObject;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Vector3f;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,12 +35,14 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
         //set up projection
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        GLU.gluPerspective(FIELD_OF_VIEW, (float) Configs.DISPLAY_WITH / Configs.DISPLAY_HEIGHT, NEAR, FAR);
+        GLU.gluPerspective(FIELD_OF_VIEW, (float) Display.getWidth() / Display.getHeight(), NEAR, FAR);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
         //set camera position
         mPosition.set(mInitialPosition.x, mInitialPosition.y, mInitialPosition.z);
 
+        //3d perspective needs a depth test
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
     //increment the camera's current yaw rotation
@@ -116,4 +120,23 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
         mPosition.set(mInitialPosition.x, mInitialPosition.y, mInitialPosition.z);
     }
 
+    @Override
+    public void restoreProjection() {
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
+    }
+
+    @Override
+    public void saveProjection() {
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glMatrixMode(GL_MODELVIEW);
+    }
+
+    @Override
+    public void dispose() {
+        //disable depth test
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+    }
 }

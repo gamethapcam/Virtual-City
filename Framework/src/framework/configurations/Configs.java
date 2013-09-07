@@ -18,7 +18,4 @@ public class Configs {
     public static final boolean FULL_SCREEN = true;
     public static final boolean HIDE_DEFAULT_CURSOR = true;
 
-
-
-
 }

@@ -24,7 +24,7 @@ public class MainScreen extends BaseScreen {
     @Override
     public void onDraw() {
         //go to Test screen
-        getProgram().setScreen(new PerspectiveTestScreen(getProgram()));
+        getProgram().setScreen(new HudTestScreen(getProgram()));
     }
 
     @Override
