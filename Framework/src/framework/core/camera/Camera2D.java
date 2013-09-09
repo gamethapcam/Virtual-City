@@ -1,6 +1,8 @@
 package framework.core.camera;
 
-import javafx.geometry.Rectangle2D;
+import framework.utills.geometry.Point;
+import framework.utills.geometry.Rectangle;
+import framework.utills.geometry.Rectangle2D;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -118,7 +120,13 @@ public class Camera2D implements OrthographicCamera {
 
     @Override
     public Rectangle2D getVisibleArea() {
-        return new Rectangle2D(mOrthoLeft, mOrthoBottom, Math.abs(mOrthoRight - mOrthoLeft), Math.abs(mOrthoTop - mOrthoBottom));
+        Point leftBottom = new Point(mOrthoLeft, mOrthoBottom);
+        Point rightTop = new Point(
+                mOrthoLeft + Math.abs(mOrthoRight - mOrthoLeft),
+                mOrthoBottom + Math.abs(mOrthoTop - mOrthoBottom));
+
+        return new Rectangle(leftBottom,
+                rightTop);
     }
 
     @Override

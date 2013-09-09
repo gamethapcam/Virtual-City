@@ -1,7 +1,7 @@
 package framework.core.camera;
 
 
-import javafx.geometry.Rectangle2D;
+import framework.utills.geometry.Rectangle2D;
 import org.lwjgl.util.vector.Vector2f;
 
 /**
