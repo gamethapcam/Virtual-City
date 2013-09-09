@@ -88,32 +88,46 @@ public class HudTestScreen extends BaseScreen {
     }
 
     private void drawInterface() {
-        ;
-        glPushMatrix();
+
+        //get frustum visible area
         Rectangle2D visibleArea = mCamera2D.getVisibleArea();
-        float size = 0.1f;
+
+        double scaleFactor = 0.5;
+
+        glLoadIdentity();
+
+        //translate to top left corner
+        glTranslated(visibleArea.getMinX(), visibleArea.getMaxY(), 0);
+
+        //white color
+        glColor3f(1f, 1f, 1f);
 
 
-//        glTranslated(visibleArea.getMinX(), visibleArea.getMaxY(),0);
-
-
-
-//        glLoadIdentity();
-//        glScaled(0.3,0.3,1);
-        glTranslated(visibleArea.getMinX(), visibleArea.getMaxY(),0);
-
-        glColor3f(1f,1f,1f);
-        glBegin(GL_QUADS);
         {
-            float scale = 1.5f;
-            glVertex2f(-size/ scale, -size/scale);
-            glVertex2f(-size/scale, size/scale);
-            glVertex2f(size/scale, size/scale);
-            glVertex2f(size/scale, -size/scale);
-        }
-        glEnd();
+            glPushMatrix();
 
-        glColor3f(0.3f,0.7f,0.3f);
+            //scale
+            glScaled(scaleFactor, scaleFactor, 1);
+
+            //draw inner square
+            drawSquare();
+
+            glPopMatrix();
+        }
+
+
+        //green color
+        glColor3f(0.3f, 0.7f, 0.3f);
+
+        //draw outer square
+        drawSquare();
+
+
+    }
+
+
+    private void drawSquare() {
+        float size = 0.5f;
         glBegin(GL_QUADS);
         {
             glVertex2f(-size, -size);
@@ -122,10 +136,6 @@ public class HudTestScreen extends BaseScreen {
             glVertex2f(size, -size);
         }
         glEnd();
-
-
-
-        glPopMatrix();
     }
 
     private void drawCursor(Vector2f cursorCoords) {
