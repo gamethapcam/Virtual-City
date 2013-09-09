@@ -5,11 +5,15 @@ import framework.core.architecture.Program;
 import framework.core.camera.Camera2D;
 import framework.core.camera.Camera3D;
 import framework.core.camera.Static3DCamera;
+import framework.utills.geometry.Point;
+import framework.utills.geometry.Rectangle;
 import framework.utills.geometry.Rectangle2D;
 import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Color;
 import org.lwjgl.util.vector.Vector2f;
+import virtualcity3d.models.hud.ColorSquare;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -24,6 +28,7 @@ public class HudTestScreen extends BaseScreen {
 
     Camera3D mCamera3D;
     Camera2D mCamera2D;
+    ColorSquare mColorSquare;
 
     public HudTestScreen(Program program) {
         super(program);
@@ -40,6 +45,16 @@ public class HudTestScreen extends BaseScreen {
         mCamera3D = new Static3DCamera(0, 1, -7);
         //enable 3D projection
         mCamera3D.initializePerspective();
+
+        //get frustum visible area
+        Rectangle2D visibleArea = mCamera2D.getVisibleArea();
+
+        double squareSize = 0.2;
+        Point leftBottom = new Point(visibleArea.getMinX(),visibleArea.getMaxY() - squareSize);
+        Point rightTop = new Point(visibleArea.getMinX() + squareSize,visibleArea.getMaxY());
+
+        Rectangle rec = new Rectangle(leftBottom,rightTop);
+        mColorSquare = new ColorSquare(rec);
 
     }
 
@@ -78,7 +93,6 @@ public class HudTestScreen extends BaseScreen {
         //draw cursor
         drawCursor(mCamera2D.screenToWorld(new Vector2f(Mouse.getX(), Mouse.getY())));
 
-
         //Draw Interface
         drawInterface();
 
@@ -88,43 +102,27 @@ public class HudTestScreen extends BaseScreen {
     }
 
     private void drawInterface() {
+        float scaleFactor = 0.5f;
 
-        //get frustum visible area
-        Rectangle2D visibleArea = mCamera2D.getVisibleArea();
-
-        double scaleFactor = 0.5;
-
-        glLoadIdentity();
-
-        //translate to top left corner
-        glTranslated(visibleArea.getMinX(), visibleArea.getMaxY(), 0);
-
-        //white color
-        glColor3f(1f, 1f, 1f);
-
-
+        glPushMatrix();
         {
-            glPushMatrix();
+            glLoadIdentity();
 
-            //scale
-            glScaled(scaleFactor, scaleFactor, 1);
+            //translate to top left corner
+            glTranslated(mColorSquare.getX(), mColorSquare.getY(), 0);
 
-            //draw inner square
+            glScalef(scaleFactor, scaleFactor, 1f);
+
+            //green color
+            glColor3f(0.3f, 0.7f, 0.3f);
+
+            //draw outer square
             drawSquare();
 
             glPopMatrix();
         }
 
-
-        //green color
-        glColor3f(0.3f, 0.7f, 0.3f);
-
-        //draw outer square
-        drawSquare();
-
-
     }
-
 
     private void drawSquare() {
         float size = 0.5f;
