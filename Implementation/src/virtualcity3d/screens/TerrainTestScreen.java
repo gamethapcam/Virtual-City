@@ -48,10 +48,10 @@ public class TerrainTestScreen extends BaseScreen {
         mCamera3D.initializePerspective();
 
         //create Terrain
-        mTerrain = new SimpleTerrain(25, 15);
+        mTerrain = new SimpleTerrain(25, 15,5,-1);
 
         //create Terrain Renderer
-//        mTerrainRenderer = new SolidTerrainRenderer(Color.GREY);
+//        mTerrainRenderer = new SolidTerrainRenderer(ReadableColor.GREY);
         mTerrainRenderer = new WireTerrainRenderer();
     }
 
@@ -65,22 +65,8 @@ public class TerrainTestScreen extends BaseScreen {
         //translate view according to 3D camera
         mCamera3D.lookThrough();
 
-//        glColor3f(0.7f, 1f, 1f);
-//
-//        //render grid mesh
-//        SimpleShapesRenderer.renderGridMesh(90);
-//
-//        glTranslated(0, -1, 0);
-//
-//        glColor3f(0, 0.5f, 0.0f);
-//        SimpleShapesRenderer.renderSimpleFloor(new Vector2f(-100, -100), new Vector2f(100, 100));
-//
-//        SimpleShapesRenderer.drawSnowMan();
-
-
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
-
 
         //save 3d projection
         mCamera3D.saveProjection();

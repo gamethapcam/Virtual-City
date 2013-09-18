@@ -29,7 +29,7 @@ public class SolidTerrainRenderer implements TerrainRenderer {
         int ZLength = terrain.getZ_Length();
 
         //cache height map
-        int[][] heightMap = terrain.getHeightMap();
+        double[][] heightMap = terrain.getHeightMap();
 
         //use terrain color
         glColor3ub(mSolidColor.getRedByte(), mSolidColor.getGreenByte(), mSolidColor.getBlueByte());
@@ -38,7 +38,7 @@ public class SolidTerrainRenderer implements TerrainRenderer {
         drawHeighMap(XLength, ZLength, heightMap);
     }
 
-    private void drawHeighMap(int XLength, int ZLength, int[][] heightMap) {
+    private void drawHeighMap(int XLength, int ZLength, double[][] heightMap) {
         for (int x = 1; x < XLength; x++) {
             for (int z = 1; z < ZLength; z++) {
 

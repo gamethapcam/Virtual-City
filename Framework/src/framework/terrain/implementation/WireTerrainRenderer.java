@@ -24,7 +24,7 @@ public class WireTerrainRenderer implements TerrainRenderer {
         int ZLength = terrain.getZ_Length();
 
         //cache height map
-        int[][] heightMap = terrain.getHeightMap();
+        double[][] heightMap = terrain.getHeightMap();
 
         //use terrain color
         glColor3ub(ReadableColor.WHITE.getRedByte(), ReadableColor.WHITE.getGreenByte(), ReadableColor.WHITE.getBlueByte());
@@ -33,7 +33,7 @@ public class WireTerrainRenderer implements TerrainRenderer {
         drawHeighMap(XLength, ZLength, heightMap);
     }
 
-    private void drawHeighMap(int XLength, int ZLength, int[][] heightMap) {
+    private void drawHeighMap(int XLength, int ZLength, double[][] heightMap) {
         for (int x = 1; x < XLength; x++) {
             for (int z = 1; z < ZLength; z++) {
 
