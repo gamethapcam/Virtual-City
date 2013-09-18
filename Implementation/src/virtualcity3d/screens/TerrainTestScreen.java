@@ -5,8 +5,8 @@ import framework.core.architecture.Program;
 import framework.core.camera.Camera2D;
 import framework.core.camera.Camera3D;
 import framework.core.camera.FirstPersonCamera;
+import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SimpleTerrain;
-import framework.terrain.implementation.WireTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
 import framework.utills.SimpleShapesRenderer;
@@ -43,16 +43,17 @@ public class TerrainTestScreen extends BaseScreen {
         mCamera2D = new Camera2D();
 
         //create instance of 3D camera and position it
-        mCamera3D = new FirstPersonCamera(0, 10, -7);
+        mCamera3D = new FirstPersonCamera(-130, 150, -70);
         //enable 3D projection
         mCamera3D.initializePerspective();
 
         //create Terrain
-        mTerrain = new SimpleTerrain(25, 15,5,-1);
+        mTerrain = new SimpleTerrain(250, 150,7,-2);
 
         //create Terrain Renderer
 //        mTerrainRenderer = new SolidTerrainRenderer(ReadableColor.GREY);
-        mTerrainRenderer = new WireTerrainRenderer();
+//        mTerrainRenderer = new WireTerrainRenderer();
+        mTerrainRenderer = new HeighColoredTerrainRenderer();
     }
 
     @Override

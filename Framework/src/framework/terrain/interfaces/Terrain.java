@@ -18,4 +18,7 @@ public interface Terrain {
     int getX_Length();
     int getZ_Length();
     double[][] getHeightMap();
+
+    int getMaxHeight();
+    int getMinHeight();
 }

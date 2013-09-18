@@ -83,6 +83,16 @@ public class SimpleTerrain implements Terrain {
     }
 
     @Override
+    public int getMaxHeight() {
+        return mMaxHeight;
+    }
+
+    @Override
+    public int getMinHeight() {
+        return mMinHeight;
+    }
+
+    @Override
     public int getX_Length() {
         return mX_Length;
     }
