@@ -9,6 +9,7 @@ import framework.terrain.implementation.SimpleTerrain;
 import framework.terrain.implementation.WireTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
+import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
@@ -104,16 +105,8 @@ public class TerrainTestScreen extends BaseScreen {
         glColor3f(1f, 0, 0);
         glPushMatrix();
         glTranslated(cursorCoords.x, cursorCoords.y, 0);
-        glBegin(GL11.GL_TRIANGLE_FAN);
-        {
-            glVertex2f(0, 0);
-            int slices = 20;
-            for (int i = 0; i <= slices; i++) {
-                double angle = Math.PI * 2 * i / slices;
-                glVertex2f((float) Math.cos(angle) / 100, (float) Math.sin(angle) / 100);
-            }
-        }
-        glEnd();
+        int slices = 20;
+        SimpleShapesRenderer.drawCircle(slices);
         glPopMatrix();
     }
 

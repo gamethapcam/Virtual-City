@@ -1,5 +1,6 @@
 package framework.utills;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 import org.lwjgl.util.vector.Vector2f;
@@ -81,6 +82,18 @@ public class SimpleShapesRenderer {
             glVertex3f(rightBottomCorner.x, yPosition, leftTopCorner.y);
             glVertex3f(rightBottomCorner.x, yPosition, rightBottomCorner.y);
             glVertex3f(leftTopCorner.x, yPosition, rightBottomCorner.y);
+        }
+        glEnd();
+    }
+
+    public static void drawCircle(int slices) {
+        glBegin(GL11.GL_TRIANGLE_FAN);
+        {
+            glVertex2f(0, 0);
+            for (int i = 0; i <= slices; i++) {
+                double angle = Math.PI * 2 * i / slices;
+                glVertex2f((float) Math.cos(angle) / 100, (float) Math.sin(angle) / 100);
+            }
         }
         glEnd();
     }
