@@ -24,7 +24,7 @@ import static org.lwjgl.opengl.GL11.*;
  * Time: 19:03
  * To change this template use File | Settings | File Templates.
  */
-public class TerrainTestScreen extends BaseScreen {
+public class ModelTestScreen extends BaseScreen {
 
     FirstPersonCamera mCamera3D;
     Camera2D mCamera2D;
@@ -32,7 +32,7 @@ public class TerrainTestScreen extends BaseScreen {
     TerrainRenderer mTerrainRenderer;
 
 
-    public TerrainTestScreen(Program program) {
+    public ModelTestScreen(Program program) {
         super(program);
     }
 
@@ -44,7 +44,10 @@ public class TerrainTestScreen extends BaseScreen {
         mCamera2D = new Camera2D();
 
         //create instance of 3D camera and position it
-        mCamera3D = new FirstPersonCamera(0, 15, -70);
+        mCamera3D = new FirstPersonCamera(0, 15, -30);
+
+        //increase movement speed
+        mCamera3D.setMovementSpeed(10);
 
         //enable 3D projection
         mCamera3D.initializePerspective();
@@ -53,8 +56,6 @@ public class TerrainTestScreen extends BaseScreen {
         mTerrain = new SimpleTerrain(100, 100, 7, -2);
 
         //create Terrain Renderer
-//        mTerrainRenderer = new SolidTerrainRenderer(ReadableColor.GREY);
-//        mTerrainRenderer = new WireTerrainRenderer();
         mTerrainRenderer = new HeighColoredTerrainRenderer();
 
         //cook terrain
@@ -117,9 +118,9 @@ public class TerrainTestScreen extends BaseScreen {
         }
 
         //create place for city
-        int areaRadius = 24;
-        int xPosition = -25;
-        int yPosition = -25;
+        int areaRadius = 30;
+        int xPosition = 0;
+        int yPosition = 0;
 
         Point position = new Point(xPosition, yPosition);
 

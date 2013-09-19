@@ -58,49 +58,13 @@ public class HeighColoredTerrainRenderer implements TerrainRenderer {
 
     void setColorForHeight(double h, int minHeight, int maxHeight) {
 
-//        int brownLevel = 0;
-//        int greenLevel = 2;
-//        int blueLevel = minHeight + 1;
-//        int whiteLevel = (maxHeight - 1);
-//
-//        //rgb
-//        double r = 0, g = 0, b = 0;
-
         //absolute height
         h = Math.abs(h);
 
         double heightDelta = maxHeight - minHeight;
         double percentage = h / heightDelta;
 
-//        if (h <= blueLevel) {
-//            //draw water
-//            r = 0;
-//            g = 0;
-//            b = 1;
-//        } else if (h > blueLevel && h <= brownLevel) {
-//            //draw ground
-//            r = Color.BROWN.getRed();
-//            g = Color.BROWN.getGreen();
-//            b = Color.BROWN.getBlue();
-//        } else if (h > brownLevel && h <= greenLevel) {
-//            //draw grass
-//            r = 0;
-//            g = 1;
-//            b = 0;
-//        } else if (h > greenLevel) {
-//            //draw snow
-//            r = 1;
-//            g = 1;
-//            b = 1;
-//        }
-//
-//        glColor3d(r, g, b);
-
-//	glColor3d((h+3)/10,(h+3)/10,(h+3)/6);
-//        glColor3d(0.2 + h / 20, (5 - h) / 7, 0);
-
-//        glColor3d(percentage + 0.1, percentage / 1.5 + 0.3, percentage /2);
-        glColor3d(percentage - 0.1, percentage / 1.5 + 0.2 , percentage /2);
+        glColor3d(percentage - 0.1, percentage / 1.5 + 0.2, percentage / 2);
     }
 
 

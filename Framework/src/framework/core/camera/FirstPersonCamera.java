@@ -18,7 +18,7 @@ import org.lwjgl.util.Point;
  */
 public class FirstPersonCamera extends Camera3D {
 
-    public static final float MOVEMENT_SPEED = 5f;
+    public static final float DEFAULT_MOVEMENT_SPEED = 5f;
     public static final float ROTATION_SPEED = 2.5f;
     private boolean mMovingBackwards;
     private boolean mMovingForward;
@@ -29,6 +29,7 @@ public class FirstPersonCamera extends Camera3D {
     private boolean mYawEnabled;
     private boolean mPitchEnabled;
     private long mLastUpdateTime;
+    private float mMovementSpeed = DEFAULT_MOVEMENT_SPEED;
 
 
     public FirstPersonCamera(int x, int y, int z) {
@@ -127,7 +128,7 @@ public class FirstPersonCamera extends Camera3D {
 
     private void listenForMovementChange(long deltaTime) {
 
-        float movementSpeed = MOVEMENT_SPEED * deltaTime / 1000;
+        float movementSpeed = mMovementSpeed * deltaTime / 1000;
         float rotationSpeed = ROTATION_SPEED * deltaTime / 1000;
 
         if (mMovingForward) {
@@ -165,5 +166,11 @@ public class FirstPersonCamera extends Camera3D {
         super.lookThrough();
     }
 
+    public float getMovementSpeed() {
+        return mMovementSpeed;
+    }
 
+    public void setMovementSpeed(float movementSpeed) {
+        mMovementSpeed = movementSpeed;
+    }
 }

@@ -27,4 +27,12 @@ public class Rectangle implements Rectangle2D {
     public double getMaxY() {
         return mRightTop.getY();
     }
+
+    public Point getLeftBottom() {
+        return mLeftBottom;
+    }
+
+    public Point getRightTop() {
+        return mRightTop;
+    }
 }

@@ -2,6 +2,7 @@ package framework.terrain.implementation;
 
 import framework.terrain.interfaces.Terrain;
 import framework.utills.RandomUtils;
+import framework.utills.geometry.Rectangle;
 
 /**
  * Created with IntelliJ IDEA.
@@ -90,6 +91,83 @@ public class SimpleTerrain implements Terrain {
     @Override
     public int getMinHeight() {
         return mMinHeight;
+    }
+
+    @Override
+    public void smooth() {
+        // low-pass filter
+
+        double tmp[][] = new double[getX_Length()][getZ_Length()];
+        int x, z;
+        for (x = 1; x < getX_Length() - 1; x++)
+            for (z = 1; z < getZ_Length() - 1; z++) {
+                tmp[x][z] = (mHeightMap[x - 1][z - 1] + mHeightMap[x - 1][z] + mHeightMap[x - 1][z + 1] +
+                        mHeightMap[x][z - 1] + 4 * mHeightMap[x][z] + mHeightMap[x][z + 1] +
+                        mHeightMap[x + 1][z - 1] + mHeightMap[x + 1][z] + mHeightMap[x + 1][z + 1]) / 12;
+            }
+
+        for (x = 1; x < getX_Length() - 1; x++)
+            for (z = 1; z < getZ_Length() - 1; z++)
+                mHeightMap[x][z] = tmp[x][z];
+    }
+
+    @Override
+    public void flattenArea(Rectangle flattedArea, int heightLevel) {
+
+        //first make sure provided area is exist in terrain
+        ensureAreaExist(flattedArea);
+
+        int xOffset = mX_Length / 2;
+        int zOffset = mZ_Length / 2;
+
+        //calculate  X coordinates
+        int initialX = (int) flattedArea.getLeftBottom().getX() + xOffset;
+        double finalX = flattedArea.getRightTop().getX() + xOffset;
+
+        //calculate Z coordinates
+        int initialZ = (int) flattedArea.getLeftBottom().getY() + zOffset;
+        double finalZ = flattedArea.getRightTop().getY() + zOffset;
+
+        //make flatted area
+        for (int x = initialX; x < finalX - 1; x++) {
+            for (int z = initialZ; z < finalZ - 1; z++)
+                mHeightMap[x][z] = heightLevel;
+        }
+    }
+
+    private void ensureAreaExist(Rectangle flattedArea) {
+
+        int xOffset = mX_Length / 2;
+        int zOffset = mZ_Length / 2;
+
+        //calculate rectangle params
+        int minX = -getX_Length() / 2;
+        int minY = -getZ_Length() / 2;
+        int maxX = -minX;
+        int maxY = -minY;
+
+        //offset  to only positive values
+        minX += xOffset;
+        minY += zOffset;
+        maxX += xOffset;
+        maxY += zOffset;
+
+        int width = maxX;
+        int height = maxY;
+        //use java rectangle to represent terrain actual area
+        java.awt.Rectangle outer = new java.awt.Rectangle(minX, minY, width, height);
+
+        //convert inner arguments to java rectangle
+        java.awt.Rectangle inner = new java.awt.Rectangle(
+                (int) flattedArea.getMinX() + xOffset,
+                (int) flattedArea.getMaxY() + zOffset,
+                (int) flattedArea.getRightTop().getX() + xOffset,
+                (int) flattedArea.getLeftBottom().getY() + zOffset);
+
+        //check if in bounds
+        if (!outer.contains(inner)) {
+            throw new IllegalArgumentException("provided rectangle exceeds terrain size");
+        }
     }
 
     @Override

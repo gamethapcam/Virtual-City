@@ -1,5 +1,7 @@
 package framework.terrain.interfaces;
 
+import framework.utills.geometry.Rectangle;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Yan
@@ -16,9 +18,25 @@ public interface Terrain {
     void quake();
 
     int getX_Length();
+
     int getZ_Length();
+
     double[][] getHeightMap();
 
     int getMaxHeight();
+
     int getMinHeight();
+
+    /**
+     * Smoothing a bit created terrain
+     */
+    void smooth();
+
+    /**
+     * Creates a Flat landscape area in terrain
+     *
+     * @param flattedArea area of landscape
+     * @param heightLevel elevation level
+     */
+    void flattenArea(Rectangle flattedArea, int heightLevel);
 }
