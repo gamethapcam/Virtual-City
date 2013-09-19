@@ -4,6 +4,7 @@ import framework.core.architecture.FrameworkObject;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -24,9 +25,13 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
     protected float yaw = 0.0f;
     protected float pitch = 0.0f;
     private Vector3f mInitialPosition;
+    private Vector2f mMovementConstrainY;
 
     public Camera3D(float x, float y, float z) {
         mInitialPosition = new Vector3f(x, y, z);
+
+        //default constrain
+        mMovementConstrainY = new Vector2f(0, 15);
     }
 
     @Override
@@ -93,14 +98,19 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
         mPosition.y -= distance;
 
         //constrain
-        if (mPosition.y < mInitialPosition.y) {
-            mPosition.y = mInitialPosition.y;
+        if (mPosition.y < mMovementConstrainY.x) {
+            mPosition.y = mMovementConstrainY.x;
         }
     }
 
     @Override
     public void elevate(float distance) {
         mPosition.y += distance;
+
+        //constrain
+        if (mPosition.y > mMovementConstrainY.y) {
+            mPosition.y = mMovementConstrainY.y;
+        }
     }
 
     //translates and rotate the matrix so that it looks through the camera
@@ -138,5 +148,12 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
     public void dispose() {
         //disable depth test
         GL11.glDisable(GL11.GL_DEPTH_TEST);
+    }
+
+    /**
+     * @param movementConstrainY x component is the lower coordinate camera can be , y is the highest
+     */
+    public void setMovementConstrainY(Vector2f movementConstrainY) {
+        mMovementConstrainY = movementConstrainY;
     }
 }

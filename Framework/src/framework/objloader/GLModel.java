@@ -47,7 +47,6 @@ public class GLModel {
 
     /**
      * Render mesh into a displaylist and store the listID in the flowercenter object.
-     * @param PR   PetalRing to draw
      */
     public void makeDisplayList() {
         // call the displaylist
@@ -68,8 +67,6 @@ public class GLModel {
 
     /**
      * recalculate normals on the mesh object
-     * @see GL_Mesh.regenerateNormals()
-     * @see GL_Mesh.setSmoothingAngle()
      */
     public void regenerateNormals() {
         if (mesh != null) {
@@ -151,7 +148,6 @@ public class GLModel {
      * the mesh with normals and texture coordinates.  Loops through
      * all triangles in the mesh object (ignores groups and materials).
      *
-     * @param o  mesh object to render
      */
     public void renderTextured(int textureHandle)
     {

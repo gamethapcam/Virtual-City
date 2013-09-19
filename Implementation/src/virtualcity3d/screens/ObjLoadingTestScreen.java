@@ -2,18 +2,15 @@ package virtualcity3d.screens;
 
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
-import framework.core.camera.Camera2D;
 import framework.core.camera.FirstPersonCamera;
 import framework.objloader.GLModel;
 import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SimpleTerrain;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
-import framework.utills.SimpleShapesRenderer;
 import framework.utills.geometry.Point;
 import framework.utills.geometry.Rectangle;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -30,15 +27,14 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ObjLoadingTestScreen extends BaseScreen {
 
-    public static final String CUBE_OBJ_FILE_NAME = "cube.obj";
-    public static final String BUNNY_OBJ_FILE_NAME = "bunny.obj";
+    //    public static final String OBJ_FILE_NAME = "bunny.obj";
+    public static final String OBJ_FILE_NAME = "boy.obj";
+    public static final int RAMP_LEVEL = 3;
+
     FirstPersonCamera mCamera3D;
-    Camera2D mCamera2D;
+    GLModel model;
     Terrain mTerrain;
-    TerrainRenderer mTerrainRenderer;
-    //    private Model model;
-    GLModel cubeObj;
-    GLModel bunnyObj;
+    private TerrainRenderer mTerrainRenderer;
 
 
     public ObjLoadingTestScreen(Program program) {
@@ -49,11 +45,10 @@ public class ObjLoadingTestScreen extends BaseScreen {
     public void init() {
         //To change body of implemented methods use File | Settings | File Templates.
 
-        //create instance of 2d camera
-        mCamera2D = new Camera2D();
-
         //create instance of 3D camera and position it
-        mCamera3D = new FirstPersonCamera(0, 15, -30);
+        mCamera3D = new FirstPersonCamera(0, 8, -15);
+
+        mCamera3D.setMovementConstrainY(new Vector2f(RAMP_LEVEL + 5, 20));
 
         //increase movement speed
         mCamera3D.setMovementSpeed(10);
@@ -74,19 +69,81 @@ public class ObjLoadingTestScreen extends BaseScreen {
         initLight();
 
         // Load the model
-        cubeObj = new GLModel(CUBE_OBJ_FILE_NAME);
-        cubeObj.regenerateNormals();
+        model = new GLModel(OBJ_FILE_NAME);
+        model.regenerateNormals();
 
-        // Load the model
-        bunnyObj = new GLModel(BUNNY_OBJ_FILE_NAME);
-        bunnyObj.regenerateNormals();
     }
+
+    @Override
+    public void onDraw() {
+
+        // clear depth buffer and color
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        glClearColor(0, 0.5f, 0.5f, 1.0f);
+
+
+        //translate view according to 3D camera
+        mCamera3D.lookThrough();
+
+        //draw terrain at it's current state
+        mTerrainRenderer.renderTerrain(mTerrain);
+
+        glPushMatrix();
+        {
+
+            glEnable(GL_TEXTURE_2D);
+
+            //draw 3d models
+            glTranslated(0, 4, 0);
+            float scaleFactor = 0.7f;
+            glScaled(scaleFactor, scaleFactor, scaleFactor);
+            model.render();
+
+            glDisable(GL_TEXTURE_2D);
+        }
+        glPopMatrix();
+
+        //Reset ModelView Matrix
+        glLoadIdentity();
+
+    }
+
+    private void useGoldMaterial() {
+        // use gold material
+        FloatBuffer materialAmbient;
+        FloatBuffer materialDiffuse;
+        FloatBuffer materialSpecular;
+
+        //ambient
+        materialAmbient = BufferUtils.createFloatBuffer(4);
+        materialAmbient.put(0.2f).put(0.2f).put(0.0f).put(0.0f).flip();
+
+        //diffuse
+        materialDiffuse = BufferUtils.createFloatBuffer(4);
+        materialDiffuse.put(0.8f).put(0.6f).put(0.2f).put(0.0f).flip();
+
+        //specular
+        materialSpecular = BufferUtils.createFloatBuffer(4);
+        materialSpecular.put(0.6f).put(0.5f).put(0.4f).put(0.0f).flip();
+
+        glLight(GL_FRONT_AND_BACK, GL_AMBIENT, materialAmbient);
+        glLight(GL_FRONT_AND_BACK, GL_DIFFUSE, materialDiffuse);
+        glLight(GL_FRONT_AND_BACK, GL_SPECULAR, materialSpecular);
+        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 120);
+    }
+
+
+    @Override
+    public void onUpdate(long delta) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 
     private void initLight() {
 
 
         FloatBuffer lightPosition;
-        FloatBuffer whiteLight;
+        FloatBuffer lightColor;
 
         FloatBuffer matSpecular;
         FloatBuffer modelAmbient;
@@ -96,8 +153,8 @@ public class ObjLoadingTestScreen extends BaseScreen {
         lightPosition.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
 
         //light color
-        whiteLight = BufferUtils.createFloatBuffer(4);
-        whiteLight.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+        lightColor = BufferUtils.createFloatBuffer(4);
+        lightColor.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
 
         //specular component
         matSpecular = BufferUtils.createFloatBuffer(4);
@@ -120,10 +177,10 @@ public class ObjLoadingTestScreen extends BaseScreen {
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
 
         // sets specular light to white
-        glLight(GL_LIGHT0, GL_SPECULAR, whiteLight);
+        glLight(GL_LIGHT0, GL_SPECULAR, lightColor);
 
         // sets diffuse light to white
-        glLight(GL_LIGHT0, GL_DIFFUSE, whiteLight);
+        glLight(GL_LIGHT0, GL_DIFFUSE, lightColor);
 
         // global ambient light
         glLightModel(GL_LIGHT_MODEL_AMBIENT, modelAmbient);
@@ -139,91 +196,6 @@ public class ObjLoadingTestScreen extends BaseScreen {
 
         // tell openGL glColor3f effects the ambient and diffuse properties of material
         glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    }
-
-
-    @Override
-    public void onDraw() {
-
-        // clear depth buffer and color
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        glClearColor(0, 0.5f, 0.5f, 1.0f);
-
-
-        //translate view according to 3D camera
-        mCamera3D.lookThrough();
-
-        //draw terrain at it's current state
-        mTerrainRenderer.renderTerrain(mTerrain);
-
-
-        //draw 3d models
-        drawCube();
-        drawBunny();
-
-
-        //save 3d projection
-        mCamera3D.saveProjection();
-
-        //switch to 2d projection
-        mCamera2D.lookThrough();
-
-        //Reset ModelView Matrix
-        glLoadIdentity();
-
-        //draw cursor
-        drawCursor(mCamera2D.screenToWorld(new Vector2f(Mouse.getX(), Mouse.getY())));
-
-
-        //restore 3d Projection
-        mCamera3D.restoreProjection();
-
-    }
-
-    private void drawBunny() {
-        // draw cubeObj at center
-        glPushMatrix();
-        {
-            glTranslated(0, 6, 0);
-
-            // enables opengl to use glColor3f to define material color
-            glDisable(GL_COLOR_MATERIAL);
-            bunnyObj.render();
-            // enables opengl to use glColor3f to define material color
-            glEnable(GL_COLOR_MATERIAL);
-        }
-        glPopMatrix();
-    }
-
-    private void drawCube() {
-        // draw cubeObj at center
-        glPushMatrix();
-        {
-            glTranslated(0, 6, 0);
-
-            // enables opengl to use glColor3f to define material color
-            glDisable(GL_COLOR_MATERIAL);
-            cubeObj.render();
-            // enables opengl to use glColor3f to define material color
-            glEnable(GL_COLOR_MATERIAL);
-        }
-        glPopMatrix();
-    }
-
-
-    private void drawCursor(Vector2f cursorCoords) {
-        glColor3f(1f, 0, 0);
-        glPushMatrix();
-        glTranslated(cursorCoords.x, cursorCoords.y, 0);
-        int slices = 20;
-        SimpleShapesRenderer.drawCircle(slices);
-        glPopMatrix();
-    }
-
-
-    @Override
-    public void onUpdate(long delta) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private void cookTerrain() {
@@ -244,7 +216,7 @@ public class ObjLoadingTestScreen extends BaseScreen {
                 new Point(-areaRadius + position.getX(), -areaRadius + position.getY()),
                 new Point(areaRadius, areaRadius));
 
-        int heightLevel = 3;
+        int heightLevel = RAMP_LEVEL;
 
         //prepare area for houses to be built
         mTerrain.flattenArea(flattedArea, heightLevel);
@@ -255,4 +227,5 @@ public class ObjLoadingTestScreen extends BaseScreen {
         }
 
     }
+
 }
