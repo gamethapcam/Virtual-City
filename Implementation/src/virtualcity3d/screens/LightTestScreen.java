@@ -71,14 +71,12 @@ public class LightTestScreen extends BaseScreen {
 
     private void initLight() {
 
-        //----------- Variables added for Lighting Test -----------//
-        FloatBuffer matSpecular;
+
         FloatBuffer lightPosition;
         FloatBuffer whiteLight;
-        FloatBuffer lModelAmbient;
-        //----------- END: Variables added for Lighting Test -----------//
 
-        //----------- Variables & method calls added for Lighting Test -----------//
+        FloatBuffer matSpecular;
+        FloatBuffer modelAmbient;
 
         //light position
         lightPosition = BufferUtils.createFloatBuffer(4);
@@ -93,8 +91,8 @@ public class LightTestScreen extends BaseScreen {
         matSpecular.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
 
         //ambient component
-        lModelAmbient = BufferUtils.createFloatBuffer(4);
-        lModelAmbient.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
+        modelAmbient = BufferUtils.createFloatBuffer(4);
+        modelAmbient.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
 
         //make a smooth shading
         glShadeModel(GL_SMOOTH);
@@ -115,7 +113,7 @@ public class LightTestScreen extends BaseScreen {
         glLight(GL_LIGHT0, GL_DIFFUSE, whiteLight);
 
         // global ambient light
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, lModelAmbient);
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, modelAmbient);
 
         // enables lighting
         glEnable(GL_LIGHTING);
@@ -126,7 +124,7 @@ public class LightTestScreen extends BaseScreen {
         // enables opengl to use glColor3f to define material color
         glEnable(GL_COLOR_MATERIAL);
 
-        // tell opengl glColor3f effects the ambient and diffuse properties of material
+        // tell openGL glColor3f effects the ambient and diffuse properties of material
         glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     }
 
@@ -146,9 +144,7 @@ public class LightTestScreen extends BaseScreen {
         mTerrainRenderer.renderTerrain(mTerrain);
 
 
-        glColor3f(0.7f, 0.1f, 0.9f);
-        glTranslated(0, 10, 0);
-        GLUT.glutSolidSphere(5, 50, 50);
+        drawModel();
 
 
         //save 3d projection
@@ -167,6 +163,17 @@ public class LightTestScreen extends BaseScreen {
         //restore 3d Projection
         mCamera3D.restoreProjection();
 
+    }
+
+    private void drawModel() {
+
+        glPushMatrix();
+        {
+            glColor3f(0.7f, 0.1f, 0.9f);
+            glTranslated(0, 10, 0);
+            GLUT.glutSolidSphere(5, 50, 50);
+        }
+        glPopMatrix();
     }
 
 
