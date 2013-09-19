@@ -8,12 +8,16 @@ import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SimpleTerrain;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
+import framework.utills.GLUT;
 import framework.utills.SimpleShapesRenderer;
 import framework.utills.geometry.Point;
 import framework.utills.geometry.Rectangle;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
+
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -24,7 +28,7 @@ import static org.lwjgl.opengl.GL11.*;
  * Time: 19:03
  * To change this template use File | Settings | File Templates.
  */
-public class ModelTestScreen extends BaseScreen {
+public class LightTestScreen extends BaseScreen {
 
     FirstPersonCamera mCamera3D;
     Camera2D mCamera2D;
@@ -32,7 +36,7 @@ public class ModelTestScreen extends BaseScreen {
     TerrainRenderer mTerrainRenderer;
 
 
-    public ModelTestScreen(Program program) {
+    public LightTestScreen(Program program) {
         super(program);
     }
 
@@ -60,6 +64,70 @@ public class ModelTestScreen extends BaseScreen {
 
         //cook terrain
         cookTerrain();
+
+        //now we need to initialize light properties
+        initLight();
+    }
+
+    private void initLight() {
+
+        //----------- Variables added for Lighting Test -----------//
+        FloatBuffer matSpecular;
+        FloatBuffer lightPosition;
+        FloatBuffer whiteLight;
+        FloatBuffer lModelAmbient;
+        //----------- END: Variables added for Lighting Test -----------//
+
+        //----------- Variables & method calls added for Lighting Test -----------//
+
+        //light position
+        lightPosition = BufferUtils.createFloatBuffer(4);
+        lightPosition.put(1.0f).put(1.0f).put(1.0f).put(0.0f).flip();
+
+        //light color
+        whiteLight = BufferUtils.createFloatBuffer(4);
+        whiteLight.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+
+        //specular component
+        matSpecular = BufferUtils.createFloatBuffer(4);
+        matSpecular.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+
+        //ambient component
+        lModelAmbient = BufferUtils.createFloatBuffer(4);
+        lModelAmbient.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
+
+        //make a smooth shading
+        glShadeModel(GL_SMOOTH);
+
+        // sets specular material color
+        glMaterial(GL_FRONT, GL_SPECULAR, matSpecular);
+
+        // set material shininess
+        glMaterialf(GL_FRONT, GL_SHININESS, 50.0f);
+
+        // sets light position
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+
+        // sets specular light to white
+        glLight(GL_LIGHT0, GL_SPECULAR, whiteLight);
+
+        // sets diffuse light to white
+        glLight(GL_LIGHT0, GL_DIFFUSE, whiteLight);
+
+        // global ambient light
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, lModelAmbient);
+
+        // enables lighting
+        glEnable(GL_LIGHTING);
+
+        // enables light0
+        glEnable(GL_LIGHT0);
+
+        // enables opengl to use glColor3f to define material color
+        glEnable(GL_COLOR_MATERIAL);
+
+        // tell opengl glColor3f effects the ambient and diffuse properties of material
+        glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     }
 
 
@@ -70,11 +138,18 @@ public class ModelTestScreen extends BaseScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         glClearColor(0, 0.5f, 0.5f, 1.0f);
 
+
         //translate view according to 3D camera
         mCamera3D.lookThrough();
 
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
+
+
+        glColor3f(0.7f, 0.1f, 0.9f);
+        glTranslated(0, 10, 0);
+        GLUT.glutSolidSphere(5, 50, 50);
+
 
         //save 3d projection
         mCamera3D.saveProjection();
@@ -134,7 +209,7 @@ public class ModelTestScreen extends BaseScreen {
         mTerrain.flattenArea(flattedArea, heightLevel);
 
         //smooth
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             mTerrain.smooth();
         }
 
