@@ -1,5 +1,6 @@
 package virtualcity3d.screens;
 
+import framework.configurations.Configs;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
@@ -14,6 +15,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
+import java.io.File;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -27,7 +29,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ObjLoadingTestScreen extends BaseScreen {
 
-    public static final String OBJ_FILE_NAME = "house.obj";
+    public static final String OBJ_FILE_NAME = Configs.RESOURCES_PATH +  "house.obj";
     public static final int RAMP_LEVEL = 3;
 
     FirstPersonCamera mCamera3D;
