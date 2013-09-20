@@ -171,7 +171,7 @@ public class ObjLoadingTestScreen extends BaseScreen {
         glMaterial(GL_FRONT, GL_SPECULAR, matSpecular);
 
         // set material shininess
-        glMaterialf(GL_FRONT, GL_SHININESS, 50.0f);
+        glMaterialf(GL_FRONT, GL_SHININESS, 10.0f);
 
         // sets light position
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);

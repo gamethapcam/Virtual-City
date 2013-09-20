@@ -32,6 +32,10 @@ public class HeighColoredTerrainRenderer implements TerrainRenderer {
     }
 
     private void drawHeightMap(int XLength, int ZLength, double[][] heightMap, int maxHeight, int minHeight) {
+
+        //set default normal UP
+        glNormal3f(0, 1f, 0);
+
         for (int x = 1; x < XLength; x++) {
             for (int z = 1; z < ZLength; z++) {
 
