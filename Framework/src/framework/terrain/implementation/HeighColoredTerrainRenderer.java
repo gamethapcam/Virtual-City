@@ -2,8 +2,13 @@ package framework.terrain.implementation;
 
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glMaterial;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,8 +19,24 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class HeighColoredTerrainRenderer implements TerrainRenderer {
 
-    private static int WATER_LEVEL_HEIGHT = -1;
 
+    private void defineMaterial() {
+
+        //those parameters for gold material
+        FloatBuffer ambient = floatBuffer(0.24725f, 0.1995f, 0.0745f, 1.0f);
+        FloatBuffer diffuse = floatBuffer(0.75164f, 0.60648f, 0.22648f, 1.0f);
+        FloatBuffer specular = floatBuffer(0.628281f, 0.555802f, 0.366065f, 1.0f);
+//        float shininess = 51.2f;
+
+        float shininess = 11.2f;
+
+        //use material
+        glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT_AND_DIFFUSE, ambient);
+        glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE, diffuse);
+        glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR, specular);
+        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+
+    }
 
     @Override
     public void renderTerrain(Terrain terrain) {
@@ -26,6 +47,9 @@ public class HeighColoredTerrainRenderer implements TerrainRenderer {
 
         //cache height map
         double[][] heightMap = terrain.getHeightMap();
+
+        //define material
+        defineMaterial();
 
         //go over height map and draw
         drawHeightMap(XLength, ZLength, heightMap, terrain.getMaxHeight(), terrain.getMinHeight());
@@ -68,8 +92,16 @@ public class HeighColoredTerrainRenderer implements TerrainRenderer {
         double heightDelta = maxHeight - minHeight;
         double percentage = h / heightDelta;
 
-        glColor3d(percentage - 0.1, percentage / 1.5 + 0.2, percentage / 2);
+        glColor3d(percentage - 0.6, percentage / 4 + 0.2, percentage / 5);
     }
 
+
+    public FloatBuffer floatBuffer(float a, float b, float c, float d) {
+        float[] data = new float[]{a, b, c, d};
+        FloatBuffer fb = BufferUtils.createFloatBuffer(data.length);
+        fb.put(data);
+        fb.flip();
+        return fb;
+    }
 
 }

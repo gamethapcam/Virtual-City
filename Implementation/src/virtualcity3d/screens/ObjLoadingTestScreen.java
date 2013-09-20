@@ -27,8 +27,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ObjLoadingTestScreen extends BaseScreen {
 
-    //    public static final String OBJ_FILE_NAME = "bunny.obj";
-    public static final String OBJ_FILE_NAME = "boy.obj";
+    public static final String OBJ_FILE_NAME = "house.obj";
     public static final int RAMP_LEVEL = 3;
 
     FirstPersonCamera mCamera3D;
@@ -97,7 +96,13 @@ public class ObjLoadingTestScreen extends BaseScreen {
             glTranslated(0, 4, 0);
             float scaleFactor = 0.7f;
             glScaled(scaleFactor, scaleFactor, scaleFactor);
-            model.render();
+
+            //we don't want current color to affect our object
+            glDisable(GL_COLOR_MATERIAL);
+            {
+                model.render();
+            }
+            glEnable(GL_COLOR_MATERIAL);
 
             glDisable(GL_TEXTURE_2D);
         }
@@ -106,30 +111,6 @@ public class ObjLoadingTestScreen extends BaseScreen {
         //Reset ModelView Matrix
         glLoadIdentity();
 
-    }
-
-    private void useGoldMaterial() {
-        // use gold material
-        FloatBuffer materialAmbient;
-        FloatBuffer materialDiffuse;
-        FloatBuffer materialSpecular;
-
-        //ambient
-        materialAmbient = BufferUtils.createFloatBuffer(4);
-        materialAmbient.put(0.2f).put(0.2f).put(0.0f).put(0.0f).flip();
-
-        //diffuse
-        materialDiffuse = BufferUtils.createFloatBuffer(4);
-        materialDiffuse.put(0.8f).put(0.6f).put(0.2f).put(0.0f).flip();
-
-        //specular
-        materialSpecular = BufferUtils.createFloatBuffer(4);
-        materialSpecular.put(0.6f).put(0.5f).put(0.4f).put(0.0f).flip();
-
-        glLight(GL_FRONT_AND_BACK, GL_AMBIENT, materialAmbient);
-        glLight(GL_FRONT_AND_BACK, GL_DIFFUSE, materialDiffuse);
-        glLight(GL_FRONT_AND_BACK, GL_SPECULAR, materialSpecular);
-        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 120);
     }
 
 
@@ -195,7 +176,7 @@ public class ObjLoadingTestScreen extends BaseScreen {
         glEnable(GL_COLOR_MATERIAL);
 
         // tell openGL glColor3f effects the ambient and diffuse properties of material
-        glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     }
 
     private void cookTerrain() {
