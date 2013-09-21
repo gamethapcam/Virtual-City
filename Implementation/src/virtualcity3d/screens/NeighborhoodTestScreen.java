@@ -30,7 +30,7 @@ import static org.lwjgl.opengl.GL11.glTranslated;
 public class NeighborhoodTestScreen extends BaseScreen {
 
 
-    public static final int RAMP_LEVEL = 3;
+    public static final int RAMP_LEVEL = 7;
     public static final int COTTAGES_COUNT_IN_ROW = 5;
     public static final int COTTAGE_ROWS_COUNT = 5;
 
@@ -80,13 +80,13 @@ public class NeighborhoodTestScreen extends BaseScreen {
         int terrainSizeZ = AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGE_ROWS_COUNT;
 
         //create Terrain
-        mTerrain = new SimpleTerrain(terrainSizeX, terrainSizeZ, 7, -2);
+        mTerrain = new SimpleTerrain(terrainSizeX * 2, terrainSizeZ * 2, RAMP_LEVEL + 5, -2);
 
         //create Terrain Renderer
         mTerrainRenderer = new HeighColoredTerrainRenderer();
 
         //cook terrain
-//        cookTerrain();
+        cookTerrain();
     }
 
     @Override
@@ -109,10 +109,10 @@ public class NeighborhoodTestScreen extends BaseScreen {
         //we don't want current color to affect our object
         glDisable(GL_COLOR_MATERIAL);
         {
-            //begin from bottom left of terrain
-            int initialX = -mTerrain.getX_Length() / 2 - AssetManager.DEFAULT_COTTAGE_SIZE / 2;
-            int initialZ = -mTerrain.getZ_Length() / 2 + AssetManager.DEFAULT_COTTAGE_SIZE / 2;
-            int initialY = 1;
+
+            int initialX = -(AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGE_ROWS_COUNT) / 2 + AssetManager.DEFAULT_COTTAGE_SIZE/2 ;
+            int initialZ = -(AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGES_COUNT_IN_ROW) / 2 - AssetManager.DEFAULT_COTTAGE_SIZE/2 ;
+            int initialY = RAMP_LEVEL + 1;
 
             //translate to initial position
             glTranslated(initialX, initialY, initialZ);
@@ -159,7 +159,7 @@ public class NeighborhoodTestScreen extends BaseScreen {
 
         //light color
         lightColor = BufferUtils.createFloatBuffer(4);
-        lightColor.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
+        lightColor.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
 
         //specular component
         matSpecular = BufferUtils.createFloatBuffer(4);
@@ -167,7 +167,7 @@ public class NeighborhoodTestScreen extends BaseScreen {
 
         //ambient component
         modelAmbient = BufferUtils.createFloatBuffer(4);
-        modelAmbient.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
+        modelAmbient.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
 
         //make a smooth shading
         glShadeModel(GL_SMOOTH);
@@ -176,7 +176,7 @@ public class NeighborhoodTestScreen extends BaseScreen {
         glMaterial(GL_FRONT, GL_SPECULAR, matSpecular);
 
         // set material shininess
-        glMaterialf(GL_FRONT, GL_SHININESS, 10.0f);
+        glMaterialf(GL_FRONT, GL_SHININESS, 100.0f);
 
         // sets light position
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
@@ -210,10 +210,15 @@ public class NeighborhoodTestScreen extends BaseScreen {
             mTerrain.quake();
         }
 
+
+        int areaSize = AssetManager.DEFAULT_COTTAGE_SIZE *
+                ((COTTAGES_COUNT_IN_ROW > COTTAGE_ROWS_COUNT) ? COTTAGES_COUNT_IN_ROW : COTTAGE_ROWS_COUNT);
+
         //create place for city
-        int areaRadius = 5;
+        int areaRadius = areaSize / 2 + AssetManager.DEFAULT_COTTAGE_SIZE;
         int xPosition = 0;
         int yPosition = 0;
+
 
         Point position = new Point(xPosition, yPosition);
 
