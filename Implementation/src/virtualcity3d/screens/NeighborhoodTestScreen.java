@@ -1,6 +1,5 @@
 package virtualcity3d.screens;
 
-import framework.configurations.Configs;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
@@ -14,10 +13,12 @@ import framework.utills.geometry.Rectangle;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
+import resources.AssetManager;
 
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glTranslated;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,52 +27,66 @@ import static org.lwjgl.opengl.GL11.*;
  * Time: 19:03
  * To change this template use File | Settings | File Templates.
  */
-public class ObjLoadingTestScreen extends BaseScreen {
+public class NeighborhoodTestScreen extends BaseScreen {
 
-    public static final String OBJ_FILE_NAME = Configs.RESOURCES_PATH +  "house.obj";
+
     public static final int RAMP_LEVEL = 3;
+    public static final int COTTAGES_COUNT_IN_ROW = 5;
+    public static final int COTTAGE_ROWS_COUNT = 5;
 
     FirstPersonCamera mCamera3D;
-    GLModel model;
+    GLModel mCottageModel;
     Terrain mTerrain;
     private TerrainRenderer mTerrainRenderer;
 
 
-    public ObjLoadingTestScreen(Program program) {
+    public NeighborhoodTestScreen(Program program) {
         super(program);
     }
 
     @Override
     public void init() {
-        //To change body of implemented methods use File | Settings | File Templates.
 
+        initCameras();
+
+        //now we need to initialize light properties
+        initLight();
+
+        // Load the models
+        mCottageModel = AssetManager.loadCottageModel();
+//        mCottageModel = AssetManager.loadCubeModel();
+
+        //create terrain
+        createTerrain();
+
+    }
+
+    private void initCameras() {
         //create instance of 3D camera and position it
         mCamera3D = new FirstPersonCamera(0, 8, -15);
 
         mCamera3D.setMovementConstrainY(new Vector2f(-50, 100));
 
         //increase movement speed
-        mCamera3D.setMovementSpeed(10);
+        mCamera3D.setMovementSpeed(20);
 
         //enable 3D projection
         mCamera3D.initializePerspective();
+    }
+
+    private void createTerrain() {
+
+        int terrainSizeX = AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGES_COUNT_IN_ROW;
+        int terrainSizeZ = AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGE_ROWS_COUNT;
 
         //create Terrain
-        mTerrain = new SimpleTerrain(10, 10, 7, -2);
+        mTerrain = new SimpleTerrain(terrainSizeX, terrainSizeZ, 7, -2);
 
         //create Terrain Renderer
         mTerrainRenderer = new HeighColoredTerrainRenderer();
 
         //cook terrain
 //        cookTerrain();
-
-        //now we need to initialize light properties
-        initLight();
-
-        // Load the mCottageModel
-        model = new GLModel(OBJ_FILE_NAME);
-        model.regenerateNormals();
-
     }
 
     @Override
@@ -90,30 +105,35 @@ public class ObjLoadingTestScreen extends BaseScreen {
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
 
-        glPushMatrix();
+
+        //we don't want current color to affect our object
+        glDisable(GL_COLOR_MATERIAL);
         {
+            //begin from bottom left of terrain
+            int initialX = -mTerrain.getX_Length() / 2 - AssetManager.DEFAULT_COTTAGE_SIZE / 2;
+            int initialZ = -mTerrain.getZ_Length() / 2 + AssetManager.DEFAULT_COTTAGE_SIZE / 2;
+            int initialY = 1;
 
-            glEnable(GL_TEXTURE_2D);
+            //translate to initial position
+            glTranslated(initialX, initialY, initialZ);
 
-            //draw 3d models
-            glTranslated(0, 1, 0);
-            float scaleFactor = 0.7f;
-            glScaled(scaleFactor, scaleFactor, scaleFactor);
-            glColor3f(1f,1f,1f);
+            for (int rowIndex = 0; rowIndex < COTTAGE_ROWS_COUNT; rowIndex++) {
 
-            //we don't want current color to affect our object
-            glDisable(GL_COLOR_MATERIAL);
-            {
-                model.render();
+                //translate to next row
+                glTranslated(0, 0, (rowIndex > 0) ? AssetManager.DEFAULT_COTTAGE_SIZE : 0);
+                glPushMatrix();
+                {
+                    for (int currentCottageIndexInRow = 0; currentCottageIndexInRow < COTTAGES_COUNT_IN_ROW; currentCottageIndexInRow++) {
+                        //translate and render
+                        glTranslated(AssetManager.DEFAULT_COTTAGE_SIZE, 0, 0);
+                        mCottageModel.render();
+                    }
+                }
+                glPopMatrix();
             }
-            glEnable(GL_COLOR_MATERIAL);
 
-            glDisable(GL_TEXTURE_2D);
         }
-        glPopMatrix();
-
-        //Reset ModelView Matrix
-        glLoadIdentity();
+        glEnable(GL_COLOR_MATERIAL);
 
     }
 

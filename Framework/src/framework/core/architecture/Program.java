@@ -87,8 +87,10 @@ public abstract class Program {
 
         while (!Display.isCloseRequested()) {
 
-            //wait to sync to 60 fps
-            Display.sync(Configs.FPS);
+            if (Configs.SYNC_FPS) {
+                //wait to sync to 60 fps
+                Display.sync(Configs.FPS);
+            }
 
             calculateFps(getTime() - lastLoopTime);
 
