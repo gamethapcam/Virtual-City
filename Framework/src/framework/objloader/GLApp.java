@@ -1,5 +1,6 @@
 package framework.objloader;
 
+import framework.configurations.Configs;
 import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
@@ -45,7 +46,9 @@ public class GLApp {
             pathAndFile[0] = matcher.group();
             pathAndFile[1] = filename.substring(matcher.end());
         } else {
-            pathAndFile[0] = "";
+//            pathAndFile[0] = "";
+//            pathAndFile[1] = filename;
+            pathAndFile[0] = Configs.RESOURCES_PATH;
             pathAndFile[1] = filename;
         }
         return pathAndFile;

@@ -15,7 +15,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
-import java.io.File;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -98,6 +97,7 @@ public class ObjLoadingTestScreen extends BaseScreen {
             glTranslated(0, 4, 0);
             float scaleFactor = 0.7f;
             glScaled(scaleFactor, scaleFactor, scaleFactor);
+            glColor3f(1f,1f,1f);
 
             //we don't want current color to affect our object
             glDisable(GL_COLOR_MATERIAL);
