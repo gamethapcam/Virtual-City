@@ -48,7 +48,7 @@ public class ObjLoadingTestScreen extends BaseScreen {
         //create instance of 3D camera and position it
         mCamera3D = new FirstPersonCamera(0, 8, -15);
 
-        mCamera3D.setMovementConstrainY(new Vector2f(RAMP_LEVEL + 5, 20));
+        mCamera3D.setMovementConstrainY(new Vector2f(-50, 100));
 
         //increase movement speed
         mCamera3D.setMovementSpeed(10);
@@ -57,13 +57,13 @@ public class ObjLoadingTestScreen extends BaseScreen {
         mCamera3D.initializePerspective();
 
         //create Terrain
-        mTerrain = new SimpleTerrain(100, 100, 7, -2);
+        mTerrain = new SimpleTerrain(10, 10, 7, -2);
 
         //create Terrain Renderer
         mTerrainRenderer = new HeighColoredTerrainRenderer();
 
         //cook terrain
-        cookTerrain();
+//        cookTerrain();
 
         //now we need to initialize light properties
         initLight();
@@ -81,6 +81,8 @@ public class ObjLoadingTestScreen extends BaseScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         glClearColor(0, 0.5f, 0.5f, 1.0f);
 
+        glLoadIdentity();
+
 
         //translate view according to 3D camera
         mCamera3D.lookThrough();
@@ -94,7 +96,7 @@ public class ObjLoadingTestScreen extends BaseScreen {
             glEnable(GL_TEXTURE_2D);
 
             //draw 3d models
-            glTranslated(0, 4, 0);
+            glTranslated(0, 1, 0);
             float scaleFactor = 0.7f;
             glScaled(scaleFactor, scaleFactor, scaleFactor);
             glColor3f(1f,1f,1f);
@@ -189,7 +191,7 @@ public class ObjLoadingTestScreen extends BaseScreen {
         }
 
         //create place for city
-        int areaRadius = 30;
+        int areaRadius = 5;
         int xPosition = 0;
         int yPosition = 0;
 
