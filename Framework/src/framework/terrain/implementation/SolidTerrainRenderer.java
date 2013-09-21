@@ -15,10 +15,15 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class SolidTerrainRenderer implements TerrainRenderer {
 
+    private final float mAlpha;
     ReadableColor mSolidColor;
 
-    public SolidTerrainRenderer(ReadableColor solidColor) {
+    public SolidTerrainRenderer(ReadableColor solidColor,float alpha) {
         mSolidColor = solidColor;
+        mAlpha = alpha;
+
+        if(mAlpha < 0 || mAlpha > 1.0)
+            throw new IllegalArgumentException("Alpha must be between 0 and 1.0");
     }
 
     @Override
@@ -31,11 +36,21 @@ public class SolidTerrainRenderer implements TerrainRenderer {
         //cache height map
         double[][] heightMap = terrain.getHeightMap();
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        byte alpha = (byte)(255 * mAlpha);
+
         //use terrain color
-        glColor3ub(mSolidColor.getRedByte(), mSolidColor.getGreenByte(), mSolidColor.getBlueByte());
+        glColor4ub(mSolidColor.getRedByte(), mSolidColor.getGreenByte(), mSolidColor.getBlueByte(), alpha);
+
+
+
 
         //go over height map
         drawHeighMap(XLength, ZLength, heightMap);
+
+        glDisable(GL_BLEND);
     }
 
     private void drawHeighMap(int XLength, int ZLength, double[][] heightMap) {

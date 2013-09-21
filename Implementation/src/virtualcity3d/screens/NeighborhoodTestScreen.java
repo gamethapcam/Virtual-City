@@ -6,12 +6,14 @@ import framework.core.camera.FirstPersonCamera;
 import framework.objloader.GLModel;
 import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SimpleTerrain;
+import framework.terrain.implementation.SolidTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
 import framework.utills.geometry.Point;
 import framework.utills.geometry.Rectangle;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector2f;
 import resources.AssetManager;
 
@@ -37,7 +39,9 @@ public class NeighborhoodTestScreen extends BaseScreen {
     FirstPersonCamera mCamera3D;
     GLModel mCottageModel;
     Terrain mTerrain;
+    Terrain mWater;
     private TerrainRenderer mTerrainRenderer;
+    private TerrainRenderer mWaterRenderer;
 
 
     public NeighborhoodTestScreen(Program program) {
@@ -58,6 +62,11 @@ public class NeighborhoodTestScreen extends BaseScreen {
 
         //create terrain
         createTerrain();
+
+        //init water
+        int waterOffset = 100;
+        mWater = new SimpleTerrain(mTerrain.getX_Length()+ waterOffset,mTerrain.getZ_Length()+ waterOffset,0,0);
+        mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE,0.6f);
 
     }
 
@@ -80,7 +89,7 @@ public class NeighborhoodTestScreen extends BaseScreen {
         int terrainSizeZ = AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGE_ROWS_COUNT;
 
         //create Terrain
-        mTerrain = new SimpleTerrain(terrainSizeX * 2, terrainSizeZ * 2, RAMP_LEVEL + 5, -2);
+        mTerrain = new SimpleTerrain(terrainSizeX * 2, terrainSizeZ * 2, RAMP_LEVEL + 5, -5);
 
         //create Terrain Renderer
         mTerrainRenderer = new HeighColoredTerrainRenderer();
@@ -105,6 +114,7 @@ public class NeighborhoodTestScreen extends BaseScreen {
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
 
+        mWaterRenderer.renderTerrain(mWater);
 
         //we don't want current color to affect our object
         glDisable(GL_COLOR_MATERIAL);
@@ -206,7 +216,7 @@ public class NeighborhoodTestScreen extends BaseScreen {
     private void cookTerrain() {
 
         //cook
-        for (int i = 0; i < 50000; i++) {
+        for (int i = 0; i < 90000; i++) {
             mTerrain.quake();
         }
 
@@ -215,7 +225,7 @@ public class NeighborhoodTestScreen extends BaseScreen {
                 ((COTTAGES_COUNT_IN_ROW > COTTAGE_ROWS_COUNT) ? COTTAGES_COUNT_IN_ROW : COTTAGE_ROWS_COUNT);
 
         //create place for city
-        int areaRadius = areaSize / 2 + AssetManager.DEFAULT_COTTAGE_SIZE;
+        int areaRadius = areaSize / 2 + AssetManager.DEFAULT_COTTAGE_SIZE + 5;
         int xPosition = 0;
         int yPosition = 0;
 
