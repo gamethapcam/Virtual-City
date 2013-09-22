@@ -116,8 +116,11 @@ public class NeighborhoodTestScreen extends BaseScreen {
 
         mWaterRenderer.renderTerrain(mWater);
 
+        glColor3f(1f,1f,1f);
+
         //we don't want current color to affect our object
-        glDisable(GL_COLOR_MATERIAL);
+//        glDisable(GL_COLOR_MATERIAL);
+        glEnable(GL_TEXTURE_2D);
         {
 
             int initialX = -(AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGE_ROWS_COUNT) / 2 + AssetManager.DEFAULT_COTTAGE_SIZE/2 ;
@@ -143,7 +146,8 @@ public class NeighborhoodTestScreen extends BaseScreen {
             }
 
         }
-        glEnable(GL_COLOR_MATERIAL);
+//        glEnable(GL_COLOR_MATERIAL);
+        glDisable(GL_TEXTURE_2D);
 
     }
 
