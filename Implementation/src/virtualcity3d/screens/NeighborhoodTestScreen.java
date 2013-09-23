@@ -243,7 +243,7 @@ public class NeighborhoodTestScreen extends BaseScreen {
         int heightLevel = RAMP_LEVEL;
 
         //prepare area for houses to be built
-        mTerrain.flattenArea(flattedArea, heightLevel);
+//        mTerrain.flattenArea(flattedArea, heightLevel);
 
         //smooth
         for (int i = 0; i < 10; i++) {
