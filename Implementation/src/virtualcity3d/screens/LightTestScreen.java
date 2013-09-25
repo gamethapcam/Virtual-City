@@ -4,8 +4,8 @@ import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.Camera2D;
 import framework.core.camera.FirstPersonCamera;
-import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SimpleTerrain;
+import framework.terrain.implementation.TexturedTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
 import framework.utills.GLUT;
@@ -50,17 +50,20 @@ public class LightTestScreen extends BaseScreen {
         //create instance of 3D camera and position it
         mCamera3D = new FirstPersonCamera(0, 15, -30);
 
-        //increase movement speed
-        mCamera3D.setMovementSpeed(10);
-
         //enable 3D projection
         mCamera3D.initializePerspective();
+
+        mCamera3D.setMovementConstrainY(new Vector2f(-50, 100));
+
+        //increase movement speed
+        mCamera3D.setMovementSpeed(10);
 
         //create Terrain
         mTerrain = new SimpleTerrain(100, 100, 7, -2);
 
         //create Terrain Renderer
-        mTerrainRenderer = new HeighColoredTerrainRenderer();
+//        mTerrainRenderer = new HeighColoredTerrainRenderer();
+        mTerrainRenderer = new TexturedTerrainRenderer();
 
         //cook terrain
         cookTerrain();
