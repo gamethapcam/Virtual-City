@@ -13,6 +13,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import virtualcity3d.models.models3d.HouseModelMedium;
 import virtualcity3d.models.models3d.HouseModelSmall;
 
 import java.nio.FloatBuffer;
@@ -29,7 +30,8 @@ import static org.lwjgl.opengl.GL11.*;
 public class ObjLoadingTestScreen extends BaseScreen {
 
     FirstPersonCamera mCamera3D;
-    Model3D model;
+    Model3D smallHouseModel;
+    Model3D mediumHouseModel;
     Terrain mTerrain;
     private TerrainRenderer mTerrainRenderer;
 
@@ -62,10 +64,14 @@ public class ObjLoadingTestScreen extends BaseScreen {
         initLight();
 
         // Load the mCottageModel
-        model = new HouseModelSmall();
+        smallHouseModel = new HouseModelSmall();
+        mediumHouseModel = new HouseModelMedium();
 
-        //set position of model
-        model.setPosition(new Vector3f(0, 0, 0));
+        //set position of smallHouseModel
+        smallHouseModel.setPosition(new Vector3f(0, 0, 0));
+
+        //set position of smallHouseModel
+        mediumHouseModel.setPosition(new Vector3f((float) (mediumHouseModel.getX_Size() * 2), 0, 0));
 
     }
 
@@ -87,16 +93,27 @@ public class ObjLoadingTestScreen extends BaseScreen {
         //draw x y z axes
         SimpleShapesRenderer.renderAxes(50);
 
-        glPushMatrix();
+        mediumHouseModel.enableRenderGLStates();
         {
-            glTranslated(model.getPosition().getX(), model.getPosition().getY(), model.getPosition().getZ());
-            model.enableRenderGLStates();
+
+            //draw medium house
+            glPushMatrix();
             {
-                model.render();
+                glTranslated(mediumHouseModel.getPosition().getX(), mediumHouseModel.getPosition().getY(), mediumHouseModel.getPosition().getZ());
+                mediumHouseModel.render();
             }
-            model.disableRenderGLStates();
+            glPopMatrix();
+
+            //draw small house
+            glPushMatrix();
+            {
+                glTranslated(smallHouseModel.getPosition().getX(), smallHouseModel.getPosition().getY(), smallHouseModel.getPosition().getZ());
+                smallHouseModel.render();
+            }
+            glPopMatrix();
         }
-        glPopMatrix();
+        mediumHouseModel.disableRenderGLStates();
+
 
     }
 
