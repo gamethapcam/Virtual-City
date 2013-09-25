@@ -36,6 +36,7 @@ public class TexturedTerrainRenderer implements TerrainRenderer {
         mTexture = loadTexture();
     }
 
+
     private Texture loadTexture() {
         Texture texture = null;
         try {
@@ -91,8 +92,9 @@ public class TexturedTerrainRenderer implements TerrainRenderer {
 
         //store color
         glPushAttrib(GL_CURRENT_BIT);
-        Color.gray.bind();
         mTexture.bind();
+        Color.gray.bind();
+
 
         //allocate vertex data holders
         VertexDataHolder vertexDataHolder_1 = new VertexDataHolder();

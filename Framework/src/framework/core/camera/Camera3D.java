@@ -156,4 +156,8 @@ public abstract class Camera3D extends FrameworkObject implements PerspectiveCam
     public void setMovementConstrainY(Vector2f movementConstrainY) {
         mMovementConstrainY = movementConstrainY;
     }
+
+    public Vector3f getPosition() {
+        return mPosition;
+    }
 }

@@ -199,15 +199,15 @@ public class GLModel {
             for (; i < m.triangles.length && (t = m.triangles[i]) != null && currMtl == t.materialID; i++) {
                 GL11.glTexCoord2f(t.uvw1.x, t.uvw1.y);
                 GL11.glNormal3f(t.norm1.x, t.norm1.y, t.norm1.z);
-                GL11.glVertex3f((float) t.p1.pos.x, (float) t.p1.pos.y, (float) t.p1.pos.z);
+                GL11.glVertex3f(t.p1.pos.x,  t.p1.pos.y,  t.p1.pos.z);
 
                 GL11.glTexCoord2f(t.uvw2.x, t.uvw2.y);
                 GL11.glNormal3f(t.norm2.x, t.norm2.y, t.norm2.z);
-                GL11.glVertex3f((float) t.p2.pos.x, (float) t.p2.pos.y, (float) t.p2.pos.z);
+                GL11.glVertex3f( t.p2.pos.x,  t.p2.pos.y,  t.p2.pos.z);
 
                 GL11.glTexCoord2f(t.uvw3.x, t.uvw3.y);
                 GL11.glNormal3f(t.norm3.x, t.norm3.y, t.norm3.z);
-                GL11.glVertex3f((float) t.p3.pos.x, (float) t.p3.pos.y, (float) t.p3.pos.z);
+                GL11.glVertex3f( t.p3.pos.x,  t.p3.pos.y,  t.p3.pos.z);
             }
             GL11.glEnd();
         }
@@ -225,14 +225,14 @@ public class GLModel {
                 t.norm2.normalize();
                 t.norm3.normalize();
 
-                GL11.glVertex3f((float) t.p1.pos.x, (float) t.p1.pos.y, (float) t.p1.pos.z);
-                GL11.glVertex3f((float) (t.p1.pos.x + t.norm1.x), (float) (t.p1.pos.y + t.norm1.y), (float) (t.p1.pos.z + t.norm1.z));
+                GL11.glVertex3f( t.p1.pos.x,  t.p1.pos.y,  t.p1.pos.z);
+                GL11.glVertex3f( (t.p1.pos.x + t.norm1.x),  (t.p1.pos.y + t.norm1.y),  (t.p1.pos.z + t.norm1.z));
 
-                GL11.glVertex3f((float) t.p2.pos.x, (float) t.p2.pos.y, (float) t.p2.pos.z);
-                GL11.glVertex3f((float) (t.p2.pos.x + t.norm2.x), (float) (t.p2.pos.y + t.norm2.y), (float) (t.p2.pos.z + t.norm2.z));
+                GL11.glVertex3f( t.p2.pos.x,  t.p2.pos.y,  t.p2.pos.z);
+                GL11.glVertex3f( (t.p2.pos.x + t.norm2.x),  (t.p2.pos.y + t.norm2.y),  (t.p2.pos.z + t.norm2.z));
 
-                GL11.glVertex3f((float) t.p3.pos.x, (float) t.p3.pos.y, (float) t.p3.pos.z);
-                GL11.glVertex3f((float) (t.p3.pos.x + t.norm3.x), (float) (t.p3.pos.y + t.norm3.y), (float) (t.p3.pos.z + t.norm3.z));
+                GL11.glVertex3f( t.p3.pos.x,  t.p3.pos.y,  t.p3.pos.z);
+                GL11.glVertex3f( (t.p3.pos.x + t.norm3.x),  (t.p3.pos.y + t.norm3.y),  (t.p3.pos.z + t.norm3.z));
             }
         }
         GL11.glEnd();

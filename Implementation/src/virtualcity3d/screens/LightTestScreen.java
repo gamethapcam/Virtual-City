@@ -20,6 +20,7 @@ import org.lwjgl.util.vector.Vector2f;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glLight;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,6 +35,7 @@ public class LightTestScreen extends BaseScreen {
     Camera2D mCamera2D;
     Terrain mTerrain;
     TerrainRenderer mTerrainRenderer;
+
 
 
     public LightTestScreen(Program program) {
@@ -192,7 +194,7 @@ public class LightTestScreen extends BaseScreen {
 
     @Override
     public void onUpdate(long delta) {
-        //To change body of implemented methods use File | Settings | File Templates.
+       //TODO update game logic
     }
 
     private void cookTerrain() {
