@@ -13,6 +13,11 @@ public class Rectangle implements Rectangle2D {
     private Point mLeftBottom;
     private Point mRightTop;
 
+    /**
+     * Creates a 2D Rectanle
+     * @param mLeftBottom  left bottom point
+     * @param mRightTop right top point
+     */
     public Rectangle(Point mLeftBottom, Point mRightTop) {
         this.mLeftBottom = mLeftBottom;
         this.mRightTop = mRightTop;

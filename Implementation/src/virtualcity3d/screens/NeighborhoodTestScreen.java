@@ -240,13 +240,11 @@ public class NeighborhoodTestScreen extends BaseScreen {
                 new Point(-areaRadius + position.getX(), -areaRadius + position.getY()),
                 new Point(areaRadius, areaRadius));
 
-        int heightLevel = RAMP_LEVEL;
 
-        //prepare area for houses to be built
-        mTerrain.flattenArea(flattedArea, heightLevel);
+        mTerrain.flattenArea(flattedArea);
 
         //smooth
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             mTerrain.smooth();
         }
 

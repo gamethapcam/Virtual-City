@@ -135,6 +135,45 @@ public class SimpleTerrain implements Terrain {
         }
     }
 
+    @Override
+    public void flattenArea(Rectangle flattedArea) {
+        //first make sure provided area is exist in terrain
+        ensureAreaExist(flattedArea);
+
+        int xOffset = mX_Length / 2;
+        int zOffset = mZ_Length / 2;
+
+        //calculate  X coordinates
+        int initialX = (int) flattedArea.getLeftBottom().getX() + xOffset;
+        double finalX = flattedArea.getRightTop().getX() + xOffset;
+
+        //calculate Z coordinates
+        int initialZ = (int) flattedArea.getLeftBottom().getY() + zOffset;
+        double finalZ = flattedArea.getRightTop().getY() + zOffset;
+
+        double lowestPoint = mHeightMap[initialX][initialZ];
+        double highestPoint = mHeightMap[initialX][initialZ];
+
+        //find highest and lowest points
+        for (int x = initialX; x < finalX - 1; x++) {
+            for (int z = initialZ; z < finalZ - 1; z++) {
+                lowestPoint = (mHeightMap[x][z] < lowestPoint) ? mHeightMap[x][z] : lowestPoint;
+                highestPoint = (mHeightMap[x][z] > highestPoint) ? mHeightMap[x][z] : highestPoint;
+            }
+        }
+
+
+        //find average of heights
+        double averageHeight = lowestPoint + Math.abs(highestPoint - lowestPoint) / 2;
+
+        //make flatted area
+        for (int x = initialX; x < finalX - 1; x++) {
+            for (int z = initialZ; z < finalZ - 1; z++) {
+                mHeightMap[x][z] = averageHeight;
+            }
+        }
+    }
+
     private void ensureAreaExist(Rectangle flattedArea) {
 
         int xOffset = mX_Length / 2;

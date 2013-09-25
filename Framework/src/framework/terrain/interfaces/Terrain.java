@@ -39,4 +39,11 @@ public interface Terrain {
      * @param heightLevel elevation level
      */
     void flattenArea(Rectangle flattedArea, int heightLevel);
+
+    /**
+     * Creates a Flat landscape area in terrain
+     *
+     * @param flattedArea area of landscape
+     */
+    void flattenArea(Rectangle flattedArea);
 }
