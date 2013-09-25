@@ -20,7 +20,6 @@ import resources.AssetManager;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glTranslated;
 
 /**
  * Created with IntelliJ IDEA.
@@ -57,8 +56,8 @@ public class NeighborhoodTestScreen extends BaseScreen {
         initLight();
 
         // Load the models
-        mCottageModel = AssetManager.loadCottageModel();
-//        mCottageModel = AssetManager.loadCubeModel();
+//        mCottageModel = AssetManager.loadCottageModelLow();
+        mCottageModel = AssetManager.loadCottageModelMid();
 
         //create terrain
         createTerrain();
@@ -137,7 +136,8 @@ public class NeighborhoodTestScreen extends BaseScreen {
                 glTranslated(0, 0, (rowIndex > 0) ? AssetManager.DEFAULT_COTTAGE_SIZE : 0);
                 glPushMatrix();
                 {
-                    for (int currentCottageIndexInRow = 0; currentCottageIndexInRow < COTTAGES_COUNT_IN_ROW; currentCottageIndexInRow++) {
+                    for (int currentCottageIndexInRow = 0; currentCottageIndexInRow < COTTAGES_COUNT_IN_ROW;
+                         currentCottageIndexInRow++) {
                         //translate and render
                         glTranslated(AssetManager.DEFAULT_COTTAGE_SIZE, 0, 0);
                         mCottageModel.render();

@@ -12,31 +12,27 @@ import framework.objloader.GLModel;
  */
 public class AssetManager {
 
-//    public static final String COTTAGE_OBJ_FILE_NAME = Configs.RESOURCES_PATH + "house.obj";
-    public static final String COTTAGE_OBJ_FILE_NAME = Configs.RESOURCES_PATH + "low_poly_house.obj";
-    public static final String CUBE_OBJ_FILE_NAME = Configs.RESOURCES_PATH + "CUBIK.obj";
-    public static final int DEFAULT_COTTAGE_SIZE = 15;
+    public static final String COTTAGE_OBJ_LOW_FILE_NAME = Configs.RESOURCES_PATH + "low_poly_house.obj";
+    public static final String COTTAGE_OBJ_MID_FILE_NAME = Configs.RESOURCES_PATH + "low_poly_house_mid.obj";
+    //    public static final int DEFAULT_COTTAGE_SIZE = 15;
+    public static final int DEFAULT_COTTAGE_SIZE = 20;
 
     /**
      * Default not scaled size is 15 x 15
      *
      * @return
      */
-    public static GLModel loadCottageModel() {
+    public static GLModel loadCottageModelLow() {
         // Load the model
-        GLModel model = new GLModel(COTTAGE_OBJ_FILE_NAME);
+        GLModel model = new GLModel(COTTAGE_OBJ_LOW_FILE_NAME);
         model.regenerateNormals();
-
         return model;
     }
 
-
-
-    public static GLModel loadCubeModel() {
+    public static GLModel loadCottageModelMid() {
         // Load the model
-        GLModel model = new GLModel(CUBE_OBJ_FILE_NAME);
+        GLModel model = new GLModel(COTTAGE_OBJ_MID_FILE_NAME);
         model.regenerateNormals();
-
         return model;
     }
 }
