@@ -4,10 +4,6 @@ import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
 import framework.core.models3d.Model3D;
-import framework.terrain.implementation.SimpleTerrain;
-import framework.terrain.implementation.WireTerrainRenderer;
-import framework.terrain.interfaces.Terrain;
-import framework.terrain.interfaces.TerrainRenderer;
 import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -32,9 +28,6 @@ public class ObjLoadingTestScreen extends BaseScreen {
     FirstPersonCamera mCamera3D;
     Model3D smallHouseModel;
     Model3D mediumHouseModel;
-    Terrain mTerrain;
-    private TerrainRenderer mTerrainRenderer;
-
 
     public ObjLoadingTestScreen(Program program) {
         super(program);
@@ -54,12 +47,6 @@ public class ObjLoadingTestScreen extends BaseScreen {
         //enable 3D projection
         mCamera3D.initializePerspective();
 
-        //create Terrain
-        mTerrain = new SimpleTerrain(100, 100, 7, -2);
-
-        //create Terrain Renderer
-        mTerrainRenderer = new WireTerrainRenderer();
-
         //now we need to initialize light properties
         initLight();
 
@@ -71,7 +58,18 @@ public class ObjLoadingTestScreen extends BaseScreen {
         smallHouseModel.setPosition(new Vector3f(0, 0, 0));
 
         //set position of smallHouseModel
-        mediumHouseModel.setPosition(new Vector3f((float) (mediumHouseModel.getX_Size() * 2), 0, 0));
+        mediumHouseModel.setPosition(new Vector3f(
+
+                //move right from a house , exactly to fit another house
+                (float) (mediumHouseModel.getX_Size()/2 + smallHouseModel.getX_Size()/2),
+                //same height
+                0,
+                //move forward from a house , exactly to fit another house
+                (float) (mediumHouseModel.getZ_Size()/2 + smallHouseModel.getZ_Size()/2)));
+
+        //enable alpha blending
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     }
 
@@ -87,15 +85,15 @@ public class ObjLoadingTestScreen extends BaseScreen {
         //translate view according to 3D camera
         mCamera3D.lookThrough();
 
-        //draw terrain
-        mTerrainRenderer.renderTerrain(mTerrain);
+        //draw gray wires
+        glColor4f(0.329412f, 0.329412f, 0.329412f, 0.5f);
+        SimpleShapesRenderer.renderGridMesh(100);
 
         //draw x y z axes
         SimpleShapesRenderer.renderAxes(50);
 
         mediumHouseModel.enableRenderGLStates();
         {
-
             //draw medium house
             glPushMatrix();
             {
