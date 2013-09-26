@@ -10,8 +10,8 @@ import framework.terrain.interfaces.TerrainRenderer;
 import framework.utills.GLUT;
 import framework.utills.geometry.Point;
 import framework.utills.geometry.Rectangle;
-import framework.utills.light.Light;
 import framework.utills.light.LightUtils;
+import framework.utills.light.SunLight;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -30,7 +30,7 @@ public class RoadsTestScreen extends BaseScreen {
     FirstPersonCamera mCamera3D;
     Terrain mTerrain;
     TerrainRenderer mTerrainRenderer;
-    private Light mSunLight;
+    private SunLight mSunLight;
 
 
     public RoadsTestScreen(Program program) {
@@ -73,7 +73,7 @@ public class RoadsTestScreen extends BaseScreen {
         LightUtils.enableMaterialLightening();
         LightUtils.setDefaultMaterial();
 
-        mSunLight = LightUtils.createSunLight();
+        mSunLight = (SunLight) LightUtils.createSunLight();
         mSunLight.setPosition(new Vector3f(0f, 5f, -10f));
         mSunLight.enable();
 
@@ -115,7 +115,8 @@ public class RoadsTestScreen extends BaseScreen {
 
     @Override
     public void onUpdate(long delta) {
-        mSunLight.setPosition(mCamera3D.getPosition());
+        //we need to update position after camera was transformed
+        mSunLight.setPosition(mSunLight.getInitialPosition());
     }
 
     private void cookTerrain() {

@@ -16,11 +16,12 @@ import static org.lwjgl.opengl.GL11.*;
  * Date: 25/09/13
  * Time: 18:07
  */
-public class BaseLight implements Light {
+public abstract class BaseLight implements Light {
 
-    private Vector3f mPosition;
+    protected Vector3f mPosition = new Vector3f();
     private int mGlLight;
     private static HashMap<Integer, Boolean> LIGHTS_IN_USE = new HashMap<Integer, Boolean>();
+    private Vector3f mInitialPosition;
 
     static {
         //mark all lights as not in use
@@ -33,17 +34,9 @@ public class BaseLight implements Light {
         LIGHTS_IN_USE.put(GL_LIGHT7, false);
     }
 
-    public BaseLight() {
 
+    protected BaseLight() {
         mGlLight = findNotOccupiedLightHandle();
-
-        //defaults to 0,0,0
-        mPosition = new Vector3f();
-
-        setPosition(mPosition);
-        setSpecularColor(ReadableColor.WHITE);
-        setDiffuseColor(ReadableColor.WHITE);
-        setAmbientColor(ReadableColor.WHITE);
     }
 
     private int findNotOccupiedLightHandle() {
@@ -68,6 +61,11 @@ public class BaseLight implements Light {
     }
 
     @Override
+    public Vector3f getPosition() {
+        return mPosition;
+    }
+
+    @Override
     public void enable() {
         // enables light0
         glEnable(mGlLight);
@@ -87,37 +85,73 @@ public class BaseLight implements Light {
 
     @Override
     public void setDiffuseColor(ReadableColor color) {
-        FloatBuffer lightColor;
-
-        //light color
-        lightColor = BufferUtils.createFloatBuffer(4);
-        lightColor.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
-
-        // sets diffuse light to white
-        glLight(mGlLight, GL_DIFFUSE, lightColor);
+        setDiffuseColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+//        FloatBuffer lightColor;
+//
+//        //light color
+//        lightColor = BufferUtils.createFloatBuffer(4);
+//        lightColor.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+//
+//        // sets diffuse light to white
+//        glLight(mGlLight, GL_DIFFUSE, lightColor);
     }
 
     @Override
     public void setSpecularColor(ReadableColor color) {
-        FloatBuffer lightColor;
-
-        //light color
-        lightColor = BufferUtils.createFloatBuffer(4);
-        lightColor.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
-
-        // sets specular light to white
-        glLight(mGlLight, GL_SPECULAR, lightColor);
+        setSpecularColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+//        FloatBuffer lightColor;
+//
+//        //light color
+//        lightColor = BufferUtils.createFloatBuffer(4);
+//        lightColor.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+//
+//        // sets specular light to white
+//        glLight(mGlLight, GL_SPECULAR, lightColor);
     }
 
     @Override
     public void setAmbientColor(ReadableColor color) {
-        FloatBuffer lightColor;
 
-        //light color
-        lightColor = BufferUtils.createFloatBuffer(4);
-        lightColor.put(0.0f).put(0.0f).put(0.0f).put(1.0f).flip();
+        setAmbientColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+//        FloatBuffer lightColor;
+//
+//        //light color
+//        lightColor = BufferUtils.createFloatBuffer(4);
+//        lightColor.put(0.0f).put(0.0f).put(0.0f).put(1.0f).flip();
+//
+//        // sets specular light to white
+//        glLight(mGlLight, GL_AMBIENT, lightColor);
+    }
 
-        // sets specular light to white
-        glLight(mGlLight, GL_AMBIENT, lightColor);
+    @Override
+    public void setDiffuseColor(float red, float green, float blue, float alpha) {
+        applyColorParameter(GL_DIFFUSE,
+                (FloatBuffer) BufferUtils.createFloatBuffer(4).put(red).put(green).put(blue).put(alpha).flip());
+    }
+
+    @Override
+    public void setSpecularColor(float red, float green, float blue, float alpha) {
+        applyColorParameter(GL_SPECULAR,
+                (FloatBuffer) BufferUtils.createFloatBuffer(4).put(red).put(green).put(blue).put(alpha).flip());
+    }
+
+    @Override
+    public void setAmbientColor(float red, float green, float blue, float alpha) {
+        applyColorParameter(GL_AMBIENT,
+                (FloatBuffer) BufferUtils.createFloatBuffer(4).put(red).put(green).put(blue).put(alpha).flip());
+    }
+
+    private void applyColorParameter(int glColorParameter, FloatBuffer lightColor) {
+        // sets diffuse light to white
+        glLight(mGlLight, glColorParameter, lightColor);
+    }
+
+    @Override
+    public Vector3f getInitialPosition() {
+        return mInitialPosition;
+    }
+
+    public void setInitialPosition(Vector3f position) {
+        mInitialPosition = position;
     }
 }

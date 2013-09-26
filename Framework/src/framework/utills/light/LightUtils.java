@@ -16,7 +16,7 @@ import static org.lwjgl.opengl.GL11.GL_LIGHTING;
  */
 public class LightUtils {
     public static Light createSunLight() {
-        return new BaseLight();
+        return new SunLight();
     }
 
     public static void enableMaterialLightening() {
