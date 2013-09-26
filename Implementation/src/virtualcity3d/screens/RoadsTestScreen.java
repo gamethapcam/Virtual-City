@@ -15,6 +15,8 @@ import framework.utills.light.SunLight;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import resources.AssetManager;
+import resources.Assets2D;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -49,7 +51,7 @@ public class RoadsTestScreen extends BaseScreen {
         mTerrain = new SimpleTerrain(100, 100, 10, -5);
 
         //create Terrain Renderer
-        mTerrainRenderer = new TexturedTerrainRenderer();
+        mTerrainRenderer = new TexturedTerrainRenderer(AssetManager.getAsset2D(Assets2D.GRASS));
 
         //cook terrain
         cookTerrain();

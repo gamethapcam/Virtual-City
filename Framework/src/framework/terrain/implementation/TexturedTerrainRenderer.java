@@ -1,6 +1,5 @@
 package framework.terrain.implementation;
 
-import framework.configurations.Configs;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
 import org.lwjgl.BufferUtils;
@@ -8,11 +7,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -26,25 +21,11 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class TexturedTerrainRenderer implements TerrainRenderer {
 
-    private static final String LOADING_SCREEN_TEXTURE = Configs.RESOURCES_PATH + "grass1.jpg";
-    public static final String IMAGE_FORMAT = "JPG";
     private Texture mTexture;
 
-
-    public TexturedTerrainRenderer() {
+    public TexturedTerrainRenderer(Texture texture) {
         //load Texture
-        mTexture = loadTexture();
-    }
-
-
-    private Texture loadTexture() {
-        Texture texture = null;
-        try {
-            texture = TextureLoader.getTexture(IMAGE_FORMAT, new FileInputStream(new File(LOADING_SCREEN_TEXTURE)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return texture;
+        mTexture = texture;
     }
 
     private void defineMaterial() {
@@ -53,7 +34,6 @@ public class TexturedTerrainRenderer implements TerrainRenderer {
         FloatBuffer ambient = floatBuffer(0.24725f, 0.1995f, 0.0745f, 1.0f);
         FloatBuffer diffuse = floatBuffer(0.75164f, 0.60648f, 0.22648f, 1.0f);
         FloatBuffer specular = floatBuffer(0.628281f, 0.555802f, 0.366065f, 1.0f);
-//        float shininess = 51.2f;
 
         float shininess = 11.2f;
 

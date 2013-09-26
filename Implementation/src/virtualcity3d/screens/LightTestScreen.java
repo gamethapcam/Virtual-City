@@ -16,6 +16,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
+import resources.AssetManager;
+import resources.Assets2D;
 
 import java.nio.FloatBuffer;
 
@@ -65,7 +67,7 @@ public class LightTestScreen extends BaseScreen {
 
         //create Terrain Renderer
 //        mTerrainRenderer = new HeighColoredTerrainRenderer();
-        mTerrainRenderer = new TexturedTerrainRenderer();
+        mTerrainRenderer = new TexturedTerrainRenderer(AssetManager.getAsset2D(Assets2D.GRASS));
 
         //cook terrain
         cookTerrain();

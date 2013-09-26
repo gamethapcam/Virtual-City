@@ -2,7 +2,12 @@ package resources;
 
 import framework.configurations.Configs;
 import framework.objloader.GLModel;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -14,50 +19,54 @@ import java.util.HashMap;
  */
 public class AssetManager {
 
-    private static final String COTTAGE_OBJ_LOW_FILE_NAME = Configs.RESOURCES_PATH + "low_poly_house.obj";
-    private static final String COTTAGE_OBJ_MID_FILE_NAME = Configs.RESOURCES_PATH + "low_poly_house_mid.obj";
     private static final HashMap<Assets3D, GLModel> _assets3D = new HashMap<Assets3D, GLModel>();
+    private static final HashMap<Assets2D, Texture> _assets2D = new HashMap<Assets2D, Texture>();
 
 
-    public static GLModel getAsset3D(Assets3D asset) {
+    public static GLModel getAsset3D(Assets3D asset3D) {
+        if (_assets3D.containsKey(asset3D))
+            return _assets3D.get(asset3D);
+        _assets3D.put(asset3D, loadAsset3D(asset3D));
+        return getAsset3D(asset3D);
+    }
 
-        if (_assets3D.containsKey(asset))
-            return _assets3D.get(asset);
+    public static Texture getAsset2D(Assets2D asset2D) {
+        if (_assets2D.containsKey(asset2D))
+            return _assets2D.get(asset2D);
+        _assets2D.put(asset2D, loadAsset2D(asset2D));
+        return getAsset2D(asset2D);
+    }
 
-        _assets3D.put(asset, loadAsset3D(asset));
-        return getAsset3D(asset);
+    private static Texture loadAsset2D(Assets2D asset) {
+        return loadTexture(asset.getName());
+    }
 
+    private static Texture loadTexture(String textureName) {
+        Texture texture = null;
+        try {
+            texture = TextureLoader.getTexture(getImageFormat(textureName),
+                    new FileInputStream(new File(Configs.RESOURCES_PATH + textureName)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return texture;
+    }
+
+    private static String getImageFormat(String imageName) {
+        String[] splitted = imageName.split("\\.");
+        String format = splitted[splitted.length - 1].toUpperCase();
+        return format;
     }
 
     private static GLModel loadAsset3D(Assets3D asset) {
-
-        switch (asset) {
-            case SMALL_HOUSE:
-                return loadCottageModelLow();
-            case MEDIUM_HOUSE:
-                return loadCottageModelMid();
-            default:
-                throw new IllegalArgumentException("Requested asset is not found");
-        }
+        return loadModel(asset.getName());
     }
 
-    /**
-     * Default not scaled size is 12 x 12
-     */
-    private static GLModel loadCottageModelLow() {
+    private static GLModel loadModel(String modelName) {
         // Load the model
-        GLModel model = new GLModel(COTTAGE_OBJ_LOW_FILE_NAME);
+        GLModel model = new GLModel(Configs.RESOURCES_PATH + modelName);
         model.regenerateNormals();
         return model;
     }
 
-    /**
-     * Default not scaled size 15 x 15
-     */
-    private static GLModel loadCottageModelMid() {
-        // Load the model
-        GLModel model = new GLModel(COTTAGE_OBJ_MID_FILE_NAME);
-        model.regenerateNormals();
-        return model;
-    }
 }

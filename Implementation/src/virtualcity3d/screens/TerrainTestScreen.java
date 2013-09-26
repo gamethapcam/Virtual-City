@@ -11,6 +11,8 @@ import framework.utills.geometry.Point;
 import framework.utills.geometry.Rectangle;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
+import resources.AssetManager;
+import resources.Assets2D;
 
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
@@ -57,7 +59,7 @@ public class TerrainTestScreen extends BaseScreen {
 //        mTerrainRenderer = new WireTerrainRenderer();
 //        mTerrainRenderer = new HeighColoredTerrainRenderer();
 
-        mTerrainRenderer = new TexturedTerrainRenderer();
+        mTerrainRenderer = new TexturedTerrainRenderer(AssetManager.getAsset2D(Assets2D.GRASS));
 
 
         //cook terrain
