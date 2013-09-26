@@ -97,6 +97,7 @@ public class ObjLoadingTestScreen extends BaseScreen {
             //draw medium house
             glPushMatrix();
             {
+                //translate to position
                 glTranslated(mediumHouseModel.getPosition().getX(), mediumHouseModel.getPosition().getY(), mediumHouseModel.getPosition().getZ());
                 mediumHouseModel.render();
             }
@@ -105,6 +106,7 @@ public class ObjLoadingTestScreen extends BaseScreen {
             //draw small house
             glPushMatrix();
             {
+                //translate to position
                 glTranslated(smallHouseModel.getPosition().getX(), smallHouseModel.getPosition().getY(), smallHouseModel.getPosition().getZ());
                 smallHouseModel.render();
             }

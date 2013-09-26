@@ -7,7 +7,7 @@ package resources;
  * Time: 11:51
  */
 public enum Assets2D {
-    GRASS, SPLASH_SCREEN,ROAD;
+    GRASS, SPLASH_SCREEN;
 
     public String getName() {
         switch (this) {
@@ -15,8 +15,6 @@ public enum Assets2D {
                 return "grass.jpg";
             case SPLASH_SCREEN:
                 return "loadingScreen.png";
-            case ROAD:
-                return "road_texture_white_line.jpg";
             default:
                 throw new IllegalArgumentException("Requested asset is not found");
         }

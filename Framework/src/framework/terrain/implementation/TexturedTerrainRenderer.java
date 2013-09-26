@@ -72,6 +72,7 @@ public class TexturedTerrainRenderer implements TerrainRenderer {
 
         //store color
         glPushAttrib(GL_CURRENT_BIT);
+
         mTexture.bind();
         Color.gray.bind();
 
@@ -85,32 +86,38 @@ public class TexturedTerrainRenderer implements TerrainRenderer {
         for (int x = 1; x < XLength; x++) {
             for (int z = 1; z < ZLength; z++) {
 
-                //draw  small quads
-                glBegin(GL_QUADS);
+                glPushMatrix();
                 {
-                    //calculate vertexes
-                    calculateFirstVertex(XLength, ZLength, heightMap, vertexDataHolder_1, x, z);
-                    calculateSecondVertex(XLength, ZLength, heightMap, vertexDataHolder_2, x, z);
-                    calculateThirdVertex(XLength, ZLength, heightMap, vertexDataHolder_3, x, z);
-                    calculateFourthVertex(XLength, ZLength, heightMap, vertexDataHolder_4, x, z);
+                    //must offset to zero
+                    glTranslated(0, -1, 0);
 
-                    //calculate normal for this surface
-                    Vector3f normal = calculateNormal(
-                            new Vector3f(vertexDataHolder_1.x, vertexDataHolder_1.y, vertexDataHolder_1.z),
-                            new Vector3f(vertexDataHolder_2.x, vertexDataHolder_2.y, vertexDataHolder_2.z),
-                            new Vector3f(vertexDataHolder_3.x, vertexDataHolder_3.y, vertexDataHolder_3.z));
+                    //draw  small quads
+                    glBegin(GL_QUADS);
+                    {
+                        //calculate vertexes
+                        calculateFirstVertex(XLength, ZLength, heightMap, vertexDataHolder_1, x, z);
+                        calculateSecondVertex(XLength, ZLength, heightMap, vertexDataHolder_2, x, z);
+                        calculateThirdVertex(XLength, ZLength, heightMap, vertexDataHolder_3, x, z);
+                        calculateFourthVertex(XLength, ZLength, heightMap, vertexDataHolder_4, x, z);
 
-                    //set a normal for this surface
-                    glNormal3f(normal.x, normal.y, normal.z);
+                        //calculate normal for this surface
+                        Vector3f normal = calculateNormal(
+                                new Vector3f(vertexDataHolder_1.x, vertexDataHolder_1.y, vertexDataHolder_1.z),
+                                new Vector3f(vertexDataHolder_2.x, vertexDataHolder_2.y, vertexDataHolder_2.z),
+                                new Vector3f(vertexDataHolder_3.x, vertexDataHolder_3.y, vertexDataHolder_3.z));
 
-                    //draw vertexes with texture
-                    drawVertex(vertexDataHolder_1);
-                    drawVertex(vertexDataHolder_2);
-                    drawVertex(vertexDataHolder_3);
-                    drawVertex(vertexDataHolder_4);
+                        //set a normal for this surface
+                        glNormal3f(normal.x, normal.y, normal.z);
+
+                        //draw vertexes with texture
+                        drawVertex(vertexDataHolder_1);
+                        drawVertex(vertexDataHolder_2);
+                        drawVertex(vertexDataHolder_3);
+                        drawVertex(vertexDataHolder_4);
+                    }
+                    glEnd();
                 }
-                glEnd();
-
+                glPopMatrix();
             }
         }
 

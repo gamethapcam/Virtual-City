@@ -3,9 +3,9 @@ package virtualcity3d.screens;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
-import framework.models.models2D.Model2D;
+import framework.models.models3D.Model3D;
+import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SimpleTerrain;
-import framework.terrain.implementation.WireTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
 import framework.utills.GLUT;
@@ -17,7 +17,9 @@ import framework.utills.light.SunLight;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import virtualcity3d.models.models2D.RoadTile;
+import virtualcity3d.models.models3d.CarJeep;
+import virtualcity3d.models.models3d.RoadTileCorner;
+import virtualcity3d.models.models3d.RoadTileStraight;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -34,8 +36,9 @@ public class RoadsTestScreen extends BaseScreen {
     Terrain mTerrain;
     TerrainRenderer mTerrainRenderer;
     private SunLight mSunLight;
-    private Model2D mRoadTile;
-
+    private Model3D mRoadTileStraight;
+    private Model3D mRoadTileCorner;
+    private Model3D mJeep;
 
     public RoadsTestScreen(Program program) {
         super(program);
@@ -50,19 +53,22 @@ public class RoadsTestScreen extends BaseScreen {
 
     private void initTerrain() {
         //create Terrain
-        mTerrain = new SimpleTerrain(100, 100, 10, -5);
+        mTerrain = new SimpleTerrain(150, 150, 10, -5);
 
         //create Terrain Renderer
 //        mTerrainRenderer = new TexturedTerrainRenderer(AssetManager.getAsset2D(Assets2D.GRASS));
-        mTerrainRenderer = new WireTerrainRenderer();
+//        mTerrainRenderer = new WireTerrainRenderer();
+        mTerrainRenderer = new HeighColoredTerrainRenderer();
+
 
         //init road tile
-        mRoadTile = new RoadTile();
+        mRoadTileStraight = new RoadTileStraight();
+        mRoadTileCorner = new RoadTileCorner();
+        mJeep = new CarJeep();
 
-        mRoadTile.addRotation(90, 0f, 1f, 0f);
-        mRoadTile.addRotation(90, 1f, 0f, 0f);
-        mRoadTile.setPosition(new Vector3f(0,0,0));
-
+        mRoadTileStraight.setPosition(new Vector3f(0f, 0.1f, 0f));
+        mRoadTileCorner.setPosition(new Vector3f(0f, 0.1f, 0f));
+        mJeep.setPosition(new Vector3f((float) (mRoadTileStraight.getX_Size() / 2 - mJeep.getX_Size() / 2), 0.11f, 0f));
 
         //cook terrain
         cookTerrain();
@@ -105,50 +111,60 @@ public class RoadsTestScreen extends BaseScreen {
         //translate view according to 3D camera
         mCamera3D.lookThrough();
 
+        SimpleShapesRenderer.renderAxes(100);
+
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
 
-        SimpleShapesRenderer.renderAxes(100);
 
-        mRoadTile.enableRenderGLStates();
+        mRoadTileStraight.enableRenderGLStates();
+        {
 
+            for (int i = 0; i < 5; i++) {
+                glPushMatrix();
+                {
+                    glTranslated(mRoadTileStraight.getPosition().x,
+                            mRoadTileStraight.getPosition().y,
+                            mRoadTileStraight.getPosition().z + i * (mRoadTileStraight.getZ_Size() / 2));
+                    mRoadTileStraight.render();
+                }
+                glPopMatrix();
+            }
 
-        //draw right
-        for (int i = 0; i < 5; i++) {
             glPushMatrix();
             {
-                mRoadTile.clearRotations();
-                mRoadTile.addRotation(90, 0f, 1f, 0f);
-                mRoadTile.addRotation(90, 1f, 0f, 0f);
-
-                mRoadTile.setPosition(new Vector3f((float) (i * mRoadTile.getX_Size() / 2), 0.2f, 0));
-                mRoadTile.render();
+                glTranslated(mRoadTileCorner.getPosition().x,
+                        mRoadTileCorner.getPosition().y,
+                        mRoadTileCorner.getPosition().z + 6 * (mRoadTileStraight.getZ_Size() / 2));
+                glRotated(90,0,1,0);
+                mRoadTileCorner.render();
             }
             glPopMatrix();
-        }
 
-        //draw down
-        for (int i = 2; i < 5; i++) {
+            for (int i = 2; i < 7; i++) {
+                glPushMatrix();
+                {
+                    glTranslated(mRoadTileStraight.getPosition().x + i * (mRoadTileStraight.getX_Size() / 2),
+                            mRoadTileStraight.getPosition().y,
+                            mRoadTileStraight.getPosition().z + 6 * (mRoadTileStraight.getZ_Size() / 2));
+                    glRotated(90,0,1,0);
+                    mRoadTileStraight.render();
+                }
+                glPopMatrix();
+            }
+
             glPushMatrix();
             {
-                mRoadTile.clearRotations();
-//                mRoadTile.addRotation(90, 0f, 1f, 0f);
-                mRoadTile.addRotation(90, 1f, 0f, 0f);
-
-                mRoadTile.setPosition(new Vector3f(
-                        (float) (4 * mRoadTile.getX_Size() / 2),
-                        0.2f,
-                        (float) (-i * mRoadTile.getX_Size() / 2)));
-                mRoadTile.render();
+                glTranslated(mJeep.getPosition().x,
+                        mJeep.getPosition().y,
+                        mJeep.getPosition().z);
+                mJeep.render();
             }
             glPopMatrix();
+
         }
+        mRoadTileCorner.disableRenderGLStates();
 
-
-        mRoadTile.disableRenderGLStates();
-
-        glTranslated(0, 5, 0);
-        drawModel();
 
     }
 
@@ -189,7 +205,7 @@ public class RoadsTestScreen extends BaseScreen {
                 new Point(mTerrain.getX_Length() / 2 - 1, mTerrain.getZ_Length() / 2 - 1));
 
         //prepare area for houses to be built
-        mTerrain.flattenArea(flattedArea,0);
+        mTerrain.flattenArea(flattedArea, 0);
 
     }
 }
