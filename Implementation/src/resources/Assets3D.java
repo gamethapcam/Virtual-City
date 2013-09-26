@@ -8,7 +8,7 @@ package resources;
  * To change this template use File | Settings | File Templates.
  */
 public enum Assets3D {
-    SMALL_HOUSE, MEDIUM_HOUSE, CAR_JEEP, ROAD_TILE_STRAIGHT, ROAD_TILE_CORNER;
+    SMALL_HOUSE, MEDIUM_HOUSE, CAR_JEEP, ROAD_TILE_STRAIGHT, ROAD_TILE_CORNER, ROAD_TILE_JUNCTION;
 
     public String getName() {
         switch (this) {
@@ -22,6 +22,8 @@ public enum Assets3D {
                 return "road.obj";
             case ROAD_TILE_CORNER:
                 return "road_corner.obj";
+            case ROAD_TILE_JUNCTION:
+                return "road_junction.obj";
             default:
                 throw new IllegalArgumentException("Requested asset is not found");
         }

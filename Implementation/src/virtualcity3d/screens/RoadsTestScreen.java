@@ -19,6 +19,7 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import virtualcity3d.models.models3d.CarJeep;
 import virtualcity3d.models.models3d.RoadTileCorner;
+import virtualcity3d.models.models3d.RoadTileJunction;
 import virtualcity3d.models.models3d.RoadTileStraight;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -39,6 +40,7 @@ public class RoadsTestScreen extends BaseScreen {
     private Model3D mRoadTileStraight;
     private Model3D mRoadTileCorner;
     private Model3D mJeep;
+    private Model3D mRoadTileJunction;
 
     public RoadsTestScreen(Program program) {
         super(program);
@@ -64,10 +66,13 @@ public class RoadsTestScreen extends BaseScreen {
         //init road tile
         mRoadTileStraight = new RoadTileStraight();
         mRoadTileCorner = new RoadTileCorner();
+        mRoadTileJunction = new RoadTileJunction();
         mJeep = new CarJeep();
 
         mRoadTileStraight.setPosition(new Vector3f(0f, 0.1f, 0f));
         mRoadTileCorner.setPosition(new Vector3f(0f, 0.1f, 0f));
+        mRoadTileJunction.setPosition(new Vector3f(0f, 0.1f, 0f));
+
         mJeep.setPosition(new Vector3f((float) (mRoadTileStraight.getX_Size() / 2 - mJeep.getX_Size() / 2), 0.11f, 0f));
 
         //cook terrain
@@ -120,6 +125,7 @@ public class RoadsTestScreen extends BaseScreen {
         mRoadTileStraight.enableRenderGLStates();
         {
 
+            //draw down
             for (int i = 0; i < 5; i++) {
                 glPushMatrix();
                 {
@@ -131,28 +137,57 @@ public class RoadsTestScreen extends BaseScreen {
                 glPopMatrix();
             }
 
+
+            //draw turn left
             glPushMatrix();
             {
                 glTranslated(mRoadTileCorner.getPosition().x,
                         mRoadTileCorner.getPosition().y,
                         mRoadTileCorner.getPosition().z + 6 * (mRoadTileStraight.getZ_Size() / 2));
-                glRotated(90,0,1,0);
+                glRotated(90, 0, 1, 0);
                 mRoadTileCorner.render();
             }
             glPopMatrix();
 
+
+            //draw left
             for (int i = 2; i < 7; i++) {
                 glPushMatrix();
                 {
                     glTranslated(mRoadTileStraight.getPosition().x + i * (mRoadTileStraight.getX_Size() / 2),
                             mRoadTileStraight.getPosition().y,
                             mRoadTileStraight.getPosition().z + 6 * (mRoadTileStraight.getZ_Size() / 2));
-                    glRotated(90,0,1,0);
+                    glRotated(90, 0, 1, 0);
                     mRoadTileStraight.render();
                 }
                 glPopMatrix();
             }
 
+            //draw junction
+            glPushMatrix();
+            {
+                glTranslated(mRoadTileJunction.getPosition().x ,
+                        mRoadTileJunction.getPosition().y,
+                        mRoadTileJunction.getPosition().z -(mRoadTileStraight.getX_Size()));
+                mRoadTileJunction.render();
+            }
+            glPopMatrix();
+
+            //draw left from junction
+            for (int i = 1; i < 7; i++) {
+                glPushMatrix();
+                {
+                    glTranslated(mRoadTileStraight.getPosition().x + i * (mRoadTileStraight.getX_Size()),
+                            mRoadTileStraight.getPosition().y,
+                            mRoadTileStraight.getPosition().z - (mRoadTileStraight.getX_Size()));
+                    glRotated(90, 0, 1, 0);
+                    mRoadTileStraight.render();
+                }
+                glPopMatrix();
+            }
+
+
+            //draw jeep
             glPushMatrix();
             {
                 glTranslated(mJeep.getPosition().x,
