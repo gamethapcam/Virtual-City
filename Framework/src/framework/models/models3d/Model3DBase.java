@@ -1,4 +1,4 @@
-package framework.core.models3d;
+package framework.models.models3D;
 
 import framework.objloader.GLModel;
 import org.lwjgl.util.vector.Vector3f;

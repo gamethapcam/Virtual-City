@@ -10,4 +10,6 @@ package framework.utills.geometry;
 public interface Rectangle2D {
     double getMinX();
     double getMaxY();
+    Point getLeftBottom();
+    Point getRightTop();
 }

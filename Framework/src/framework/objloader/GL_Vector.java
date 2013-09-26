@@ -373,12 +373,12 @@ public class GL_Vector {
 //    }
 //
 //    /**
-//     * return a vector rotated the given number of degrees around the Y axis
+//     * return a vector rotated the given number of angle around the Y axis
 //     */
-//    public static GL_Vector rotationVector(float degrees) {
+//    public static GL_Vector rotationVector(float angle) {
 //        return new GL_Vector(
-//                (float)Math.sin(degrees * GLApp.PIOVER180),
+//                (float)Math.sin(angle * GLApp.PIOVER180),
 //                0,
-//                (float)Math.cos(degrees * GLApp.PIOVER180) );
+//                (float)Math.cos(angle * GLApp.PIOVER180) );
 //    }
 }

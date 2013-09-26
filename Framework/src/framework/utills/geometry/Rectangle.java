@@ -33,10 +33,12 @@ public class Rectangle implements Rectangle2D {
         return mRightTop.getY();
     }
 
+    @Override
     public Point getLeftBottom() {
         return mLeftBottom;
     }
 
+    @Override
     public Point getRightTop() {
         return mRightTop;
     }

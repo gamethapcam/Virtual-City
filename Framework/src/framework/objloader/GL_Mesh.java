@@ -30,7 +30,7 @@ public class GL_Mesh {
 
     public String name = "";      // This object's name
 
-    // calculate the cosine of the smoothing angle (in degrees) (see registerSmoothNeighbors())
+    // calculate the cosine of the smoothing angle (in angle) (see registerSmoothNeighbors())
     private float maxSmoothingAngle = 89f;
     private float cos_angle = (float) Math.cos(Math.toRadians(maxSmoothingAngle));
 
@@ -59,7 +59,7 @@ public class GL_Mesh {
      * at the edge of the faces will be averaged.
      * <PRE>
      * N1        example: the angle between face normals 1 and 2
-     * |                   is 90 degrees.  If maxSmoothingAngle is 80
+     * |                   is 90 angle.  If maxSmoothingAngle is 80
      * _____|___                these faces will have a hard edge.  If
      * face1       |___ N2         maxSmoothingAngle is 100 they will be smoothed.
      * |
@@ -255,7 +255,7 @@ public class GL_Mesh {
      * that are neighbors to the given Triangle.  Only count as neighbors
      * those triangles that form a smooth surface with this triangle,
      * meaning the angle between this triangle and the neighbor triangle
-     * is > 90 degrees (the actual min degrees value is in cos_angle).
+     * is > 90 angle (the actual min angle value is in cos_angle).
      * <p/>
      * Requires that rebuild() has been run so that the vertex has
      * a list of neighbor triangles populated (see addNeighborTri()),

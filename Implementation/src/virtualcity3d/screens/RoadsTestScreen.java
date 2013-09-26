@@ -3,11 +3,13 @@ package virtualcity3d.screens;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
+import framework.models.models2D.Model2D;
 import framework.terrain.implementation.SimpleTerrain;
-import framework.terrain.implementation.TexturedTerrainRenderer;
+import framework.terrain.implementation.WireTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
 import framework.utills.GLUT;
+import framework.utills.SimpleShapesRenderer;
 import framework.utills.geometry.Point;
 import framework.utills.geometry.Rectangle;
 import framework.utills.light.LightUtils;
@@ -15,8 +17,7 @@ import framework.utills.light.SunLight;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import resources.AssetManager;
-import resources.Assets2D;
+import virtualcity3d.models.models2D.RoadTile;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -33,6 +34,7 @@ public class RoadsTestScreen extends BaseScreen {
     Terrain mTerrain;
     TerrainRenderer mTerrainRenderer;
     private SunLight mSunLight;
+    private Model2D mRoadTile;
 
 
     public RoadsTestScreen(Program program) {
@@ -51,7 +53,16 @@ public class RoadsTestScreen extends BaseScreen {
         mTerrain = new SimpleTerrain(100, 100, 10, -5);
 
         //create Terrain Renderer
-        mTerrainRenderer = new TexturedTerrainRenderer(AssetManager.getAsset2D(Assets2D.GRASS));
+//        mTerrainRenderer = new TexturedTerrainRenderer(AssetManager.getAsset2D(Assets2D.GRASS));
+        mTerrainRenderer = new WireTerrainRenderer();
+
+        //init road tile
+        mRoadTile = new RoadTile();
+
+        mRoadTile.addRotation(90, 0f, 1f, 0f);
+        mRoadTile.addRotation(90, 1f, 0f, 0f);
+        mRoadTile.setPosition(new Vector3f(0,0,0));
+
 
         //cook terrain
         cookTerrain();
@@ -97,9 +108,47 @@ public class RoadsTestScreen extends BaseScreen {
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
 
+        SimpleShapesRenderer.renderAxes(100);
+
+        mRoadTile.enableRenderGLStates();
+
+
+        //draw right
+        for (int i = 0; i < 5; i++) {
+            glPushMatrix();
+            {
+                mRoadTile.clearRotations();
+                mRoadTile.addRotation(90, 0f, 1f, 0f);
+                mRoadTile.addRotation(90, 1f, 0f, 0f);
+
+                mRoadTile.setPosition(new Vector3f((float) (i * mRoadTile.getX_Size() / 2), 0.2f, 0));
+                mRoadTile.render();
+            }
+            glPopMatrix();
+        }
+
+        //draw down
+        for (int i = 2; i < 5; i++) {
+            glPushMatrix();
+            {
+                mRoadTile.clearRotations();
+//                mRoadTile.addRotation(90, 0f, 1f, 0f);
+                mRoadTile.addRotation(90, 1f, 0f, 0f);
+
+                mRoadTile.setPosition(new Vector3f(
+                        (float) (4 * mRoadTile.getX_Size() / 2),
+                        0.2f,
+                        (float) (-i * mRoadTile.getX_Size() / 2)));
+                mRoadTile.render();
+            }
+            glPopMatrix();
+        }
+
+
+        mRoadTile.disableRenderGLStates();
+
         glTranslated(0, 5, 0);
         drawModel();
-
 
     }
 
@@ -135,18 +184,12 @@ public class RoadsTestScreen extends BaseScreen {
 
     private void makeAreaForRoads() {
 
-        //create place for city
-        int areaRadius = 30;
-        int xPosition = 0;
-        int yPosition = 0;
-
-        Point position = new Point(xPosition, yPosition);
-
         Rectangle flattedArea = new Rectangle(
-                new Point(-areaRadius + position.getX(), -areaRadius + position.getY()),
-                new Point(areaRadius, areaRadius));
+                new Point(-1 * (mTerrain.getX_Length() / 2 - 1), -1 * (mTerrain.getZ_Length() / 2 - 1)),
+                new Point(mTerrain.getX_Length() / 2 - 1, mTerrain.getZ_Length() / 2 - 1));
+
         //prepare area for houses to be built
-        mTerrain.flattenArea(flattedArea);
+        mTerrain.flattenArea(flattedArea,0);
 
     }
 }
