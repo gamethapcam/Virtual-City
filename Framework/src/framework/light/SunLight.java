@@ -1,4 +1,4 @@
-package framework.utills.light;
+package framework.light;
 
 import org.lwjgl.util.vector.Vector3f;
 

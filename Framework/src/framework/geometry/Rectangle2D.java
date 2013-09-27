@@ -1,4 +1,4 @@
-package framework.utills.geometry;
+package framework.geometry;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,4 +12,7 @@ public interface Rectangle2D {
     double getMaxY();
     Point getLeftBottom();
     Point getRightTop();
+    Point getCenter();
+    double getWidth();
+    double getHeight();
 }

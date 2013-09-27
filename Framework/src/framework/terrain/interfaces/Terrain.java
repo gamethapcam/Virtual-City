@@ -1,6 +1,6 @@
 package framework.terrain.interfaces;
 
-import framework.utills.geometry.Rectangle;
+import framework.geometry.Rectangle;
 
 /**
  * Created with IntelliJ IDEA.

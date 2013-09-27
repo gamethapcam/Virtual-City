@@ -2,7 +2,7 @@ package framework.terrain.implementation;
 
 import framework.terrain.interfaces.Terrain;
 import framework.utills.RandomUtils;
-import framework.utills.geometry.Rectangle;
+import framework.geometry.Rectangle;
 
 /**
  * Created with IntelliJ IDEA.

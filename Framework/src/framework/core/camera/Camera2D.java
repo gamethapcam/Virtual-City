@@ -1,8 +1,8 @@
 package framework.core.camera;
 
-import framework.utills.geometry.Point;
-import framework.utills.geometry.Rectangle;
-import framework.utills.geometry.Rectangle2D;
+import framework.geometry.Point;
+import framework.geometry.Rectangle;
+import framework.geometry.Rectangle2D;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;

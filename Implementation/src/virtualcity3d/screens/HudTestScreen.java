@@ -5,13 +5,12 @@ import framework.core.architecture.Program;
 import framework.core.camera.Camera2D;
 import framework.core.camera.Camera3D;
 import framework.core.camera.Static3DCamera;
-import framework.utills.geometry.Point;
-import framework.utills.geometry.Rectangle;
-import framework.utills.geometry.Rectangle2D;
+import framework.geometry.Point;
+import framework.geometry.Rectangle;
+import framework.geometry.Rectangle2D;
 import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.Color;
 import org.lwjgl.util.vector.Vector2f;
 import virtualcity3d.models.hud.ColorSquare;
 

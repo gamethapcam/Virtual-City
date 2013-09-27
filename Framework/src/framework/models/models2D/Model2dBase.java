@@ -1,6 +1,6 @@
 package framework.models.models2D;
 
-import framework.utills.geometry.Rectangle2D;
+import framework.geometry.Rectangle2D;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;

@@ -1,7 +1,7 @@
 package virtualcity3d.models.hud;
 
-import framework.utills.geometry.Point;
-import framework.utills.geometry.Rectangle;
+import framework.geometry.Point;
+import framework.geometry.Rectangle;
 import org.lwjgl.util.Color;
 
 /**
