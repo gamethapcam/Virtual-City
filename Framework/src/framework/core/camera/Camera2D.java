@@ -52,7 +52,6 @@ public class Camera2D implements OrthographicCamera {
 
     @Override
     public void initializePerspective() {
-
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
         GL11.glOrtho(mOrthoLeft, mOrthoRight, mOrthoBottom, mOrthoTop, mOrthoNear, mOrthoFar);
