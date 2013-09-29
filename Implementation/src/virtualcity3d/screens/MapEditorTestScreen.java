@@ -35,15 +35,12 @@ public class MapEditorTestScreen extends BaseScreen {
 
     @Override
     public void init() {
-        //To change body of implemented methods use File | Settings | File Templates.
 
         mCamera = new Camera2D();
         mCamera.initializePerspective();
 
-        Point lBottom = new Point(-0.1f, -0.1f);
-        Point rTop = new Point(0.1f, 0.1f);
-        mSquare = new ColorSquare(ReadableColor.GREEN, new Rectangle(lBottom, rTop));
-        mSquare.setPosition(new Vector3f(-0.3f,-0.3f,0f));
+        mSquare = new ColorSquare(ReadableColor.GREEN, mCamera.getVisibleArea().getWidth() / 4, mCamera.getVisibleArea().getHeight() / 4);
+        mSquare.setPosition(new Vector3f(-0.3f, -0.3f, 0f));
 
     }
 
