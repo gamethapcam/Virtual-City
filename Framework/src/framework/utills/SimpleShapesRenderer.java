@@ -73,7 +73,23 @@ public class SimpleShapesRenderer {
         s.draw(radius, slices, stacks);
     }
 
-    public static void renderSimpleFloor(Vector2f leftTopCorner,Vector2f rightBottomCorner) {
+    public static void renderAxes(int length) {
+        glBegin(GL_LINES);
+        {
+            glColor3f(length, 0, 0); // X axis is red.
+            glVertex3f(0, 0, 0);
+            glVertex3f(length, 0, 0);
+            glColor3f(0, length, 0); // Y axis is green.
+            glVertex3f(0, 0, 0);
+            glVertex3f(0, length, 0);
+            glColor3f(0, 0, length); // z axis is blue.
+            glVertex3f(0, 0, 0);
+            glVertex3f(0, 0, length);
+        }
+        glEnd();
+    }
+
+    public static void renderSimpleFloor(Vector2f leftTopCorner, Vector2f rightBottomCorner) {
 
         int yPosition = 0;
         glBegin(GL_QUADS);

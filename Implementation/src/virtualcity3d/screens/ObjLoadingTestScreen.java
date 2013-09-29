@@ -1,19 +1,16 @@
 package virtualcity3d.screens;
 
-import framework.configurations.Configs;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
-import framework.objloader.GLModel;
-import framework.terrain.implementation.HeighColoredTerrainRenderer;
-import framework.terrain.implementation.SimpleTerrain;
-import framework.terrain.interfaces.Terrain;
-import framework.terrain.interfaces.TerrainRenderer;
-import framework.utills.geometry.Point;
-import framework.utills.geometry.Rectangle;
+import framework.models.models3D.Model3D;
+import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
+import virtualcity3d.models.models3d.HouseModelMedium;
+import virtualcity3d.models.models3d.HouseModelSmall;
 
 import java.nio.FloatBuffer;
 
@@ -28,14 +25,9 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ObjLoadingTestScreen extends BaseScreen {
 
-    public static final String OBJ_FILE_NAME = Configs.RESOURCES_PATH +  "house.obj";
-    public static final int RAMP_LEVEL = 3;
-
     FirstPersonCamera mCamera3D;
-    GLModel model;
-    Terrain mTerrain;
-    private TerrainRenderer mTerrainRenderer;
-
+    Model3D smallHouseModel;
+    Model3D mediumHouseModel;
 
     public ObjLoadingTestScreen(Program program) {
         super(program);
@@ -43,7 +35,6 @@ public class ObjLoadingTestScreen extends BaseScreen {
 
     @Override
     public void init() {
-        //To change body of implemented methods use File | Settings | File Templates.
 
         //create instance of 3D camera and position it
         mCamera3D = new FirstPersonCamera(0, 8, -15);
@@ -56,21 +47,29 @@ public class ObjLoadingTestScreen extends BaseScreen {
         //enable 3D projection
         mCamera3D.initializePerspective();
 
-        //create Terrain
-        mTerrain = new SimpleTerrain(10, 10, 7, -2);
-
-        //create Terrain Renderer
-        mTerrainRenderer = new HeighColoredTerrainRenderer();
-
-        //cook terrain
-//        cookTerrain();
-
         //now we need to initialize light properties
         initLight();
 
         // Load the mCottageModel
-        model = new GLModel(OBJ_FILE_NAME);
-        model.regenerateNormals();
+        smallHouseModel = new HouseModelSmall();
+        mediumHouseModel = new HouseModelMedium();
+
+        //set position of smallHouseModel
+        smallHouseModel.setPosition(new Vector3f(0, 0, 0));
+
+        //set position of smallHouseModel
+        mediumHouseModel.setPosition(new Vector3f(
+
+                //move right from a house , exactly to fit another house
+                (float) (mediumHouseModel.getX_Size()/2 + smallHouseModel.getX_Size()/2),
+                //same height
+                0,
+                //move forward from a house , exactly to fit another house
+                (float) (mediumHouseModel.getZ_Size()/2 + smallHouseModel.getZ_Size()/2)));
+
+        //enable alpha blending
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     }
 
@@ -83,37 +82,38 @@ public class ObjLoadingTestScreen extends BaseScreen {
 
         glLoadIdentity();
 
-
         //translate view according to 3D camera
         mCamera3D.lookThrough();
 
-        //draw terrain at it's current state
-        mTerrainRenderer.renderTerrain(mTerrain);
+        //draw gray wires
+        glColor4f(0.329412f, 0.329412f, 0.329412f, 0.5f);
+        SimpleShapesRenderer.renderGridMesh(100);
 
-        glPushMatrix();
+        //draw x y z axes
+        SimpleShapesRenderer.renderAxes(50);
+
+        mediumHouseModel.enableRenderGLStates();
         {
-
-            glEnable(GL_TEXTURE_2D);
-
-            //draw 3d models
-            glTranslated(0, 1, 0);
-            float scaleFactor = 0.7f;
-            glScaled(scaleFactor, scaleFactor, scaleFactor);
-            glColor3f(1f,1f,1f);
-
-            //we don't want current color to affect our object
-            glDisable(GL_COLOR_MATERIAL);
+            //draw medium house
+            glPushMatrix();
             {
-                model.render();
+                //translate to position
+                glTranslated(mediumHouseModel.getPosition().getX(), mediumHouseModel.getPosition().getY(), mediumHouseModel.getPosition().getZ());
+                mediumHouseModel.render();
             }
-            glEnable(GL_COLOR_MATERIAL);
+            glPopMatrix();
 
-            glDisable(GL_TEXTURE_2D);
+            //draw small house
+            glPushMatrix();
+            {
+                //translate to position
+                glTranslated(smallHouseModel.getPosition().getX(), smallHouseModel.getPosition().getY(), smallHouseModel.getPosition().getZ());
+                smallHouseModel.render();
+            }
+            glPopMatrix();
         }
-        glPopMatrix();
+        mediumHouseModel.disableRenderGLStates();
 
-        //Reset ModelView Matrix
-        glLoadIdentity();
 
     }
 
@@ -181,36 +181,6 @@ public class ObjLoadingTestScreen extends BaseScreen {
 
         // tell openGL glColor3f effects the ambient and diffuse properties of material
         glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-    }
-
-    private void cookTerrain() {
-
-        //cook
-        for (int i = 0; i < 50000; i++) {
-            mTerrain.quake();
-        }
-
-        //create place for city
-        int areaRadius = 5;
-        int xPosition = 0;
-        int yPosition = 0;
-
-        Point position = new Point(xPosition, yPosition);
-
-        Rectangle flattedArea = new Rectangle(
-                new Point(-areaRadius + position.getX(), -areaRadius + position.getY()),
-                new Point(areaRadius, areaRadius));
-
-        int heightLevel = RAMP_LEVEL;
-
-        //prepare area for houses to be built
-        mTerrain.flattenArea(flattedArea, heightLevel);
-
-        //smooth
-        for (int i = 0; i < 10; i++) {
-            mTerrain.smooth();
-        }
-
     }
 
 }

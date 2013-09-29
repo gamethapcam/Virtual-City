@@ -4,22 +4,25 @@ import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.Camera2D;
 import framework.core.camera.FirstPersonCamera;
-import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SimpleTerrain;
+import framework.terrain.implementation.TexturedTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
 import framework.utills.GLUT;
 import framework.utills.SimpleShapesRenderer;
-import framework.utills.geometry.Point;
-import framework.utills.geometry.Rectangle;
+import framework.geometry.Point;
+import framework.geometry.Rectangle;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
+import resources.AssetManager;
+import resources.Assets2D;
 
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glLight;
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,6 +39,7 @@ public class LightTestScreen extends BaseScreen {
     TerrainRenderer mTerrainRenderer;
 
 
+
     public LightTestScreen(Program program) {
         super(program);
     }
@@ -50,17 +54,20 @@ public class LightTestScreen extends BaseScreen {
         //create instance of 3D camera and position it
         mCamera3D = new FirstPersonCamera(0, 15, -30);
 
-        //increase movement speed
-        mCamera3D.setMovementSpeed(10);
-
         //enable 3D projection
         mCamera3D.initializePerspective();
+
+        mCamera3D.setMovementConstrainY(new Vector2f(-50, 100));
+
+        //increase movement speed
+        mCamera3D.setMovementSpeed(10);
 
         //create Terrain
         mTerrain = new SimpleTerrain(100, 100, 7, -2);
 
         //create Terrain Renderer
-        mTerrainRenderer = new HeighColoredTerrainRenderer();
+//        mTerrainRenderer = new HeighColoredTerrainRenderer();
+        mTerrainRenderer = new TexturedTerrainRenderer(AssetManager.getAsset2D(Assets2D.GRASS));
 
         //cook terrain
         cookTerrain();
@@ -189,7 +196,7 @@ public class LightTestScreen extends BaseScreen {
 
     @Override
     public void onUpdate(long delta) {
-        //To change body of implemented methods use File | Settings | File Templates.
+       //TODO update game logic
     }
 
     private void cookTerrain() {

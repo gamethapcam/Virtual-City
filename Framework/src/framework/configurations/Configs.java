@@ -19,7 +19,7 @@ public class Configs {
     public static final boolean FRAMEWORK_LOGS_ENABLED = true;
     public static final boolean MOUSE_ENABLED = true;
     public static final boolean KEYBOARD_ENABLED = true;
-    public static final boolean HIDE_DEFAULT_CURSOR = true;
+    public static final boolean HIDE_DEFAULT_CURSOR = false;
     public static final String RESOURCES_PATH = "resources" + File.separator;
 
 }

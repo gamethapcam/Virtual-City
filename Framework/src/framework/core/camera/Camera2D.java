@@ -1,8 +1,8 @@
 package framework.core.camera;
 
-import framework.utills.geometry.Point;
-import framework.utills.geometry.Rectangle;
-import framework.utills.geometry.Rectangle2D;
+import framework.geometry.Point;
+import framework.geometry.Rectangle;
+import framework.geometry.Rectangle2D;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -52,7 +52,6 @@ public class Camera2D implements OrthographicCamera {
 
     @Override
     public void initializePerspective() {
-
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
         GL11.glOrtho(mOrthoLeft, mOrthoRight, mOrthoBottom, mOrthoTop, mOrthoNear, mOrthoFar);

@@ -4,4 +4,5 @@ Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 map_Kd low_poly_house.jpg
+bump s_house_hpoly.jpg -bm 1
 Ni 1.00

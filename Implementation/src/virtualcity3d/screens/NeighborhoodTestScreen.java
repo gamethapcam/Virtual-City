@@ -9,18 +9,18 @@ import framework.terrain.implementation.SimpleTerrain;
 import framework.terrain.implementation.SolidTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
-import framework.utills.geometry.Point;
-import framework.utills.geometry.Rectangle;
+import framework.geometry.Point;
+import framework.geometry.Rectangle;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector2f;
 import resources.AssetManager;
+import resources.Assets3D;
 
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glTranslated;
 
 /**
  * Created with IntelliJ IDEA.
@@ -57,8 +57,8 @@ public class NeighborhoodTestScreen extends BaseScreen {
         initLight();
 
         // Load the models
-        mCottageModel = AssetManager.loadCottageModel();
-//        mCottageModel = AssetManager.loadCubeModel();
+//        mCottageModel = AssetManager.loadCottageModelLow();
+        mCottageModel = AssetManager.getAsset3D(Assets3D.MEDIUM_HOUSE);
 
         //create terrain
         createTerrain();
@@ -85,8 +85,8 @@ public class NeighborhoodTestScreen extends BaseScreen {
 
     private void createTerrain() {
 
-        int terrainSizeX = AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGES_COUNT_IN_ROW;
-        int terrainSizeZ = AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGE_ROWS_COUNT;
+        int terrainSizeX = 15 * COTTAGES_COUNT_IN_ROW;
+        int terrainSizeZ = 15 * COTTAGE_ROWS_COUNT;
 
         //create Terrain
         mTerrain = new SimpleTerrain(terrainSizeX * 2, terrainSizeZ * 2, RAMP_LEVEL + 5, -5);
@@ -124,8 +124,8 @@ public class NeighborhoodTestScreen extends BaseScreen {
         glEnable(GL_TEXTURE_2D);
         {
 
-            int initialX = -(AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGE_ROWS_COUNT) / 2 + AssetManager.DEFAULT_COTTAGE_SIZE / 2;
-            int initialZ = -(AssetManager.DEFAULT_COTTAGE_SIZE * COTTAGES_COUNT_IN_ROW) / 2 - AssetManager.DEFAULT_COTTAGE_SIZE / 2;
+            int initialX = -(15 * COTTAGE_ROWS_COUNT) / 2 + 15 / 2;
+            int initialZ = -(15 * COTTAGES_COUNT_IN_ROW) / 2 - 15 / 2;
             int initialY = RAMP_LEVEL + 1;
 
             //translate to initial position
@@ -134,12 +134,13 @@ public class NeighborhoodTestScreen extends BaseScreen {
             for (int rowIndex = 0; rowIndex < COTTAGE_ROWS_COUNT; rowIndex++) {
 
                 //translate to next row
-                glTranslated(0, 0, (rowIndex > 0) ? AssetManager.DEFAULT_COTTAGE_SIZE : 0);
+                glTranslated(0, 0, (rowIndex > 0) ? 15 : 0);
                 glPushMatrix();
                 {
-                    for (int currentCottageIndexInRow = 0; currentCottageIndexInRow < COTTAGES_COUNT_IN_ROW; currentCottageIndexInRow++) {
+                    for (int currentCottageIndexInRow = 0; currentCottageIndexInRow < COTTAGES_COUNT_IN_ROW;
+                         currentCottageIndexInRow++) {
                         //translate and render
-                        glTranslated(AssetManager.DEFAULT_COTTAGE_SIZE, 0, 0);
+                        glTranslated(15, 0, 0);
                         mCottageModel.render();
                     }
                 }
@@ -225,11 +226,11 @@ public class NeighborhoodTestScreen extends BaseScreen {
         }
 
 
-        int areaSize = AssetManager.DEFAULT_COTTAGE_SIZE *
+        int areaSize = 15 *
                 ((COTTAGES_COUNT_IN_ROW > COTTAGE_ROWS_COUNT) ? COTTAGES_COUNT_IN_ROW : COTTAGE_ROWS_COUNT);
 
         //create place for city
-        int areaRadius = areaSize / 2 + AssetManager.DEFAULT_COTTAGE_SIZE + 5;
+        int areaRadius = areaSize / 2 + 15 + 5;
         int xPosition = 0;
         int yPosition = 0;
 
@@ -240,13 +241,11 @@ public class NeighborhoodTestScreen extends BaseScreen {
                 new Point(-areaRadius + position.getX(), -areaRadius + position.getY()),
                 new Point(areaRadius, areaRadius));
 
-        int heightLevel = RAMP_LEVEL;
 
-        //prepare area for houses to be built
-//        mTerrain.flattenArea(flattedArea, heightLevel);
+        mTerrain.flattenArea(flattedArea);
 
         //smooth
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             mTerrain.smooth();
         }
 

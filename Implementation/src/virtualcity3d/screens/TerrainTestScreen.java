@@ -2,20 +2,20 @@ package virtualcity3d.screens;
 
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
-import framework.core.camera.Camera2D;
 import framework.core.camera.FirstPersonCamera;
-import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SimpleTerrain;
+import framework.terrain.implementation.TexturedTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
-import framework.utills.SimpleShapesRenderer;
-import framework.utills.geometry.Point;
-import framework.utills.geometry.Rectangle;
-import org.lwjgl.input.Mouse;
+import framework.geometry.Point;
+import framework.geometry.Rectangle;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
+import resources.AssetManager;
+import resources.Assets2D;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,7 +27,6 @@ import static org.lwjgl.opengl.GL11.*;
 public class TerrainTestScreen extends BaseScreen {
 
     FirstPersonCamera mCamera3D;
-    Camera2D mCamera2D;
     Terrain mTerrain;
     TerrainRenderer mTerrainRenderer;
 
@@ -40,8 +39,6 @@ public class TerrainTestScreen extends BaseScreen {
     public void init() {
         //To change body of implemented methods use File | Settings | File Templates.
 
-        //create instance of 2d camera
-        mCamera2D = new Camera2D();
 
         //create instance of 3D camera and position it
         mCamera3D = new FirstPersonCamera(0, 15, -70);
@@ -49,13 +46,21 @@ public class TerrainTestScreen extends BaseScreen {
         //enable 3D projection
         mCamera3D.initializePerspective();
 
+        mCamera3D.setMovementConstrainY(new Vector2f(-50, 100));
+
+        //increase movement speed
+        mCamera3D.setMovementSpeed(10);
+
         //create Terrain
         mTerrain = new SimpleTerrain(100, 100, 7, -2);
 
         //create Terrain Renderer
 //        mTerrainRenderer = new SolidTerrainRenderer(ReadableColor.GREY);
 //        mTerrainRenderer = new WireTerrainRenderer();
-        mTerrainRenderer = new HeighColoredTerrainRenderer();
+//        mTerrainRenderer = new HeighColoredTerrainRenderer();
+
+        mTerrainRenderer = new TexturedTerrainRenderer(AssetManager.getAsset2D(Assets2D.GRASS));
+
 
         //cook terrain
         cookTerrain();
@@ -69,38 +74,15 @@ public class TerrainTestScreen extends BaseScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         glClearColor(0, 0.5f, 0.5f, 1.0f);
 
+        //Reset ModelView Matrix
+        glLoadIdentity();
+
         //translate view according to 3D camera
         mCamera3D.lookThrough();
 
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
 
-        //save 3d projection
-        mCamera3D.saveProjection();
-
-        //switch to 2d projection
-        mCamera2D.lookThrough();
-
-        //Reset ModelView Matrix
-        glLoadIdentity();
-
-        //draw cursor
-        drawCursor(mCamera2D.screenToWorld(new Vector2f(Mouse.getX(), Mouse.getY())));
-
-
-        //restore 3d Projection
-        mCamera3D.restoreProjection();
-
-    }
-
-
-    private void drawCursor(Vector2f cursorCoords) {
-        glColor3f(1f, 0, 0);
-        glPushMatrix();
-        glTranslated(cursorCoords.x, cursorCoords.y, 0);
-        int slices = 20;
-        SimpleShapesRenderer.drawCircle(slices);
-        glPopMatrix();
     }
 
 

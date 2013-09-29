@@ -1,4 +1,4 @@
-package framework.utills.geometry;
+package framework.geometry;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +13,12 @@ public class Rectangle implements Rectangle2D {
     private Point mLeftBottom;
     private Point mRightTop;
 
+    /**
+     * Creates a 2D Rectanle
+     *
+     * @param mLeftBottom left bottom point
+     * @param mRightTop   right top point
+     */
     public Rectangle(Point mLeftBottom, Point mRightTop) {
         this.mLeftBottom = mLeftBottom;
         this.mRightTop = mRightTop;
@@ -28,11 +34,30 @@ public class Rectangle implements Rectangle2D {
         return mRightTop.getY();
     }
 
+    @Override
     public Point getLeftBottom() {
         return mLeftBottom;
     }
 
+    @Override
     public Point getRightTop() {
         return mRightTop;
+    }
+
+    @Override
+    public Point getCenter() {
+        float x = (float) (getRightTop().getX() - getMinX());
+        float y = (float) (getRightTop().getY() - getLeftBottom().getY());
+        return new Point(x, y);
+    }
+
+    @Override
+    public double getWidth() {
+        return Math.abs(getRightTop().getX() - getLeftBottom().getX());
+    }
+
+    @Override
+    public double getHeight() {
+        return Math.abs(getRightTop().getY() - getLeftBottom().getY());
     }
 }

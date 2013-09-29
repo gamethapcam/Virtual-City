@@ -1,4 +1,4 @@
-package framework.utills.geometry;
+package framework.geometry;
 
 /**
  * Created with IntelliJ IDEA.

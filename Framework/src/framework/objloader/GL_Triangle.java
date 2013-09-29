@@ -117,7 +117,7 @@ public class GL_Triangle {
      * surface.  cos_angle is the minumum angle for smoothing.
      * If the angle between the faces is > cos_angle, then the
      * faces are considered to be a continuous surface.  Ie.
-     * 90 degrees is a sharp corner, 180 degrees is a flat surface.
+     * 90 angle is a sharp corner, 180 angle is a flat surface.
      */
     public static boolean onSameSurface(GL_Triangle t1, GL_Triangle t2, float cos_angle) {
         float dot = GL_Vector.dotProduct(t1.n, t2.n);

@@ -63,22 +63,29 @@ public class HeighColoredTerrainRenderer implements TerrainRenderer {
         for (int x = 1; x < XLength; x++) {
             for (int z = 1; z < ZLength; z++) {
 
-                //draw  small quads
-                glBegin(GL_QUADS);
+                glPushMatrix();
                 {
-                    setColorForHeight(heightMap[x][z], minHeight, maxHeight);
-                    glVertex3d(z - ZLength / 2, 1 + heightMap[x][z], x - XLength / 2);
+                    //must offset to zero
+                    glTranslated(0, -1, 0);
+                    //draw  small quads
+                    glBegin(GL_QUADS);
+                    {
+                        setColorForHeight(heightMap[x][z], minHeight, maxHeight);
+                        glVertex3d(z - ZLength / 2, 1 + heightMap[x][z], x - XLength / 2);
 
-                    setColorForHeight(heightMap[x][z], minHeight, maxHeight);
-                    glVertex3d(z - 1 - ZLength / 2, 1 + heightMap[x][z - 1], x - XLength / 2);
+                        setColorForHeight(heightMap[x][z], minHeight, maxHeight);
+                        glVertex3d(z - 1 - ZLength / 2, 1 + heightMap[x][z - 1], x - XLength / 2);
 
-                    setColorForHeight(heightMap[x][z], minHeight, maxHeight);
-                    glVertex3d(z - 1 - ZLength / 2, 1 + heightMap[x - 1][z - 1], x - 1 - XLength / 2);
+                        setColorForHeight(heightMap[x][z], minHeight, maxHeight);
+                        glVertex3d(z - 1 - ZLength / 2, 1 + heightMap[x - 1][z - 1], x - 1 - XLength / 2);
 
-                    setColorForHeight(heightMap[x][z], minHeight, maxHeight);
-                    glVertex3d(z - ZLength / 2, 1 + heightMap[x - 1][z], x - 1 - XLength / 2);
+                        setColorForHeight(heightMap[x][z], minHeight, maxHeight);
+                        glVertex3d(z - ZLength / 2, 1 + heightMap[x - 1][z], x - 1 - XLength / 2);
+                    }
+                    glEnd();
+
                 }
-                glEnd();
+                glPopMatrix();
 
             }
         }
