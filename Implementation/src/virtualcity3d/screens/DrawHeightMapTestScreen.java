@@ -37,8 +37,8 @@ public class DrawHeightMapTestScreen extends BaseScreen {
     public DrawHeightMapTestScreen(Program program) {
         super(program);
 
-        WIDTH = Display.getWidth();
-        HEIGHT = Display.getWidth();//Display.getHeight();
+        WIDTH = 500;//Display.getWidth();
+        HEIGHT = 500;//Display.getWidth();//Display.getHeight();
     }
 
     @Override
@@ -212,10 +212,10 @@ public class DrawHeightMapTestScreen extends BaseScreen {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         glClearColor(0, 0.5f, 0.5f, 1.0f);
         glLoadIdentity();
-        SimpleShapesRenderer.renderAxes(300);
+        SimpleShapesRenderer.renderAxes(1);
 
         //here we define where to start drawing pixels array
-        glRasterPos2f(-0.5f, -0.5f);
+        glRasterPos2f(0f, 0f);
 
         //Draw pixel mPixelBuffer
         glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, mPixelBuffer);
