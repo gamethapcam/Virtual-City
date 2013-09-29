@@ -9,10 +9,10 @@ import framework.text.TextRenderer;
 import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.Point;
 import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import virtualcity3d.listeners.MapEditorMouseListener;
 import virtualcity3d.models.hud.ColorSquare;
 import virtualcity3d.models.hud.HouseIcon;
 import virtualcity3d.models.hud.Icon;
@@ -33,14 +33,16 @@ public class MapEditorTestScreen extends BaseScreen {
 
     Camera2D mCamera;
     private ColorSquare mEditorAreaSquare;
-    private HouseIcon mSmallHouseIconMap;
+    private HouseIcon mCurrentlySelectedIcon;
     private Vector2f mCursorWorldCoords;
     private ArrayList<Icon> mMapDrawenIcons = new ArrayList<Icon>();
     private ArrayList<Icon> mSidePanelIcons = new ArrayList<Icon>();
     private TextRenderer mTextRenderer = new TextRenderer();
+    private MouseInputProcessorListener mInputProcessorListener;
 
     public MapEditorTestScreen(Program program) {
         super(program);
+        mInputProcessorListener = new MapEditorMouseListener(this);
     }
 
     @Override
@@ -61,38 +63,21 @@ public class MapEditorTestScreen extends BaseScreen {
                         -(float) (visibleAreaHeight - editorAreaHeight), 0f));
 
         //init map icons
-        mSmallHouseIconMap = new HouseIcon(0.03);
-        mSmallHouseIconMap.setBackGroundColor(ReadableColor.GREEN);
+        mCurrentlySelectedIcon = new HouseIcon(0.03);
+        mCurrentlySelectedIcon.setBackGroundColor(ReadableColor.GREEN);
 
         //init side panel icons
         initSidePanelIcons((float) editorAreaWidth, (float) editorAreaHeight);
 
-        //set on click listener
-        MouseInputProcessor.setMouseInputProcessorListener(new MouseInputProcessorListener() {
-            @Override
-            public void onMouseButtonDown(MouseInputProcessor.MouseButton mouseButton, Point point) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void onMouseButtonUp(MouseInputProcessor.MouseButton mouseButton, Point point) {
-                if (mouseButton == MouseInputProcessor.MouseButton.LEFT_BUTTON) {
-                    mMapDrawenIcons.add(mSmallHouseIconMap.clone());
-                }
-            }
-
-            @Override
-            public void onMousePositionChange(int dx, int dy, int newX, int newY) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
+        //set virtualcity3d.listeners
+        MouseInputProcessor.setMouseInputProcessorListener(mInputProcessorListener);
     }
 
     private void initSidePanelIcons(float editorAreaWidth, float editorAreaHeight) {
 
         float padding = 0.01f;
         float initX = -editorAreaWidth / 2 + padding;
-        float initY = editorAreaHeight / 2 - 2 * padding;
+        float initY = editorAreaHeight / 2 - 0.1f - padding;
 
 
         //small house green icon
@@ -120,7 +105,7 @@ public class MapEditorTestScreen extends BaseScreen {
         //render the map
         mEditorAreaSquare.render();
 
-        mSmallHouseIconMap.enableRenderGLStates();
+        mCurrentlySelectedIcon.enableRenderGLStates();
         {
 
             drawSidePanel();
@@ -129,10 +114,10 @@ public class MapEditorTestScreen extends BaseScreen {
             drawMarkedIcons();
 
             //follow the cursor
-            mSmallHouseIconMap.setPosition(new Vector3f(mCursorWorldCoords.x, mCursorWorldCoords.y, 0));
-            mSmallHouseIconMap.render();
+            mCurrentlySelectedIcon.setPosition(new Vector3f(mCursorWorldCoords.x, mCursorWorldCoords.y, 0));
+            mCurrentlySelectedIcon.render();
         }
-        mSmallHouseIconMap.disableRenderGLStates();
+        mCurrentlySelectedIcon.disableRenderGLStates();
 
         //draws a red dot
         drawCursorPointer();
@@ -169,5 +154,17 @@ public class MapEditorTestScreen extends BaseScreen {
     @Override
     public void onUpdate(long delta) {
         mCursorWorldCoords = mCamera.screenToWorld(new Vector2f(Mouse.getX(), Mouse.getY()));
+    }
+
+    public ArrayList<Icon> getMapDrawenIcons() {
+        return mMapDrawenIcons;
+    }
+
+    public ArrayList<Icon> getSidePanelIcons() {
+        return mSidePanelIcons;
+    }
+
+    public HouseIcon getCurrentlySelectedIcon() {
+        return mCurrentlySelectedIcon;
     }
 }
