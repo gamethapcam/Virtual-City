@@ -3,17 +3,16 @@ package virtualcity3d.screens;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.Camera2D;
-import framework.core.camera.OrthographicCamera;
-import framework.core.input.keyboard.KeyboardInputProcessor;
-import framework.core.input.keyboard.KeyboardKeyListener;
-import framework.core.input.keyboard.KeyboardKeys;
-import framework.geometry.Point;
-import framework.geometry.Rectangle;
 import framework.utills.SimpleShapesRenderer;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import virtualcity3d.models.hud.ColorSquare;
+import virtualcity3d.models.hud.MapEditor;
+
+import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -27,7 +26,8 @@ import static org.lwjgl.opengl.GL11.*;
 public class MapEditorTestScreen extends BaseScreen {
 
     Camera2D mCamera;
-    private ColorSquare mSquare;
+    private ColorSquare mEditorAreaSquare;
+    private MapEditor mMapEditor;
 
     public MapEditorTestScreen(Program program) {
         super(program);
@@ -39,8 +39,14 @@ public class MapEditorTestScreen extends BaseScreen {
         mCamera = new Camera2D();
         mCamera.initializePerspective();
 
-        mSquare = new ColorSquare(ReadableColor.GREEN, mCamera.getVisibleArea().getWidth() / 4, mCamera.getVisibleArea().getHeight() / 4);
-        mSquare.setPosition(new Vector3f(-0.3f, -0.3f, 0f));
+        double visibleAreaWidth = mCamera.getVisibleArea().getWidth();
+        double visibleAreaHeight = mCamera.getVisibleArea().getHeight();
+
+        double editorAreaWidth = 0.95 * visibleAreaWidth;
+        double editorAreaHeight = 0.95 * visibleAreaHeight;
+
+        mEditorAreaSquare = new ColorSquare(ReadableColor.GREY, editorAreaWidth, editorAreaHeight);
+        mEditorAreaSquare.setPosition(new Vector3f((float) (visibleAreaWidth - editorAreaWidth), -(float) (visibleAreaHeight - editorAreaHeight), 0f));
 
     }
 
@@ -49,12 +55,21 @@ public class MapEditorTestScreen extends BaseScreen {
 
         // clear depth buffer and color
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        glClearColor(0, 0.5f, 0.5f, 1.0f);
+        glClearColor(0, 0, 0, 1.0f);
         glLoadIdentity();
-        SimpleShapesRenderer.renderAxes(1);
 
-        mSquare.render();
+        //render the map
+        mMapEditor.render();
+//        mEditorAreaSquare.render();
 
+        drawCursor();
+
+    }
+
+    private void drawCursor() {
+        //draw simple cursor
+        Vector2f cursorWorldCoords = mCamera.screenToWorld(new Vector2f(Mouse.getX(), Mouse.getY()));
+        SimpleShapesRenderer.drawCursor(cursorWorldCoords);
     }
 
     @Override

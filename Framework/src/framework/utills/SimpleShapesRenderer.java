@@ -39,6 +39,23 @@ public class SimpleShapesRenderer {
         }
     }
 
+    public static void drawCursor(Vector2f cursorCoords) {
+        glColor3f(1f, 0, 0);
+        glPushMatrix();
+        glTranslated(cursorCoords.x, cursorCoords.y, 0);
+        glBegin(GL11.GL_TRIANGLE_FAN);
+        {
+            glVertex2f(0, 0);
+            int slices = 20;
+            for (int i = 0; i <= slices; i++) {
+                double angle = Math.PI * 2 * i / slices;
+                glVertex2f((float) Math.cos(angle) / 100, (float) Math.sin(angle) / 100);
+            }
+        }
+        glEnd();
+        glPopMatrix();
+    }
+
     public static final void drawSnowMan() {
 
         glColor3f(1.0f, 1.0f, 1.0f);
