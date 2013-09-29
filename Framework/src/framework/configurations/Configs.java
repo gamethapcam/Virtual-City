@@ -11,7 +11,7 @@ import java.io.File;
  */
 public class Configs {
 
-    public static final boolean FULL_SCREEN = false;
+    public static final boolean FULL_SCREEN = true;
     public static final int DISPLAY_WITH = 1000;
     public static final int DISPLAY_HEIGHT = 700;
     public static final boolean SYNC_FPS = false;

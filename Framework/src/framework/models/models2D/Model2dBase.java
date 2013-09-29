@@ -6,10 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 
-import java.util.ArrayList;
-
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glPushAttrib;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,9 +16,9 @@ import static org.lwjgl.opengl.GL11.glPushAttrib;
  */
 public abstract class Model2dBase implements Model2D {
 
-    Texture mTexture;
-    Rectangle2D mRenderArea;
-    Vector3f mPosition = new Vector3f();
+    protected Texture mTexture;
+    protected Rectangle2D mRenderArea;
+    protected Vector3f mPosition = new Vector3f();
 
     public Model2dBase(Texture texture, Rectangle2D renderArea) {
         mTexture = texture;

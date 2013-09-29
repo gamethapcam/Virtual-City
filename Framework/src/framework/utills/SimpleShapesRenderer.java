@@ -49,7 +49,7 @@ public class SimpleShapesRenderer {
             int slices = 20;
             for (int i = 0; i <= slices; i++) {
                 double angle = Math.PI * 2 * i / slices;
-                glVertex2f((float) Math.cos(angle) / 100, (float) Math.sin(angle) / 100);
+                glVertex2f((float) Math.cos(angle) / 150, (float) Math.sin(angle) / 150);
             }
         }
         glEnd();

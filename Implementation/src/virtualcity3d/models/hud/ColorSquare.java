@@ -13,11 +13,9 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class ColorSquare implements Model2D {
 
-
     private Vector3f mPosition = new Vector3f();
     private Rectangle2D mRenderArea;
     private ReadableColor mColor;
-
 
     public ColorSquare(ReadableColor color, Rectangle2D renderArea) {
         mColor = color;
@@ -26,16 +24,21 @@ public class ColorSquare implements Model2D {
 
     public ColorSquare(ReadableColor color, float width, float height) {
         mColor = color;
-        mRenderArea = new Rectangle(new Point(-width / 2, -height / 2),  new Point(width / 2, height / 2));
+        mRenderArea = new Rectangle(new Point(-width / 2, -height / 2), new Point(width / 2, height / 2));
     }
+
     public ColorSquare(ReadableColor color, double width, double height) {
         mColor = color;
-        mRenderArea = new Rectangle(new Point(-width / 2, -height / 2),  new Point(width / 2, height / 2));
+        mRenderArea = new Rectangle(new Point(-width / 2, -height / 2), new Point(width / 2, height / 2));
     }
 
 
     @Override
     public void render() {
+
+        if (mColor == null)
+            return;
+
         //store color
         glPushAttrib(GL_CURRENT_BIT);
 
@@ -85,11 +88,19 @@ public class ColorSquare implements Model2D {
 
     @Override
     public double getX_Size() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return Math.abs(mRenderArea.getRightTop().getX() - mRenderArea.getLeftBottom().getX());
     }
 
     @Override
     public double getY_Size() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return Math.abs(mRenderArea.getRightTop().getY() - mRenderArea.getLeftBottom().getY());
+    }
+
+    public void setColor(ReadableColor color) {
+        mColor = color;
+    }
+
+    public ReadableColor getColor() {
+        return mColor;
     }
 }
