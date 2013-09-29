@@ -22,7 +22,6 @@ public abstract class Model2dBase implements Model2D {
     Texture mTexture;
     Rectangle2D mRenderArea;
     Vector3f mPosition = new Vector3f();
-    private ArrayList<Rotation> mRotationList = new ArrayList<Rotation>();
 
     public Model2dBase(Texture texture, Rectangle2D renderArea) {
         mTexture = texture;
@@ -42,13 +41,7 @@ public abstract class Model2dBase implements Model2D {
         {
 
             //translate to position
-            glTranslated(mPosition.x,mPosition.y,mPosition.z);
-
-            if (!mRotationList.isEmpty()) {
-                for (Rotation rotation : mRotationList) {
-                    glRotated(rotation.angle, rotation.xAxis, rotation.yAxis, rotation.zAxis);
-                }
-            }
+            glTranslated(mPosition.x, mPosition.y, mPosition.z);
 
             GL11.glBegin(GL11.GL_QUADS);
             {
@@ -106,27 +99,4 @@ public abstract class Model2dBase implements Model2D {
         return Math.abs(mRenderArea.getRightTop().getY() - mRenderArea.getLeftBottom().getY());
     }
 
-    @Override
-    public void addRotation(int degrees, float xAxis, float yAxis, float zAxis) {
-        mRotationList.add(new Rotation(degrees, xAxis, yAxis, zAxis));
-    }
-
-    @Override
-    public void clearRotations() {
-        mRotationList.clear();
-    }
-
-    class Rotation {
-        public int angle;
-        public float xAxis;
-        public float yAxis;
-        public float zAxis;
-
-        Rotation(int degrees, float xAxis, float yAxis, float zAxis) {
-            this.angle = degrees;
-            this.xAxis = xAxis;
-            this.yAxis = yAxis;
-            this.zAxis = zAxis;
-        }
-    }
 }

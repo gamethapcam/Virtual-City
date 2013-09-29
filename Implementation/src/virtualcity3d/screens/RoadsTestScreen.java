@@ -3,7 +3,7 @@ package virtualcity3d.screens;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
-import framework.models.models3D.Model3D;
+import framework.models.models3d.Model3D;
 import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SimpleTerrain;
 import framework.terrain.interfaces.Terrain;

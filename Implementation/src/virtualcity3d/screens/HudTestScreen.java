@@ -53,7 +53,7 @@ public class HudTestScreen extends BaseScreen {
         Point rightTop = new Point(visibleArea.getMinX() + squareSize,visibleArea.getMaxY());
 
         Rectangle rec = new Rectangle(leftBottom,rightTop);
-        mColorSquare = new ColorSquare(rec);
+//        mColorSquare = new ColorSquare(rec);
 
     }
 
@@ -107,8 +107,8 @@ public class HudTestScreen extends BaseScreen {
         {
             glLoadIdentity();
 
-            //translate to top left corner
-            glTranslated(mColorSquare.getX(), mColorSquare.getY(), 0);
+//            //translate to top left corner
+//            glTranslated(mColorSquare.getX(), mColorSquare.getY(), 0);
 
             glScalef(scaleFactor, scaleFactor, 1f);
 

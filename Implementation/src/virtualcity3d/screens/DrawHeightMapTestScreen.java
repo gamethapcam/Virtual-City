@@ -7,7 +7,6 @@ import framework.core.camera.Camera2D;
 import framework.core.input.mouse.MouseInputProcessor;
 import framework.core.input.mouse.MouseInputProcessorListener;
 import framework.utills.SimpleShapesRenderer;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Point;
 
@@ -37,8 +36,8 @@ public class DrawHeightMapTestScreen extends BaseScreen {
     public DrawHeightMapTestScreen(Program program) {
         super(program);
 
-        WIDTH = 500;//Display.getWidth();
-        HEIGHT = 500;//Display.getWidth();//Display.getHeight();
+        WIDTH = 500;//Display.getX_Size();
+        HEIGHT = 500;//Display.getX_Size();//Display.getY_Size();
     }
 
     @Override

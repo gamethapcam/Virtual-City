@@ -1,64 +1,85 @@
 package virtualcity3d.models.hud;
 
-import framework.geometry.Point;
-import framework.geometry.Rectangle;
-import org.lwjgl.util.Color;
+import framework.geometry.Rectangle2D;
+import framework.models.models2D.Model2D;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.ReadableColor;
+import org.lwjgl.util.vector.Vector3f;
 
-/**
- * Created with IntelliJ IDEA.
- * User: yan
- * Date: 09/09/13
- * Time: 09:57
- * To change this template use File | Settings | File Templates.
- */
-public class ColorSquare {
-
-    Rectangle mRectangle;
-    //anchored to top left
-    Point mPosition;
-
-    Color mColor;
+import static org.lwjgl.opengl.GL11.*;
 
 
-    public ColorSquare(Rectangle rec) {
-        mRectangle = rec;
-        mPosition = new Point(rec.getMinX(), rec.getMaxY());
-        mColor = new Color(Color.BLACK);
+public class ColorSquare implements Model2D {
+
+
+    private Vector3f mPosition;
+    private Rectangle2D mRenderArea;
+    private ReadableColor mColor;
+
+
+    public ColorSquare(ReadableColor color, Rectangle2D renderArea) {
+        mColor = color;
+        mRenderArea = renderArea;
+        mPosition = new Vector3f();
     }
 
-    public double getY() {
-        return mPosition.getY();
+    @Override
+    public void render() {
+        //store color
+        glPushAttrib(GL_CURRENT_BIT);
+
+
+        //set color
+        glColor3b(mColor.getRedByte(), mColor.getGreenByte(), mColor.getBlueByte());
+
+        glPushMatrix();
+        {
+
+            //translate to position
+            glTranslated(mPosition.x, mPosition.y, mPosition.z);
+
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glVertex2f((float) mRenderArea.getLeftBottom().getX(), (float) mRenderArea.getLeftBottom().getY());
+                GL11.glVertex2f((float) mRenderArea.getLeftBottom().getX(), (float) mRenderArea.getRightTop().getY());
+                GL11.glVertex2f((float) mRenderArea.getRightTop().getX(), (float) mRenderArea.getRightTop().getY());
+                GL11.glVertex2f((float) mRenderArea.getRightTop().getX(), (float) mRenderArea.getLeftBottom().getY());
+            }
+            GL11.glEnd();
+        }
+        glPopMatrix();
+
+        //restore color
+        glPopAttrib();
     }
 
-    public double getX() {
-        return mPosition.getX();
+    @Override
+    public void enableRenderGLStates() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public Color getColor() {
-        return mColor;
+    @Override
+    public void disableRenderGLStates() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void setColor(Color mColor) {
-        this.mColor = mColor;
-    }
-
-    public Point getPosition() {
+    @Override
+    public Vector3f getPosition() {
         return mPosition;
     }
 
-    public void setPosition(Point mPosition) {
-        this.mPosition = mPosition;
+    @Override
+    public void setPosition(Vector3f position) {
+        mPosition = position;
     }
 
-    public Rectangle getRectangle() {
-        return mRectangle;
+    @Override
+    public double getX_Size() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void setRectangle(Rectangle mRectangle) {
-        this.mRectangle = mRectangle;
-    }
-
-    public void onClick() {
-        mColor = new Color(Color.RED);
+    @Override
+    public double getY_Size() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
