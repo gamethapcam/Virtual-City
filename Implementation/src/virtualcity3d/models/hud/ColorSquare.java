@@ -14,10 +14,10 @@ import static org.lwjgl.opengl.GL11.*;
 public class ColorSquare implements Model2D {
 
     private Vector3f mPosition = new Vector3f();
-    private Rectangle2D mRenderArea;
+    private Rectangle mRenderArea;
     private ReadableColor mColor;
 
-    public ColorSquare(ReadableColor color, Rectangle2D renderArea) {
+    public ColorSquare(ReadableColor color, Rectangle renderArea) {
         mColor = color;
         mRenderArea = renderArea;
     }
@@ -102,5 +102,11 @@ public class ColorSquare implements Model2D {
 
     public ReadableColor getColor() {
         return mColor;
+    }
+
+    public Rectangle getRenderArea() {
+        Point lBottom = new Point(mRenderArea.getLeftBottom().getX() + mPosition.getX(),mRenderArea.getLeftBottom().getY() + mPosition.getY());
+        Point rTop = new Point(mRenderArea.getRightTop().getX() + mPosition.getX(),mRenderArea.getRightTop().getY() + mPosition.getY());
+        return new Rectangle(lBottom,rTop);
     }
 }

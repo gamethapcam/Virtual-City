@@ -89,7 +89,7 @@ public class HouseIcon extends Model2dBase implements Icon {
 
     @Override
     public Rectangle getBoundingArea() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return mColorSquare.getRenderArea();
     }
 
     @Override

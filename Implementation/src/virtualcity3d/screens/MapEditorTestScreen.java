@@ -16,9 +16,12 @@ import virtualcity3d.listeners.MapEditorMouseListener;
 import virtualcity3d.models.hud.ColorSquare;
 import virtualcity3d.models.hud.HouseIcon;
 import virtualcity3d.models.hud.Icon;
+
 import java.util.ArrayList;
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glLoadIdentity;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,9 +34,9 @@ public class MapEditorTestScreen extends BaseScreen {
 
     Camera2D mCamera;
     private ColorSquare mEditorAreaSquare;
-    private HouseIcon mCurrentlySelectedIcon;
+    private Icon mCurrentlySelectedIcon;
     private Vector2f mCursorWorldCoords;
-    private ArrayList<Icon> mMapDrawenIcons = new ArrayList<Icon>();
+    private ArrayList<Icon> mMapDrawnIcons = new ArrayList<Icon>();
     private ArrayList<Icon> mSidePanelIcons = new ArrayList<Icon>();
     private TextRenderer mTextRenderer = new TextRenderer();
     private MouseInputProcessorListener mInputProcessorListener;
@@ -61,14 +64,10 @@ public class MapEditorTestScreen extends BaseScreen {
                 new Vector3f((float) (visibleAreaWidth - editorAreaWidth),
                         -(float) (visibleAreaHeight - editorAreaHeight), 0f));
 
-        //init map icons
-        mCurrentlySelectedIcon = new HouseIcon(0.03);
-        mCurrentlySelectedIcon.setBackGroundColor(ReadableColor.GREEN);
-
         //init side panel icons
         initSidePanelIcons((float) editorAreaWidth, (float) editorAreaHeight);
 
-        //set virtualcity3d.listeners
+        //set listeners
         MouseInputProcessor.setMouseInputProcessorListener(mInputProcessorListener);
     }
 
@@ -80,7 +79,7 @@ public class MapEditorTestScreen extends BaseScreen {
 
 
         //small house green icon
-        HouseIcon smallHouseIconGreen = new HouseIcon(0.05);
+        final HouseIcon smallHouseIconGreen = new HouseIcon(0.05);
         smallHouseIconGreen.setBackGroundColor(ReadableColor.GREEN);
 
         smallHouseIconGreen.setPosition(new Vector3f(initX, initY, 0f));
@@ -88,21 +87,23 @@ public class MapEditorTestScreen extends BaseScreen {
             @Override
             public void onIconClicked() {
                 setRenderedText("Small House Icon Selected");
+                setCurrentlySelectedIcon(smallHouseIconGreen.clone());
             }
         });
         mSidePanelIcons.add(smallHouseIconGreen);
 
         //small house blue icon
-        HouseIcon smallHouseIconBlue = new HouseIcon(0.05);
-        smallHouseIconBlue.setBackGroundColor(ReadableColor.BLUE);
-        smallHouseIconBlue.setPosition(new Vector3f(initX, (float) (initY - smallHouseIconGreen.getY_Size() - padding), 0f));
-        smallHouseIconBlue.setClickListener(new Icon.IconClickListener() {
+        final HouseIcon bigHouseIconBlue = new HouseIcon(0.05);
+        bigHouseIconBlue.setBackGroundColor(ReadableColor.BLUE);
+        bigHouseIconBlue.setPosition(new Vector3f(initX, (float) (initY - smallHouseIconGreen.getY_Size() - padding), 0f));
+        bigHouseIconBlue.setClickListener(new Icon.IconClickListener() {
             @Override
             public void onIconClicked() {
                 setRenderedText("Big House Icon Selected");
+                setCurrentlySelectedIcon(bigHouseIconBlue.clone());
             }
         });
-        mSidePanelIcons.add(smallHouseIconBlue);
+        mSidePanelIcons.add(bigHouseIconBlue);
     }
 
     @Override
@@ -116,7 +117,11 @@ public class MapEditorTestScreen extends BaseScreen {
         //render the map
         mEditorAreaSquare.render();
 
-        mCurrentlySelectedIcon.enableRenderGLStates();
+
+        //enable texture rendering states
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         {
 
             drawSidePanel();
@@ -125,10 +130,15 @@ public class MapEditorTestScreen extends BaseScreen {
             drawMarkedIcons();
 
             //follow the cursor
-            mCurrentlySelectedIcon.setPosition(new Vector3f(mCursorWorldCoords.x, mCursorWorldCoords.y, 0));
-            mCurrentlySelectedIcon.render();
+            if (mCurrentlySelectedIcon != null) {
+                mCurrentlySelectedIcon.setPosition(new Vector3f(mCursorWorldCoords.x, mCursorWorldCoords.y, 0));
+                mCurrentlySelectedIcon.render();
+            }
         }
-        mCurrentlySelectedIcon.disableRenderGLStates();
+
+        //disable texture rendering states
+        glDisable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
 
         //draws a red dot
         drawCursorPointer();
@@ -152,7 +162,7 @@ public class MapEditorTestScreen extends BaseScreen {
 
     private void drawMarkedIcons() {
         //draw all marked icons
-        for (Icon mapDrawenIcon : mMapDrawenIcons) {
+        for (Icon mapDrawenIcon : mMapDrawnIcons) {
             mapDrawenIcon.render();
         }
     }
@@ -168,15 +178,15 @@ public class MapEditorTestScreen extends BaseScreen {
         mCursorWorldCoords = mCamera.screenToWorld(new Vector2f(Mouse.getX(), Mouse.getY()));
     }
 
-    public ArrayList<Icon> getMapDrawenIcons() {
-        return mMapDrawenIcons;
+    public ArrayList<Icon> getMapDrawnIcons() {
+        return mMapDrawnIcons;
     }
 
     public ArrayList<Icon> getSidePanelIcons() {
         return mSidePanelIcons;
     }
 
-    public HouseIcon getCurrentlySelectedIcon() {
+    public Icon getCurrentlySelectedIcon() {
         return mCurrentlySelectedIcon;
     }
 
@@ -186,5 +196,13 @@ public class MapEditorTestScreen extends BaseScreen {
 
     public void setRenderedText(String renderedText) {
         mRenderedText = renderedText;
+    }
+
+    public ColorSquare getEditorAreaSquare() {
+        return mEditorAreaSquare;
+    }
+
+    public void setCurrentlySelectedIcon(Icon currentlySelectedIcon) {
+        mCurrentlySelectedIcon = currentlySelectedIcon;
     }
 }

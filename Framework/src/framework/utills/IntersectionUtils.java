@@ -13,7 +13,11 @@ import org.lwjgl.util.vector.Vector2f;
  */
 public class IntersectionUtils {
 
-    public static boolean inBounds(Rectangle rec, Vector2f p){
-        throw new UnsupportedOperationException();
+    public static boolean inBounds(Rectangle rec, Vector2f p) {
+        float minX = (float) rec.getMinX();
+        float maxX = (float) rec.getRightTop().getX();
+        float minY = (float) rec.getLeftBottom().getY();
+        float maxY = (float) rec.getRightTop().getY();
+        return ((p.x > minX && p.x < maxX) && (p.y > minY && p.y < maxY));
     }
 }

@@ -30,17 +30,32 @@ public class MapEditorMouseListener implements MouseInputProcessorListener {
     @Override
     public void onMouseButtonUp(MouseInputProcessor.MouseButton mouseButton, Point point) {
         if (mouseButton == MouseInputProcessor.MouseButton.LEFT_BUTTON) {
+            leftButtonClicked();
+        } else if (mouseButton == MouseInputProcessor.MouseButton.RIGHT_BUTTON){
+           rightButtonClicked();
+        }
+    }
 
-            //check collision with side icons
-            for (Icon icon : mMapEditorTestScreen.getSidePanelIcons()) {
-                if(IntersectionUtils.inBounds(icon.getBoundingArea(),mMapEditorTestScreen.getCursorWorldCoords())){
-                    icon.onClick();
-                    return;
-                }
+    private void rightButtonClicked() {
+        //remove currently selected icon
+        mMapEditorTestScreen.setCurrentlySelectedIcon(null);
+    }
+
+    private void leftButtonClicked() {
+        //check collision with side icons
+        for (Icon icon : mMapEditorTestScreen.getSidePanelIcons()) {
+            if (IntersectionUtils.inBounds(icon.getBoundingArea(), mMapEditorTestScreen.getCursorWorldCoords())) {
+                icon.onClick();
+                return;
             }
+        }
 
-            //otherwise draw icons on map editor
-            mMapEditorTestScreen.getMapDrawenIcons().add(mMapEditorTestScreen.getCurrentlySelectedIcon().clone());
+        //check collision with editor area
+        if (mMapEditorTestScreen.getCurrentlySelectedIcon() != null &&
+                IntersectionUtils.inBounds(mMapEditorTestScreen.getEditorAreaSquare().getRenderArea(), mMapEditorTestScreen.getCursorWorldCoords())) {
+            //draw icons on map editor
+            mMapEditorTestScreen.getMapDrawnIcons().add(mMapEditorTestScreen.getCurrentlySelectedIcon().clone());
+            return;
         }
     }
 
