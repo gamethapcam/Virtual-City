@@ -16,9 +16,7 @@ import virtualcity3d.listeners.MapEditorMouseListener;
 import virtualcity3d.models.hud.ColorSquare;
 import virtualcity3d.models.hud.HouseIcon;
 import virtualcity3d.models.hud.Icon;
-
 import java.util.ArrayList;
-
 import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
 
@@ -39,6 +37,7 @@ public class MapEditorTestScreen extends BaseScreen {
     private ArrayList<Icon> mSidePanelIcons = new ArrayList<Icon>();
     private TextRenderer mTextRenderer = new TextRenderer();
     private MouseInputProcessorListener mInputProcessorListener;
+    private String mRenderedText = "Select Icon";
 
     public MapEditorTestScreen(Program program) {
         super(program);
@@ -85,12 +84,24 @@ public class MapEditorTestScreen extends BaseScreen {
         smallHouseIconGreen.setBackGroundColor(ReadableColor.GREEN);
 
         smallHouseIconGreen.setPosition(new Vector3f(initX, initY, 0f));
+        smallHouseIconGreen.setClickListener(new Icon.IconClickListener() {
+            @Override
+            public void onIconClicked() {
+                setRenderedText("Small House Icon Selected");
+            }
+        });
         mSidePanelIcons.add(smallHouseIconGreen);
 
         //small house blue icon
         HouseIcon smallHouseIconBlue = new HouseIcon(0.05);
         smallHouseIconBlue.setBackGroundColor(ReadableColor.BLUE);
         smallHouseIconBlue.setPosition(new Vector3f(initX, (float) (initY - smallHouseIconGreen.getY_Size() - padding), 0f));
+        smallHouseIconBlue.setClickListener(new Icon.IconClickListener() {
+            @Override
+            public void onIconClicked() {
+                setRenderedText("Big House Icon Selected");
+            }
+        });
         mSidePanelIcons.add(smallHouseIconBlue);
     }
 
@@ -135,7 +146,7 @@ public class MapEditorTestScreen extends BaseScreen {
         mTextRenderer.renderText(
                 0,
                 mCamera.getVisibleArea().getRightTop().getY(),
-                "Draw a map");
+                mRenderedText);
 
     }
 
@@ -153,6 +164,7 @@ public class MapEditorTestScreen extends BaseScreen {
 
     @Override
     public void onUpdate(long delta) {
+        //poll cursor coordinates and translate to world coordinates
         mCursorWorldCoords = mCamera.screenToWorld(new Vector2f(Mouse.getX(), Mouse.getY()));
     }
 
@@ -166,5 +178,13 @@ public class MapEditorTestScreen extends BaseScreen {
 
     public HouseIcon getCurrentlySelectedIcon() {
         return mCurrentlySelectedIcon;
+    }
+
+    public Vector2f getCursorWorldCoords() {
+        return mCursorWorldCoords;
+    }
+
+    public void setRenderedText(String renderedText) {
+        mRenderedText = renderedText;
     }
 }

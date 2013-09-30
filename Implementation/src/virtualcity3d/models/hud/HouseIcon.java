@@ -19,6 +19,7 @@ public class HouseIcon extends Model2dBase implements Icon {
     private static final double HALF_SIZE = 0.05;
     ColorSquare mColorSquare;
     double mSize;
+    private IconClickListener mClickListener;
 
     public HouseIcon() {
         super(AssetManager.getAsset2D(Assets2D.SMALL_HOUSE_ICON),
@@ -86,6 +87,17 @@ public class HouseIcon extends Model2dBase implements Icon {
         return new HouseIcon(this);
     }
 
+    @Override
+    public Rectangle getBoundingArea() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onClick() {
+        if(mClickListener != null)
+            mClickListener.onIconClicked();
+    }
+
     public double getSize() {
         return mSize;
     }
@@ -98,5 +110,9 @@ public class HouseIcon extends Model2dBase implements Icon {
     @Override
     public double getY_Size() {
         return mColorSquare.getY_Size();
+    }
+
+    public void setClickListener(IconClickListener clickListener) {
+        mClickListener = clickListener;
     }
 }

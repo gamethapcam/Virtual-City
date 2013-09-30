@@ -1,5 +1,6 @@
 package virtualcity3d.models.hud;
 
+import framework.geometry.Rectangle;
 import framework.models.models2D.Model2D;
 import org.lwjgl.util.ReadableColor;
 
@@ -11,7 +12,13 @@ import org.lwjgl.util.ReadableColor;
  */
 public interface Icon extends Model2D {
 
+    public interface IconClickListener {
+        public void onIconClicked();
+    }
+
     public void setBackGroundColor(ReadableColor color);
     public ReadableColor getBackGroundColor();
     public Icon clone();
+    Rectangle getBoundingArea();
+    void onClick();
 }

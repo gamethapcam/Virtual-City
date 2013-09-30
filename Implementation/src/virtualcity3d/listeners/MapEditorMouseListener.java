@@ -2,7 +2,9 @@ package virtualcity3d.listeners;
 
 import framework.core.input.mouse.MouseInputProcessor;
 import framework.core.input.mouse.MouseInputProcessorListener;
+import framework.utills.IntersectionUtils;
 import org.lwjgl.util.Point;
+import virtualcity3d.models.hud.Icon;
 import virtualcity3d.screens.MapEditorTestScreen;
 
 /**
@@ -28,6 +30,16 @@ public class MapEditorMouseListener implements MouseInputProcessorListener {
     @Override
     public void onMouseButtonUp(MouseInputProcessor.MouseButton mouseButton, Point point) {
         if (mouseButton == MouseInputProcessor.MouseButton.LEFT_BUTTON) {
+
+            //check collision with side icons
+            for (Icon icon : mMapEditorTestScreen.getSidePanelIcons()) {
+                if(IntersectionUtils.inBounds(icon.getBoundingArea(),mMapEditorTestScreen.getCursorWorldCoords())){
+                    icon.onClick();
+                    return;
+                }
+            }
+
+            //otherwise draw icons on map editor
             mMapEditorTestScreen.getMapDrawenIcons().add(mMapEditorTestScreen.getCurrentlySelectedIcon().clone());
         }
     }
