@@ -15,14 +15,11 @@ import org.lwjgl.util.vector.Vector3f;
 import virtualcity3d.listeners.MapEditorMouseListener;
 import virtualcity3d.models.hud.SidePanelIconsFactory;
 import virtualcity3d.models.hud.icons.ColorSquare;
-import virtualcity3d.models.hud.icons.HouseIcon;
 import virtualcity3d.models.hud.icons.Icon;
 
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 /**
  * Created with IntelliJ IDEA.
@@ -80,13 +77,17 @@ public class MapEditorTestScreen extends BaseScreen {
         float initY = editorAreaHeight / 2 - 0.1f - padding;
 
         //small house green icon
-        Icon smallHouseIconGreen = SidePanelIconsFactory.createSmallHouseIcon(this,initX,initY);
-        mSidePanelIcons.add(smallHouseIconGreen);
+        mSidePanelIcons.add(SidePanelIconsFactory.createSmallHouseIcon(this, initX, initY));
+
 
         //big house house blue icon
-        final HouseIcon bigHouseIconBlue = SidePanelIconsFactory.createBigHouseIcon(this,
-                initX, (float) (initY - smallHouseIconGreen.getY_Size() - padding));
-        mSidePanelIcons.add(bigHouseIconBlue);
+        mSidePanelIcons.add(SidePanelIconsFactory.createBigHouseIcon(this,
+                initX + padding,
+                (float) (mSidePanelIcons.get(0).getPosition().getY() - mSidePanelIcons.get(0).getY_Size() - 2 * padding)));
+
+        mSidePanelIcons.add(SidePanelIconsFactory.createPlainRoadIcon(this,
+                initX + padding,
+                (float) (mSidePanelIcons.get(1).getPosition().getY() - mSidePanelIcons.get(1).getY_Size() - 2 * padding)));
     }
 
     @Override
