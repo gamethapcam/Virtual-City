@@ -1,4 +1,4 @@
-package virtualcity3d.models.hud;
+package virtualcity3d.models.hud.icons;
 
 import framework.geometry.Rectangle;
 import framework.models.models2D.Model2D;

@@ -4,7 +4,7 @@ import framework.core.input.mouse.MouseInputProcessor;
 import framework.core.input.mouse.MouseInputProcessorListener;
 import framework.utills.IntersectionUtils;
 import org.lwjgl.util.Point;
-import virtualcity3d.models.hud.Icon;
+import virtualcity3d.models.hud.icons.Icon;
 import virtualcity3d.screens.MapEditorTestScreen;
 
 /**

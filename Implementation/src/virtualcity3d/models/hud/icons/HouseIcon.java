@@ -1,4 +1,4 @@
-package virtualcity3d.models.hud;
+package virtualcity3d.models.hud.icons;
 
 import framework.geometry.Point;
 import framework.geometry.Rectangle;
@@ -27,27 +27,27 @@ public class HouseIcon extends Model2dBase implements Icon {
                         new Point(-HALF_SIZE, -HALF_SIZE),
                         new Point(HALF_SIZE, HALF_SIZE)));
 
-        mSize = HALF_SIZE * 2;
+        mSize = HALF_SIZE;
         mColorSquare = new ColorSquare(null, HALF_SIZE * 2, HALF_SIZE * 2);
         mColorSquare.setPosition(mPosition);
     }
 
-    public HouseIcon(double size) {
-        super(AssetManager.getAsset2D(Assets2D.SMALL_HOUSE_ICON),
-                new Rectangle(
-                        new Point(-size / 2, -size / 2),
-                        new Point(size / 2, size / 2)));
-
-        mSize = size;
-        mColorSquare = new ColorSquare(null, size * 2, size * 2);
-        mColorSquare.setPosition(mPosition);
-    }
+//    public HouseIcon(double size) {
+//        super(AssetManager.getAsset2D(Assets2D.SMALL_HOUSE_ICON),
+//                new Rectangle(
+//                        new Point(-size / 2, -size / 2),
+//                        new Point(size / 2, size / 2)));
+//
+//        mSize = size;
+//        mColorSquare = new ColorSquare(null, size * 2, size * 2);
+//        mColorSquare.setPosition(mPosition);
+//    }
 
     public HouseIcon(HouseIcon houseIcon) {
         super(AssetManager.getAsset2D(Assets2D.SMALL_HOUSE_ICON),
                 new Rectangle(
-                        new Point(-houseIcon.getSize()/2, -houseIcon.getSize()/2),
-                        new Point(houseIcon.getSize()/2, houseIcon.getSize()/2)));
+                        new Point(-houseIcon.getSize(), -houseIcon.getSize()),
+                        new Point(houseIcon.getSize(), houseIcon.getSize())));
 
         mSize = houseIcon.getSize();
         mColorSquare = new ColorSquare(houseIcon.getBackGroundColor(), mSize * 2, mSize * 2);

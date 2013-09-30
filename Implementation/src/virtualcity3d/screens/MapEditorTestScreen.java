@@ -13,9 +13,10 @@ import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import virtualcity3d.listeners.MapEditorMouseListener;
-import virtualcity3d.models.hud.ColorSquare;
-import virtualcity3d.models.hud.HouseIcon;
-import virtualcity3d.models.hud.Icon;
+import virtualcity3d.models.hud.SidePanelIconsFactory;
+import virtualcity3d.models.hud.icons.ColorSquare;
+import virtualcity3d.models.hud.icons.HouseIcon;
+import virtualcity3d.models.hud.icons.Icon;
 
 import java.util.ArrayList;
 
@@ -73,36 +74,18 @@ public class MapEditorTestScreen extends BaseScreen {
 
     private void initSidePanelIcons(float editorAreaWidth, float editorAreaHeight) {
 
+        //initial values
         float padding = 0.01f;
         float initX = -editorAreaWidth / 2 + padding;
         float initY = editorAreaHeight / 2 - 0.1f - padding;
 
-
         //small house green icon
-        final HouseIcon smallHouseIconGreen = new HouseIcon(0.05);
-        smallHouseIconGreen.setBackGroundColor(ReadableColor.GREEN);
-
-        smallHouseIconGreen.setPosition(new Vector3f(initX, initY, 0f));
-        smallHouseIconGreen.setClickListener(new Icon.IconClickListener() {
-            @Override
-            public void onIconClicked() {
-                setRenderedText("Small House Icon Selected");
-                setCurrentlySelectedIcon(smallHouseIconGreen.clone());
-            }
-        });
+        Icon smallHouseIconGreen = SidePanelIconsFactory.createSmallHouseIcon(this,initX,initY);
         mSidePanelIcons.add(smallHouseIconGreen);
 
-        //small house blue icon
-        final HouseIcon bigHouseIconBlue = new HouseIcon(0.05);
-        bigHouseIconBlue.setBackGroundColor(ReadableColor.BLUE);
-        bigHouseIconBlue.setPosition(new Vector3f(initX, (float) (initY - smallHouseIconGreen.getY_Size() - padding), 0f));
-        bigHouseIconBlue.setClickListener(new Icon.IconClickListener() {
-            @Override
-            public void onIconClicked() {
-                setRenderedText("Big House Icon Selected");
-                setCurrentlySelectedIcon(bigHouseIconBlue.clone());
-            }
-        });
+        //big house house blue icon
+        final HouseIcon bigHouseIconBlue = SidePanelIconsFactory.createBigHouseIcon(this,
+                initX, (float) (initY - smallHouseIconGreen.getY_Size() - padding));
         mSidePanelIcons.add(bigHouseIconBlue);
     }
 

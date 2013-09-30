@@ -12,7 +12,7 @@ import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
-import virtualcity3d.models.hud.ColorSquare;
+import virtualcity3d.models.hud.icons.ColorSquare;
 
 import static org.lwjgl.opengl.GL11.*;
 
