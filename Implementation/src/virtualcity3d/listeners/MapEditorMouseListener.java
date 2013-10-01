@@ -4,8 +4,11 @@ import framework.core.input.mouse.MouseInputProcessor;
 import framework.core.input.mouse.MouseInputProcessorListener;
 import framework.utills.IntersectionUtils;
 import org.lwjgl.util.Point;
+import org.lwjgl.util.vector.Vector2f;
 import virtualcity3d.models.hud.icons.Icon;
 import virtualcity3d.screens.MapEditorTestScreen;
+
+import java.util.Iterator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,32 +34,69 @@ public class MapEditorMouseListener implements MouseInputProcessorListener {
     public void onMouseButtonUp(MouseInputProcessor.MouseButton mouseButton, Point point) {
         if (mouseButton == MouseInputProcessor.MouseButton.LEFT_BUTTON) {
             leftButtonClicked();
-        } else if (mouseButton == MouseInputProcessor.MouseButton.RIGHT_BUTTON){
-           rightButtonClicked();
+        } else if (mouseButton == MouseInputProcessor.MouseButton.RIGHT_BUTTON) {
+            rightButtonClicked();
         }
     }
 
     private void rightButtonClicked() {
+
         //remove currently selected icon
-        mMapEditorTestScreen.setCurrentlySelectedIcon(null);
+        if (mMapEditorTestScreen.getCurrentlySelectedIcon() != null) {
+            mMapEditorTestScreen.setCurrentlySelectedIcon(null);
+        } else {
+            //check collision with drawn area icons and remove them
+            Iterator<Icon> iterator = mMapEditorTestScreen.getMapDrawnIcons().iterator();
+            while (iterator.hasNext()) {
+                Icon next = iterator.next();
+                if (IntersectionUtils.inBounds(next.getBoundingArea(), mMapEditorTestScreen.getCursorWorldCoords())) {
+                    iterator.remove();
+                    return;
+                }
+            }
+        }
     }
 
     private void leftButtonClicked() {
         //check collision with side icons
-        for (Icon icon : mMapEditorTestScreen.getSidePanelIcons()) {
-            if (IntersectionUtils.inBounds(icon.getBoundingArea(), mMapEditorTestScreen.getCursorWorldCoords())) {
-                icon.onClick();
-                return;
-            }
-        }
+        if (collisionWithSideIcons()) return;
 
+        //check if click was in bounds with editor area
+        if (notInBoundsOfEditorArea()) {
+            return;
+        }
         //check collision with editor area
-        if (mMapEditorTestScreen.getCurrentlySelectedIcon() != null &&
-                IntersectionUtils.inBounds(mMapEditorTestScreen.getEditorAreaSquare().getRenderArea(), mMapEditorTestScreen.getCursorWorldCoords())) {
+        else if (mMapEditorTestScreen.getCurrentlySelectedIcon() != null) {
             //draw icons on map editor
             mMapEditorTestScreen.getMapDrawnIcons().add(mMapEditorTestScreen.getCurrentlySelectedIcon().clone());
             return;
         }
+    }
+
+    private boolean collisionWithSideIcons() {
+        for (Icon icon : mMapEditorTestScreen.getSidePanelIcons()) {
+            if (IntersectionUtils.inBounds(icon.getBoundingArea(), mMapEditorTestScreen.getCursorWorldCoords())) {
+                icon.onClick();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean notInBoundsOfEditorArea() {
+
+        if (mMapEditorTestScreen.getCurrentlySelectedIcon() == null)
+            return false;
+
+        Vector2f alteredCoords = mMapEditorTestScreen.getCursorWorldCoords();
+        alteredCoords.x -= mMapEditorTestScreen.getCurrentlySelectedIcon().getBoundingArea().getWidth() / 2;
+        alteredCoords.y += mMapEditorTestScreen.getCurrentlySelectedIcon().getBoundingArea().getHeight() / 2;
+
+        if (!IntersectionUtils.inBounds(mMapEditorTestScreen.getEditorAreaSquare().getRenderArea(), alteredCoords)) {
+            //can't leave icon here
+            return true;
+        }
+        return false;
     }
 
     @Override

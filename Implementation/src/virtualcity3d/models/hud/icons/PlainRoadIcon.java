@@ -3,10 +3,16 @@ package virtualcity3d.models.hud.icons;
 import framework.geometry.Point;
 import framework.geometry.Rectangle;
 import framework.models.models2D.Model2dBase;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.Color;
 import resources.AssetManager;
 import resources.Assets2D;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glPopAttrib;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +26,7 @@ public class PlainRoadIcon extends Model2dBase implements Icon {
     ColorSquare mColorSquare;
     double mSize;
     private IconClickListener mClickListener;
+    private double mRotationAngle;
 
     public PlainRoadIcon() {
         super(AssetManager.getAsset2D(Assets2D.ROAD_ICON_PLAIN),
@@ -52,7 +59,40 @@ public class PlainRoadIcon extends Model2dBase implements Icon {
 
         //draw the icon
         enableRenderGLStates();
-        super.render();
+
+        //store color
+        glPushAttrib(GL_CURRENT_BIT);
+
+        mTexture.bind();
+        Color.white.bind();
+
+        glPushMatrix();
+        {
+
+            //translate to position
+            glTranslated(mPosition.x, mPosition.y, mPosition.z);
+            glRotated(mRotationAngle,0,0,1);
+
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glTexCoord2f(0, 1);
+                GL11.glVertex2f((float) mRenderArea.getLeftBottom().getX(), (float) mRenderArea.getLeftBottom().getY());
+
+                GL11.glTexCoord2f(0, 0);
+                GL11.glVertex2f((float) mRenderArea.getLeftBottom().getX(), (float) mRenderArea.getRightTop().getY());
+
+                GL11.glTexCoord2f(1, 0);
+                GL11.glVertex2f((float) mRenderArea.getRightTop().getX(), (float) mRenderArea.getRightTop().getY());
+
+                GL11.glTexCoord2f(1, 1);
+                GL11.glVertex2f((float) mRenderArea.getRightTop().getX(), (float) mRenderArea.getLeftBottom().getY());
+            }
+            GL11.glEnd();
+        }
+        glPopMatrix();
+
+        //restore color
+        glPopAttrib();
     }
 
     @Override
@@ -83,7 +123,7 @@ public class PlainRoadIcon extends Model2dBase implements Icon {
 
     @Override
     public void onClick() {
-        if(mClickListener != null)
+        if (mClickListener != null)
             mClickListener.onIconClicked();
     }
 
@@ -103,5 +143,9 @@ public class PlainRoadIcon extends Model2dBase implements Icon {
 
     public void setClickListener(IconClickListener clickListener) {
         mClickListener = clickListener;
+    }
+
+    public void setRotationAngle(double rotationAngle) {
+        mRotationAngle = rotationAngle;
     }
 }

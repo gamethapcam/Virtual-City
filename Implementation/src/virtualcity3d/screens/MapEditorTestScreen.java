@@ -6,6 +6,7 @@ import framework.core.camera.Camera2D;
 import framework.core.input.mouse.MouseInputProcessor;
 import framework.core.input.mouse.MouseInputProcessorListener;
 import framework.text.TextRenderer;
+import framework.utills.IntersectionUtils;
 import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -114,7 +115,7 @@ public class MapEditorTestScreen extends BaseScreen {
             drawMarkedIcons();
 
             //follow the cursor
-            if (mCurrentlySelectedIcon != null) {
+            if (mCurrentlySelectedIcon != null && !notInBoundsOfEditorArea()) {
                 mCurrentlySelectedIcon.setPosition(new Vector3f(mCursorWorldCoords.x, mCursorWorldCoords.y, 0));
                 mCurrentlySelectedIcon.render();
             }
@@ -160,6 +161,22 @@ public class MapEditorTestScreen extends BaseScreen {
     public void onUpdate(long delta) {
         //poll cursor coordinates and translate to world coordinates
         mCursorWorldCoords = mCamera.screenToWorld(new Vector2f(Mouse.getX(), Mouse.getY()));
+    }
+
+    private boolean notInBoundsOfEditorArea() {
+
+        if (getCurrentlySelectedIcon() == null)
+            return false;
+
+        Vector2f alteredCoords = getCursorWorldCoords();
+        alteredCoords.x -= getCurrentlySelectedIcon().getBoundingArea().getWidth() / 2;
+        alteredCoords.y += getCurrentlySelectedIcon().getBoundingArea().getHeight() / 2;
+
+        if (!IntersectionUtils.inBounds(getEditorAreaSquare().getRenderArea(), alteredCoords)) {
+            //can't leave icon here
+            return true;
+        }
+        return false;
     }
 
     public ArrayList<Icon> getMapDrawnIcons() {

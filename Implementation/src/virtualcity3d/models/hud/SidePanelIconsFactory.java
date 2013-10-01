@@ -58,7 +58,7 @@ public class SidePanelIconsFactory {
         bigHouseIconBlue.setClickListener(new Icon.IconClickListener() {
             @Override
             public void onIconClicked() {
-                screen.setRenderedText("Big House Icon Selected");
+                screen.setRenderedText("Plain Road Selected");
                 screen.setCurrentlySelectedIcon(bigHouseIconBlue.clone());
             }
         });
