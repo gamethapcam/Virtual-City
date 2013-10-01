@@ -12,6 +12,8 @@ import org.lwjgl.util.ReadableColor;
  */
 public interface Icon extends Model2D {
 
+    public static final double DEFAULT_ICON_HALF_SIZE = 0.05;
+
     public interface IconClickListener {
         public void onIconClicked();
     }
