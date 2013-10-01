@@ -11,8 +11,6 @@ import resources.AssetManager;
 import resources.Assets2D;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glPopAttrib;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +18,7 @@ import static org.lwjgl.opengl.GL11.glPopMatrix;
  * Date: 29/09/13
  * Time: 18:48
  */
-public class PlainRoadIcon extends Model2dBase implements Icon {
+public class CornerRoadIcon extends Model2dBase implements Icon {
 
     private static final double HALF_SIZE = 0.05;
     ColorSquare mColorSquare;
@@ -28,8 +26,8 @@ public class PlainRoadIcon extends Model2dBase implements Icon {
     private IconClickListener mClickListener;
     private double mRotationAngle;
 
-    public PlainRoadIcon() {
-        super(AssetManager.getAsset2D(Assets2D.ROAD_ICON_PLAIN),
+    public CornerRoadIcon() {
+        super(AssetManager.getAsset2D(Assets2D.ROAD_ICON_CORNER),
                 new Rectangle(
                         new Point(-HALF_SIZE, -HALF_SIZE),
                         new Point(HALF_SIZE, HALF_SIZE)));
@@ -39,16 +37,16 @@ public class PlainRoadIcon extends Model2dBase implements Icon {
         mColorSquare.setPosition(mPosition);
     }
 
-    public PlainRoadIcon(PlainRoadIcon plainRoadIcon) {
-        super(AssetManager.getAsset2D(Assets2D.ROAD_ICON_PLAIN),
+    public CornerRoadIcon(CornerRoadIcon cornerRoadIcon) {
+        super(AssetManager.getAsset2D(Assets2D.ROAD_ICON_CORNER),
                 new Rectangle(
-                        new Point(-plainRoadIcon.getSize(), -plainRoadIcon.getSize()),
-                        new Point(plainRoadIcon.getSize(), plainRoadIcon.getSize())));
+                        new Point(-cornerRoadIcon.getSize(), -cornerRoadIcon.getSize()),
+                        new Point(cornerRoadIcon.getSize(), cornerRoadIcon.getSize())));
 
-        mSize = plainRoadIcon.getSize();
-        mColorSquare = new ColorSquare(plainRoadIcon.getBackGroundColor(), mSize * 2, mSize * 2);
-        mRotationAngle = plainRoadIcon.getRotationAngle();
-        setPosition(new Vector3f(plainRoadIcon.getPosition()));
+        mSize = cornerRoadIcon.getSize();
+        mColorSquare = new ColorSquare(cornerRoadIcon.getBackGroundColor(), mSize * 2, mSize * 2);
+        mRotationAngle = cornerRoadIcon.getRotationAngle();
+        setPosition(new Vector3f(cornerRoadIcon.getPosition()));
     }
 
 
@@ -114,7 +112,7 @@ public class PlainRoadIcon extends Model2dBase implements Icon {
 
     @Override
     public Icon clone() {
-        return new PlainRoadIcon(this);
+        return new CornerRoadIcon(this);
     }
 
     @Override

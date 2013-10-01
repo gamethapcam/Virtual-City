@@ -3,10 +3,14 @@ package virtualcity3d.models.hud.icons;
 import framework.geometry.Point;
 import framework.geometry.Rectangle;
 import framework.models.models2D.Model2dBase;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.Color;
 import resources.AssetManager;
 import resources.Assets2D;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,15 +18,15 @@ import resources.Assets2D;
  * Date: 29/09/13
  * Time: 18:48
  */
-public class BigHouseIcon extends Model2dBase implements Icon {
+public class JunctionRoadIcon extends Model2dBase implements Icon {
 
     private static final double HALF_SIZE = 0.05;
     ColorSquare mColorSquare;
     double mSize;
     private IconClickListener mClickListener;
 
-    public BigHouseIcon() {
-        super(AssetManager.getAsset2D(Assets2D.BIG_HOUSE_ICON),
+    public JunctionRoadIcon() {
+        super(AssetManager.getAsset2D(Assets2D.ROAD_ICON_JUNCTION),
                 new Rectangle(
                         new Point(-HALF_SIZE, -HALF_SIZE),
                         new Point(HALF_SIZE, HALF_SIZE)));
@@ -32,26 +36,15 @@ public class BigHouseIcon extends Model2dBase implements Icon {
         mColorSquare.setPosition(mPosition);
     }
 
-//    public SmallHouseIcon(double size) {
-//        super(AssetManager.getAsset2D(Assets2D.BIG_HOUSE_ICON),
-//                new Rectangle(
-//                        new Point(-size / 2, -size / 2),
-//                        new Point(size / 2, size / 2)));
-//
-//        mSize = size;
-//        mColorSquare = new ColorSquare(null, size * 2, size * 2);
-//        mColorSquare.setPosition(mPosition);
-//    }
-
-    public BigHouseIcon(BigHouseIcon houseIcon) {
-        super(AssetManager.getAsset2D(Assets2D.BIG_HOUSE_ICON),
+    public JunctionRoadIcon(JunctionRoadIcon cornerRoadIcon) {
+        super(AssetManager.getAsset2D(Assets2D.ROAD_ICON_JUNCTION),
                 new Rectangle(
-                        new Point(-houseIcon.getSize(), -houseIcon.getSize()),
-                        new Point(houseIcon.getSize(), houseIcon.getSize())));
+                        new Point(-cornerRoadIcon.getSize(), -cornerRoadIcon.getSize()),
+                        new Point(cornerRoadIcon.getSize(), cornerRoadIcon.getSize())));
 
-        mSize = houseIcon.getSize();
-        mColorSquare = new ColorSquare(houseIcon.getBackGroundColor(), mSize * 2, mSize * 2);
-        setPosition(new Vector3f(houseIcon.getPosition()));
+        mSize = cornerRoadIcon.getSize();
+        mColorSquare = new ColorSquare(cornerRoadIcon.getBackGroundColor(), mSize * 2, mSize * 2);
+        setPosition(new Vector3f(cornerRoadIcon.getPosition()));
     }
 
 
@@ -63,7 +56,39 @@ public class BigHouseIcon extends Model2dBase implements Icon {
 
         //draw the icon
         enableRenderGLStates();
-        super.render();
+
+        //store color
+        glPushAttrib(GL_CURRENT_BIT);
+
+        mTexture.bind();
+        Color.white.bind();
+
+        glPushMatrix();
+        {
+
+            //translate to position
+            glTranslated(mPosition.x, mPosition.y, mPosition.z);
+
+            GL11.glBegin(GL11.GL_QUADS);
+            {
+                GL11.glTexCoord2f(0, 1);
+                GL11.glVertex2f((float) mRenderArea.getLeftBottom().getX(), (float) mRenderArea.getLeftBottom().getY());
+
+                GL11.glTexCoord2f(0, 0);
+                GL11.glVertex2f((float) mRenderArea.getLeftBottom().getX(), (float) mRenderArea.getRightTop().getY());
+
+                GL11.glTexCoord2f(1, 0);
+                GL11.glVertex2f((float) mRenderArea.getRightTop().getX(), (float) mRenderArea.getRightTop().getY());
+
+                GL11.glTexCoord2f(1, 1);
+                GL11.glVertex2f((float) mRenderArea.getRightTop().getX(), (float) mRenderArea.getLeftBottom().getY());
+            }
+            GL11.glEnd();
+        }
+        glPopMatrix();
+
+        //restore color
+        glPopAttrib();
     }
 
     @Override
@@ -84,7 +109,7 @@ public class BigHouseIcon extends Model2dBase implements Icon {
 
     @Override
     public Icon clone() {
-        return new BigHouseIcon(this);
+        return new JunctionRoadIcon(this);
     }
 
     @Override
@@ -94,7 +119,7 @@ public class BigHouseIcon extends Model2dBase implements Icon {
 
     @Override
     public void onClick() {
-        if(mClickListener != null)
+        if (mClickListener != null)
             mClickListener.onIconClicked();
     }
 
@@ -115,4 +140,5 @@ public class BigHouseIcon extends Model2dBase implements Icon {
     public void setClickListener(IconClickListener clickListener) {
         mClickListener = clickListener;
     }
+
 }

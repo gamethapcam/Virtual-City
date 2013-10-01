@@ -78,17 +78,63 @@ public class MapEditorTestScreen extends BaseScreen {
         float initY = editorAreaHeight / 2 - 0.1f - padding;
 
         //small house green icon
-        mSidePanelIcons.add(SidePanelIconsFactory.createSmallHouseIcon(this, initX, initY));
+        mSidePanelIcons.add(SidePanelIconsFactory.createSmallHouseIcon(this, initX + padding, initY - padding));
 
 
         //big house house blue icon
         mSidePanelIcons.add(SidePanelIconsFactory.createBigHouseIcon(this,
                 initX + padding,
-                (float) (mSidePanelIcons.get(0).getPosition().getY() - mSidePanelIcons.get(0).getY_Size() - 2 * padding)));
+                (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
+                        mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
+
+        //big house house blue icon
+        mSidePanelIcons.add(SidePanelIconsFactory.createTreeIcon(this,
+                initX + padding,
+                (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
+                        mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
 
         mSidePanelIcons.add(SidePanelIconsFactory.createPlainRoadIcon(this,
+                0, // rotation angle
                 initX + padding,
-                (float) (mSidePanelIcons.get(1).getPosition().getY() - mSidePanelIcons.get(1).getY_Size() - 2 * padding)));
+                (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
+                        mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
+
+        mSidePanelIcons.add(SidePanelIconsFactory.createPlainRoadIcon(this,
+                90, // rotation angle
+                initX + padding,
+                (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
+                        mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
+
+
+        //junction road
+        mSidePanelIcons.add(SidePanelIconsFactory.createJunctionRoadIcon(this,
+                initX + padding,
+                (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
+                        mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
+
+
+        //corner road variations
+        mSidePanelIcons.add(SidePanelIconsFactory.createCornerRoadIcon(this,
+                0, // rotation angle
+                initX + padding,
+                (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
+                        mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
+
+        mSidePanelIcons.add(SidePanelIconsFactory.createCornerRoadIcon(this,
+                90, // rotation angle
+                initX + padding,
+                (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
+                        mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
+        mSidePanelIcons.add(SidePanelIconsFactory.createCornerRoadIcon(this,
+                -90, // rotation angle
+                initX + padding,
+                (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
+                        mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
+        mSidePanelIcons.add(SidePanelIconsFactory.createCornerRoadIcon(this,
+                180, // rotation angle
+                initX + padding,
+                (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
+                        mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
     }
 
     @Override
