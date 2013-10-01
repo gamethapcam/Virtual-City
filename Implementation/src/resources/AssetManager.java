@@ -69,4 +69,18 @@ public class AssetManager {
         return model;
     }
 
+    public static void loadAllAssets() {
+
+        //load assets 2d
+        Assets2D[] assets2d = Assets2D.class.getEnumConstants();
+        for (int i = 0; i < assets2d.length; i++) {
+            getAsset2D(assets2d[i]);
+        }
+
+        //load assets 2d
+        Assets3D[] assets3d = Assets3D.class.getEnumConstants();
+        for (int i = 0; i < assets3d.length; i++) {
+            getAsset3D(assets3d[i]);
+        }
+    }
 }

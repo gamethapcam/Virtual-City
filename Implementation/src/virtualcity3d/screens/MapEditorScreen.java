@@ -30,7 +30,7 @@ import static org.lwjgl.opengl.GL11.*;
  * Time: 18:50
  * To change this template use File | Settings | File Templates.
  */
-public class MapEditorTestScreen extends BaseScreen {
+public class MapEditorScreen extends BaseScreen {
 
     Camera2D mCamera;
     private ColorSquare mEditorAreaSquare;
@@ -43,7 +43,7 @@ public class MapEditorTestScreen extends BaseScreen {
     private MouseInputProcessorListener mInputProcessorListener;
     private String mRenderedText = "Select Icon";
 
-    public MapEditorTestScreen(Program program) {
+    public MapEditorScreen(Program program) {
         super(program);
         mInputProcessorListener = new MapEditorMouseListener(this);
     }

@@ -24,7 +24,7 @@ public class MainScreen extends BaseScreen {
     @Override
     public void onDraw() {
         //go to Test screen
-        getProgram().setScreen(new MapEditorTestScreen(getProgram()));
+        getProgram().setScreen(new LoadingSplashScreen(getProgram()));
     }
 
     @Override

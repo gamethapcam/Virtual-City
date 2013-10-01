@@ -3,7 +3,7 @@ package virtualcity3d.models.hud;
 import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector3f;
 import virtualcity3d.models.hud.icons.*;
-import virtualcity3d.screens.MapEditorTestScreen;
+import virtualcity3d.screens.MapEditorScreen;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +12,7 @@ import virtualcity3d.screens.MapEditorTestScreen;
  * Time: 19:36
  */
 public class SidePanelIconsFactory {
-    public static Icon createSmallHouseIcon(final MapEditorTestScreen screen, float x, float y) {
+    public static Icon createSmallHouseIcon(final MapEditorScreen screen, float x, float y) {
 
         final SmallHouseIcon smallHouseIconGreen = new SmallHouseIcon();
         smallHouseIconGreen.setBackGroundColor(ReadableColor.YELLOW);
@@ -29,7 +29,7 @@ public class SidePanelIconsFactory {
         return smallHouseIconGreen;
     }
 
-    public static Icon createBigHouseIcon(final MapEditorTestScreen screen, float x, float y) {
+    public static Icon createBigHouseIcon(final MapEditorScreen screen, float x, float y) {
 
         final BigHouseIcon bigHouseIcon = new BigHouseIcon();
         bigHouseIcon.setBackGroundColor(ReadableColor.BLUE);
@@ -48,7 +48,7 @@ public class SidePanelIconsFactory {
 
 
 
-    public static Icon createTreeIcon(final MapEditorTestScreen screen, float x, float y) {
+    public static Icon createTreeIcon(final MapEditorScreen screen, float x, float y) {
 
         final TreeIcon treeIcon = new TreeIcon();
         treeIcon.setBackGroundColor(ReadableColor.GREEN);
@@ -65,7 +65,7 @@ public class SidePanelIconsFactory {
         return treeIcon;
     }
 
-    public static Icon createPlainRoadIcon(final MapEditorTestScreen screen, double rotationAngle, float x, float y) {
+    public static Icon createPlainRoadIcon(final MapEditorScreen screen, double rotationAngle, float x, float y) {
 
         final PlainRoadIcon plainRoadIcon = new PlainRoadIcon();
         plainRoadIcon.setBackGroundColor(ReadableColor.DKGREY);
@@ -83,7 +83,7 @@ public class SidePanelIconsFactory {
         return plainRoadIcon;
     }
 
-    public static Icon createJunctionRoadIcon(final MapEditorTestScreen screen, float x, float y) {
+    public static Icon createJunctionRoadIcon(final MapEditorScreen screen, float x, float y) {
 
         final JunctionRoadIcon junctionRoadIcon = new JunctionRoadIcon();
         junctionRoadIcon.setBackGroundColor(ReadableColor.DKGREY);
@@ -100,7 +100,7 @@ public class SidePanelIconsFactory {
         return junctionRoadIcon;
     }
 
-    public static Icon createCornerRoadIcon(final MapEditorTestScreen screen, double rotationAngle, float x, float y) {
+    public static Icon createCornerRoadIcon(final MapEditorScreen screen, double rotationAngle, float x, float y) {
 
         final CornerRoadIcon cornerRoadIcon = new CornerRoadIcon();
         cornerRoadIcon.setBackGroundColor(ReadableColor.DKGREY);

@@ -10,10 +10,16 @@ import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
+import resources.AssetManager;
+import resources.Assets2D;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -24,15 +30,18 @@ import static org.lwjgl.opengl.GL11.*;
  * Time: 19:03
  * To change this template use File | Settings | File Templates.
  */
-public class LoadingTestScreen extends BaseScreen {
+public class LoadingSplashScreen extends BaseScreen {
 
     private static final String LOADING_SCREEN_TEXTURE = Configs.RESOURCES_PATH + "loadingScreen.png";
     public static final String IMAGE_FORMAT = "PNG";
 
     private Texture mTexture;
     private Camera2D mCamera2D;
+    ExecutorService mPool = Executors.newFixedThreadPool(3);
+    private int framesDrawen;
 
-    public LoadingTestScreen(Program program) {
+
+    public LoadingSplashScreen(Program program) {
         super(program);
     }
 
@@ -42,10 +51,8 @@ public class LoadingTestScreen extends BaseScreen {
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-
         mCamera2D = new Camera2D();
         mCamera2D.initializePerspective();
-
 
         //load Texture
         mTexture = loadTexture();
@@ -56,13 +63,7 @@ public class LoadingTestScreen extends BaseScreen {
     }
 
     private Texture loadTexture() {
-        Texture texture = null;
-        try {
-            texture = TextureLoader.getTexture(IMAGE_FORMAT, new FileInputStream(new File(LOADING_SCREEN_TEXTURE)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return texture;
+        return  AssetManager.getAsset2D(Assets2D.SPLASH_SCREEN);
     }
 
     @Override
@@ -74,9 +75,14 @@ public class LoadingTestScreen extends BaseScreen {
 
         drawTexture();
 
-        //draw cursor
-        drawCursor(mCamera2D.screenToWorld(new Vector2f(Mouse.getX(), Mouse.getY())));
+        if (framesDrawen > 500) {
+            //pre load assets
+            AssetManager.loadAllAssets();
+            //change screen
+            getProgram().setScreen(new MapEditorScreen(getProgram()));
+        }
 
+        framesDrawen++;
     }
 
     private void drawTexture() {
@@ -130,6 +136,5 @@ public class LoadingTestScreen extends BaseScreen {
 
     @Override
     public void onUpdate(long delta) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

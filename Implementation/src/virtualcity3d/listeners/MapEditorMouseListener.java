@@ -6,7 +6,7 @@ import framework.utills.IntersectionUtils;
 import org.lwjgl.util.Point;
 import org.lwjgl.util.vector.Vector2f;
 import virtualcity3d.models.hud.icons.Icon;
-import virtualcity3d.screens.MapEditorTestScreen;
+import virtualcity3d.screens.MapEditorScreen;
 
 import java.util.Iterator;
 
@@ -19,9 +19,9 @@ import java.util.Iterator;
 public class MapEditorMouseListener implements MouseInputProcessorListener {
 
 
-    private final MapEditorTestScreen mMapEditorTestScreen;
+    private final MapEditorScreen mMapEditorTestScreen;
 
-    public MapEditorMouseListener(MapEditorTestScreen mapEditorTestScreen) {
+    public MapEditorMouseListener(MapEditorScreen mapEditorTestScreen) {
         mMapEditorTestScreen = mapEditorTestScreen;
     }
 

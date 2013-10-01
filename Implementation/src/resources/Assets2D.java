@@ -15,7 +15,7 @@ public enum Assets2D {
             case GRASS:
                 return "grass.jpg";
             case SPLASH_SCREEN:
-                return "loadingScreen.png";
+                return "loading_screen.jpg";
             case SMALL_HOUSE_ICON:
                 return "small_house_icon.png";
             case BIG_HOUSE_ICON:
