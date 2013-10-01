@@ -46,6 +46,8 @@ public class SidePanelIconsFactory {
         return bigHouseIcon;
     }
 
+
+
     public static Icon createTreeIcon(final MapEditorTestScreen screen, float x, float y) {
 
         final TreeIcon treeIcon = new TreeIcon();
@@ -63,7 +65,7 @@ public class SidePanelIconsFactory {
         return treeIcon;
     }
 
-    public static Icon createPlainRoadIcon(final MapEditorTestScreen screen,double rotationAngle, float x, float y) {
+    public static Icon createPlainRoadIcon(final MapEditorTestScreen screen, double rotationAngle, float x, float y) {
 
         final PlainRoadIcon plainRoadIcon = new PlainRoadIcon();
         plainRoadIcon.setBackGroundColor(ReadableColor.DKGREY);
@@ -98,7 +100,7 @@ public class SidePanelIconsFactory {
         return junctionRoadIcon;
     }
 
-    public static Icon createCornerRoadIcon(final MapEditorTestScreen screen,double rotationAngle, float x, float y) {
+    public static Icon createCornerRoadIcon(final MapEditorTestScreen screen, double rotationAngle, float x, float y) {
 
         final CornerRoadIcon cornerRoadIcon = new CornerRoadIcon();
         cornerRoadIcon.setBackGroundColor(ReadableColor.DKGREY);

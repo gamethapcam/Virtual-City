@@ -16,6 +16,7 @@ import org.lwjgl.util.vector.Vector3f;
 import virtualcity3d.listeners.MapEditorMouseListener;
 import virtualcity3d.models.hud.SidePanelIconsFactory;
 import virtualcity3d.models.hud.icons.ColorSquare;
+import virtualcity3d.models.hud.icons.FinishIcon;
 import virtualcity3d.models.hud.icons.Icon;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class MapEditorTestScreen extends BaseScreen {
     Camera2D mCamera;
     private ColorSquare mEditorAreaSquare;
     private Icon mCurrentlySelectedIcon;
+    private Icon mFinishIcon;
     private Vector2f mCursorWorldCoords;
     private ArrayList<Icon> mMapDrawnIcons = new ArrayList<Icon>();
     private ArrayList<Icon> mSidePanelIcons = new ArrayList<Icon>();
@@ -66,8 +68,25 @@ public class MapEditorTestScreen extends BaseScreen {
         //init side panel icons
         initSidePanelIcons((float) editorAreaWidth, (float) editorAreaHeight);
 
+        //init finish icon
+        mFinishIcon = new FinishIcon();
+        mFinishIcon.setBackGroundColor(ReadableColor.WHITE);
+        mFinishIcon.setPosition(new Vector3f((float) (visibleAreaWidth/2 - mFinishIcon.getX_Size()/2),
+                (float) (visibleAreaHeight/2 - mFinishIcon.getY_Size()/2), 0f));
+        mFinishIcon.setClickListener(new Icon.IconClickListener() {
+            @Override
+            public void onIconClicked() {
+                goToNextScreen();
+            }
+        });
+
         //set listeners
         MouseInputProcessor.setMouseInputProcessorListener(mInputProcessorListener);
+    }
+
+    private void goToNextScreen() {
+        //TODO : Implement
+        throw new UnsupportedOperationException();
     }
 
     private void initSidePanelIcons(float editorAreaWidth, float editorAreaHeight) {
@@ -148,7 +167,6 @@ public class MapEditorTestScreen extends BaseScreen {
         //render the map
         mEditorAreaSquare.render();
 
-
         //enable texture rendering states
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
@@ -165,6 +183,9 @@ public class MapEditorTestScreen extends BaseScreen {
                 mCurrentlySelectedIcon.setPosition(new Vector3f(mCursorWorldCoords.x, mCursorWorldCoords.y, 0));
                 mCurrentlySelectedIcon.render();
             }
+
+            //render finish ICON
+            mFinishIcon.render();
         }
 
         //disable texture rendering states
@@ -185,7 +206,7 @@ public class MapEditorTestScreen extends BaseScreen {
 
         //draw description text
         mTextRenderer.renderText(
-                0,
+                -0.3,
                 mCamera.getVisibleArea().getRightTop().getY(),
                 mRenderedText);
 
@@ -207,6 +228,12 @@ public class MapEditorTestScreen extends BaseScreen {
     public void onUpdate(long delta) {
         //poll cursor coordinates and translate to world coordinates
         mCursorWorldCoords = mCamera.screenToWorld(new Vector2f(Mouse.getX(), Mouse.getY()));
+
+        if (IntersectionUtils.inBounds(getFinishIcon().getBoundingArea(),
+                getCursorWorldCoords())) {
+            setRenderedText("Click finish to go to Next Screen");
+        }
+
     }
 
     private boolean notInBoundsOfEditorArea() {
@@ -251,5 +278,9 @@ public class MapEditorTestScreen extends BaseScreen {
 
     public void setCurrentlySelectedIcon(Icon currentlySelectedIcon) {
         mCurrentlySelectedIcon = currentlySelectedIcon;
+    }
+
+    public Icon getFinishIcon() {
+        return mFinishIcon;
     }
 }

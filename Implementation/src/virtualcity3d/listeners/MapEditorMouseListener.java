@@ -64,6 +64,9 @@ public class MapEditorMouseListener implements MouseInputProcessorListener {
         //check if click was in bounds with editor area
         if (notInBoundsOfEditorArea()) {
             return;
+        } else if (IntersectionUtils.inBounds(mMapEditorTestScreen.getFinishIcon().getBoundingArea(),
+                mMapEditorTestScreen.getCursorWorldCoords())) {
+            mMapEditorTestScreen.getFinishIcon().onClick();
         }
         //check collision with editor area
         else if (mMapEditorTestScreen.getCurrentlySelectedIcon() != null) {

@@ -23,4 +23,5 @@ public interface Icon extends Model2D {
     public Icon clone();
     Rectangle getBoundingArea();
     void onClick();
+    public void setClickListener(IconClickListener clickListener);
 }

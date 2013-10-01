@@ -8,7 +8,7 @@ package resources;
  */
 public enum Assets2D {
     GRASS, SPLASH_SCREEN, SMALL_HOUSE_ICON, BIG_HOUSE_ICON, TREE_ICON,
-    ROAD_ICON_PLAIN, ROAD_ICON_CORNER, ROAD_ICON_JUNCTION;
+    ROAD_ICON_PLAIN, ROAD_ICON_CORNER, ROAD_ICON_JUNCTION,FINISH_ICON;
 
     public String getName() {
         switch (this) {
@@ -28,6 +28,8 @@ public enum Assets2D {
                 return "road_icon_corner.png";
             case ROAD_ICON_JUNCTION:
                 return "road_icon_junction.png";
+            case FINISH_ICON:
+                return "finish_icon.png";
 
             default:
                 throw new IllegalArgumentException("Requested asset is not found");
