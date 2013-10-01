@@ -85,8 +85,7 @@ public class MapEditorScreen extends BaseScreen {
     }
 
     private void goToNextScreen() {
-        //TODO : Implement
-        throw new UnsupportedOperationException();
+        getProgram().setScreen(new TerrainCookerScreen(getProgram()));
     }
 
     private void initSidePanelIcons(float editorAreaWidth, float editorAreaHeight) {
