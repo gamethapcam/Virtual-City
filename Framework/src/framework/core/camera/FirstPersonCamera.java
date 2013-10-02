@@ -35,7 +35,7 @@ public class FirstPersonCamera extends Camera3D {
     public FirstPersonCamera(int x, int y, int z) {
         super(x, y, z);
 
-        KeyboardInputProcessor.setKeyboardKeyListener(new KeyboardKeyListener() {
+        KeyboardInputProcessor.addKeyboardKeyListener(new KeyboardKeyListener() {
             @Override
             public void onKeyPressed(KeyboardKeys key) {
                 switch (key) {

@@ -23,7 +23,9 @@ public class MainScreen extends BaseScreen {
 
     @Override
     public void onDraw() {
-        getProgram().setScreen(new LoadingSplashScreen(getProgram()));
+//        getProgram().setScreen(new LoadingSplashScreen(getProgram()));
+//        getProgram().setScreen(new NeighborhoodTestScreen(getProgram()));
+        getProgram().setScreen(new TerrainCookerScreen(getProgram()));
     }
 
     @Override

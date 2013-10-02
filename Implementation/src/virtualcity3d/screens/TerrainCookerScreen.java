@@ -4,25 +4,23 @@ import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.Camera2D;
 import framework.core.camera.FirstPersonCamera;
-import framework.geometry.Point;
-import framework.geometry.Rectangle;
+import framework.core.input.keyboard.KeyboardInputProcessor;
+import framework.core.input.keyboard.KeyboardKeyListener;
+import framework.core.input.keyboard.KeyboardKeys;
 import framework.light.LightUtils;
 import framework.light.SunLight;
-import framework.models.models3d.Model3D;
 import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SimpleTerrain;
+import framework.terrain.implementation.SolidTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
 import framework.text.TextRenderer;
 import framework.utills.GLUT;
 import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import virtualcity3d.models.models3d.CarJeep;
-import virtualcity3d.models.models3d.RoadTileCorner;
-import virtualcity3d.models.models3d.RoadTileJunction;
-import virtualcity3d.models.models3d.RoadTileStraight;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -35,13 +33,21 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class TerrainCookerScreen extends BaseScreen {
 
+    public static final int TERRAIN_X_LENGTH = 150;
+    public static final int TERRAIN_Z_LENGTH = 150;
+    public static final int TERRAIN_MAX_HEIGHT = 10;
+    public static final int TERRAIN_MIN_HEIGHT = -5;
+    public static final int WATER_SPAN_AFTER_TERRAIN_ENDS = 100;
     private FirstPersonCamera mCamera3D;
     private Camera2D mCamera2D;
     private Terrain mTerrain;
+    private Terrain mWater;
+    private TerrainRenderer mWaterRenderer;
     private TerrainRenderer mTerrainRenderer;
     private SunLight mSunLight;
     private int mTerrainCookSteps;
     private TextRenderer mTextRenderer = new TextRenderer();
+    private int mQuakeAmount = 1;
 
 
     public TerrainCookerScreen(Program program) {
@@ -57,13 +63,55 @@ public class TerrainCookerScreen extends BaseScreen {
 
     private void initTerrain() {
         //create Terrain
-        mTerrain = new SimpleTerrain(150, 150, 10, -5);
-
-        //create Terrain Renderer
-//        mTerrainRenderer = new TexturedTerrainRenderer(AssetManager.getAsset2D(Assets2D.GRASS));
-//        mTerrainRenderer = new WireTerrainRenderer();
+        mTerrain = new SimpleTerrain(TERRAIN_X_LENGTH, TERRAIN_Z_LENGTH, TERRAIN_MAX_HEIGHT, TERRAIN_MIN_HEIGHT);
         mTerrainRenderer = new HeighColoredTerrainRenderer();
 
+        //init water
+        mWater = new SimpleTerrain(TERRAIN_X_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, TERRAIN_Z_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, 0, 0);
+        mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE, 0.6f);
+
+        KeyboardInputProcessor.addKeyboardKeyListener(new KeyboardKeyListener() {
+            @Override
+            public void onKeyPressed(KeyboardKeys key) {
+            }
+
+            @Override
+            public void onKeyReleased(KeyboardKeys key) {
+                switch (key) {
+                    case SPACE:
+                        spaceKeyPressed();
+                        break;
+                    case ARROW_UP:
+                        upKeyPressed();
+                        break;
+                    case ARROW_DOWN:
+                        downKeyPressed();
+                        break;
+                    case M:
+                        mKeyPressed();
+                        break;
+                }
+            }
+        });
+
+    }
+
+    private void mKeyPressed() {
+        mTerrain.smooth();
+    }
+
+    private void downKeyPressed() {
+        if (mQuakeAmount > 1)
+            mQuakeAmount--;
+    }
+
+    private void upKeyPressed() {
+        mQuakeAmount++;
+    }
+
+    private void spaceKeyPressed() {
+        //TODO : implement
+        throw new UnsupportedOperationException();
     }
 
     private void initCamera() {
@@ -89,7 +137,6 @@ public class TerrainCookerScreen extends BaseScreen {
         mSunLight = (SunLight) LightUtils.createSunLight();
         mSunLight.setPosition(new Vector3f(0f, 5f, -10f));
         mSunLight.enable();
-
     }
 
 
@@ -110,8 +157,12 @@ public class TerrainCookerScreen extends BaseScreen {
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
 
-        drawModel();
+        //render water
+        mWaterRenderer.renderTerrain(mWater);
 
+
+
+        drawModel();
 
         //HUD draw
         mCamera3D.saveProjection();
@@ -125,7 +176,11 @@ public class TerrainCookerScreen extends BaseScreen {
                 mTextRenderer.renderText(mCamera2D.getVisibleArea().getMinX(),
                         mCamera2D.getVisibleArea().getLeftBottom().getY() + 0.1f, "Quakes Count " + mTerrainCookSteps);
                 mTextRenderer.renderText(mCamera2D.getVisibleArea().getMinX(),
-                        mCamera2D.getVisibleArea().getLeftBottom().getY() + 0.2f, "Press Enter To Stop ");
+                        mCamera2D.getVisibleArea().getLeftBottom().getY() + 0.2f, "Press \"Space\" To Stop ");
+                mTextRenderer.renderText(mCamera2D.getVisibleArea().getMinX(),
+                        mCamera2D.getVisibleArea().getLeftBottom().getY() + 0.3f, "Press \"M\" To Smooth ");
+                mTextRenderer.renderText(mCamera2D.getVisibleArea().getMinX(),
+                        mCamera2D.getVisibleArea().getLeftBottom().getY() + 0.4f, "Press Arrow \"UP\" Or \"DOWN\" To Change Quake Amount ");
             }
             glPopMatrix();
         }
@@ -151,7 +206,8 @@ public class TerrainCookerScreen extends BaseScreen {
 
         //cook
         if (mTerrainCookSteps < 50000) {
-            mTerrain.quake();
+
+            mTerrain.quake(Terrain.DEFAULT_QUAKE_DELTA * mQuakeAmount);
             mTerrainCookSteps++;
         }
     }

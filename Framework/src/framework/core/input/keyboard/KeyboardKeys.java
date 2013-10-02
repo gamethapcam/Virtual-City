@@ -8,5 +8,5 @@ package framework.core.input.keyboard;
  * To change this template use File | Settings | File Templates.
  */
 public enum KeyboardKeys {
-    A,S,D,W,Q,E
+    A,S,D,W,Q,E,M,SPACE,ARROW_UP,ARROW_DOWN;
 }

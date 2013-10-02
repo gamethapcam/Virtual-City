@@ -37,8 +37,8 @@ public class SimpleTerrain implements Terrain {
     }
 
     @Override
-    public void quake() {
-        double a, b, delta = 0.1;
+    public void quake(double delta) {
+        double a, b;
         int x1, x2, z1, z2, z, x;
 
         x1 = RandomUtils.randomInRange(-(getX_Length() / 2), (getX_Length() / 2));
@@ -75,6 +75,11 @@ public class SimpleTerrain implements Terrain {
                     }
                 }
         }
+    }
+
+    @Override
+    public void quake() {
+        quake(DEFAULT_QUAKE_DELTA);
     }
 
 

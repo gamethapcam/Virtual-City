@@ -3,6 +3,8 @@ package framework.core.input.keyboard;
 import framework.core.architecture.FrameworkObject;
 import org.lwjgl.input.Keyboard;
 
+import java.util.ArrayList;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Yan
@@ -12,7 +14,7 @@ import org.lwjgl.input.Keyboard;
  */
 public class KeyboardInputProcessor extends FrameworkObject {
 
-    private static KeyboardKeyListener mKeyboardKeyListener;
+    private static ArrayList<KeyboardKeyListener> keyboardKeyListeners = new ArrayList<KeyboardKeyListener>();
 
 
     public static void pollKeyboardInput() {
@@ -45,6 +47,18 @@ public class KeyboardInputProcessor extends FrameworkObject {
             case Keyboard.KEY_E:
                 onKeyReleased(KeyboardKeys.E);
                 break;
+            case Keyboard.KEY_M:
+                onKeyReleased(KeyboardKeys.M);
+                break;
+            case Keyboard.KEY_SPACE:
+                onKeyReleased(KeyboardKeys.SPACE);
+                break;
+            case Keyboard.KEY_UP:
+                onKeyReleased(KeyboardKeys.ARROW_UP);
+                break;
+            case Keyboard.KEY_DOWN:
+                onKeyReleased(KeyboardKeys.ARROW_DOWN);
+                break;
         }
     }
 
@@ -71,6 +85,17 @@ public class KeyboardInputProcessor extends FrameworkObject {
             case Keyboard.KEY_E:
                 onKeyPressed(KeyboardKeys.E);
                 break;
+            case Keyboard.KEY_M:
+                onKeyPressed(KeyboardKeys.M);
+            case Keyboard.KEY_SPACE:
+                onKeyPressed(KeyboardKeys.SPACE);
+                break;
+            case Keyboard.KEY_UP:
+                onKeyPressed(KeyboardKeys.ARROW_UP);
+                break;
+            case Keyboard.KEY_DOWN:
+                onKeyPressed(KeyboardKeys.ARROW_DOWN);
+                break;
         }
     }
 
@@ -80,24 +105,23 @@ public class KeyboardInputProcessor extends FrameworkObject {
 
     private static void onKeyReleased(KeyboardKeys key) {
         log("key Released := " + key);
-        if (mKeyboardKeyListener != null) {
-            mKeyboardKeyListener.onKeyReleased(key);
+        if (!keyboardKeyListeners.isEmpty()) {
+            for (KeyboardKeyListener keyboardKeyListener : keyboardKeyListeners) {
+                keyboardKeyListener.onKeyReleased(key);
+            }
         }
     }
 
     private static void onKeyPressed(KeyboardKeys key) {
         log("key Pressed := " + key);
-        if (mKeyboardKeyListener != null) {
-            mKeyboardKeyListener.onKeyPressed(key);
+        if (!keyboardKeyListeners.isEmpty()) {
+            for (KeyboardKeyListener keyboardKeyListener : keyboardKeyListeners) {
+                keyboardKeyListener.onKeyPressed(key);
+            }
         }
     }
 
-
-    public static KeyboardKeyListener getKeyboardKeyListener() {
-        return mKeyboardKeyListener;
-    }
-
-    public static void setKeyboardKeyListener(KeyboardKeyListener keyboardKeyListener) {
-        mKeyboardKeyListener = keyboardKeyListener;
+    public static void addKeyboardKeyListener(KeyboardKeyListener keyboardKeyListener) {
+        keyboardKeyListeners.add(keyboardKeyListener);
     }
 }

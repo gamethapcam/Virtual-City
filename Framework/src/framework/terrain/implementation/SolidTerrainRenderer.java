@@ -2,9 +2,13 @@ package framework.terrain.implementation;
 
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
 
+import java.nio.FloatBuffer;
+
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glMaterial;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,13 +22,14 @@ public class SolidTerrainRenderer implements TerrainRenderer {
     private final float mAlpha;
     ReadableColor mSolidColor;
 
-    public SolidTerrainRenderer(ReadableColor solidColor,float alpha) {
+    public SolidTerrainRenderer(ReadableColor solidColor, float alpha) {
         mSolidColor = solidColor;
         mAlpha = alpha;
 
-        if(mAlpha < 0 || mAlpha > 1.0)
+        if (mAlpha < 0 || mAlpha > 1.0)
             throw new IllegalArgumentException("Alpha must be between 0 and 1.0");
     }
+
 
     @Override
     public void renderTerrain(Terrain terrain) {
@@ -39,35 +44,50 @@ public class SolidTerrainRenderer implements TerrainRenderer {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        byte alpha = (byte)(255 * mAlpha);
+        byte alpha = (byte) (255 * mAlpha);
+
+        //store color
+        glPushAttrib(GL_CURRENT_BIT);
 
         //use terrain color
         glColor4ub(mSolidColor.getRedByte(), mSolidColor.getGreenByte(), mSolidColor.getBlueByte(), alpha);
 
-
-
-
         //go over height map
         drawHeighMap(XLength, ZLength, heightMap);
 
+        //restore color
+        glPopAttrib();
+
         glDisable(GL_BLEND);
+
     }
 
     private void drawHeighMap(int XLength, int ZLength, double[][] heightMap) {
+
+        //set default normal UP
+        glNormal3f(0, 1f, 0);
+
         for (int x = 1; x < XLength; x++) {
             for (int z = 1; z < ZLength; z++) {
 
-                //draw  small quads
-                glBegin(GL_QUADS);
+                glPushMatrix();
                 {
-                    glVertex3d(z - ZLength / 2, 1 + heightMap[x][z], x - XLength / 2);
-                    glVertex3d(z - 1 - ZLength / 2, 1 + heightMap[x][z - 1], x - XLength / 2);
-                    glVertex3d(z - 1 - ZLength / 2, 1 + heightMap[x - 1][z - 1], x - 1 - XLength / 2);
-                    glVertex3d(z - ZLength / 2, 1 + heightMap[x - 1][z], x - 1 - XLength / 2);
-                }
-                glEnd();
+                    //must offset to zero
+                    glTranslated(0, -1, 0);
 
+                    //draw  small quads
+                    glBegin(GL_QUADS);
+                    {
+                        glVertex3d(z - ZLength / 2, 1 + heightMap[x][z], x - XLength / 2);
+                        glVertex3d(z - 1 - ZLength / 2, 1 + heightMap[x][z - 1], x - XLength / 2);
+                        glVertex3d(z - 1 - ZLength / 2, 1 + heightMap[x - 1][z - 1], x - 1 - XLength / 2);
+                        glVertex3d(z - ZLength / 2, 1 + heightMap[x - 1][z], x - 1 - XLength / 2);
+                    }
+                    glEnd();
+                }
+                glPopMatrix();
             }
         }
+
     }
 }

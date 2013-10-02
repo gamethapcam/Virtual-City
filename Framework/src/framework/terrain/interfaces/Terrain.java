@@ -11,10 +11,13 @@ import framework.geometry.Rectangle;
  */
 public interface Terrain {
 
+    public static final double DEFAULT_QUAKE_DELTA = 0.1;
+
     /**
      * Create a single quake in the earth
      * and change heights map
      */
+    void quake(double delta);
     void quake();
 
     int getX_Length();

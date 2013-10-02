@@ -34,7 +34,7 @@ public class OrthoTestScreen extends BaseScreen {
         mCamera = new Camera2D();
         mCamera.initializePerspective();
 
-        KeyboardInputProcessor.setKeyboardKeyListener(new KeyboardKeyListener() {
+        KeyboardInputProcessor.addKeyboardKeyListener(new KeyboardKeyListener() {
             @Override
             public void onKeyPressed(KeyboardKeys key) {
                 switch (key) {
