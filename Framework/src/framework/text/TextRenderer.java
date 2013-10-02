@@ -30,6 +30,7 @@ public class TextRenderer {
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_TEXTURE_2D);
 
         glPushMatrix();
         {
@@ -40,6 +41,7 @@ public class TextRenderer {
         }
         glPopMatrix();
         glDisable(GL_BLEND);
+        glDisable(GL_TEXTURE_2D);
 
     }
 

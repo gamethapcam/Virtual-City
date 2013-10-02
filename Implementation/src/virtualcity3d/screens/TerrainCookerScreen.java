@@ -47,7 +47,7 @@ public class TerrainCookerScreen extends BaseScreen {
     private SunLight mSunLight;
     private int mTerrainCookSteps;
     private TextRenderer mTextRenderer = new TextRenderer();
-    private int mQuakeAmount = 1;
+    private int mQuakeSpeed = 1;
 
 
     public TerrainCookerScreen(Program program) {
@@ -67,7 +67,7 @@ public class TerrainCookerScreen extends BaseScreen {
         mTerrainRenderer = new HeighColoredTerrainRenderer();
 
         //init water
-        mWater = new SimpleTerrain(TERRAIN_X_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, TERRAIN_Z_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, 0, 0);
+        mWater = new SimpleTerrain(TERRAIN_X_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, TERRAIN_Z_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, -1, -1);
         mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE, 0.6f);
 
         KeyboardInputProcessor.addKeyboardKeyListener(new KeyboardKeyListener() {
@@ -101,12 +101,12 @@ public class TerrainCookerScreen extends BaseScreen {
     }
 
     private void downKeyPressed() {
-        if (mQuakeAmount > 1)
-            mQuakeAmount--;
+        if (mQuakeSpeed > 1)
+            mQuakeSpeed--;
     }
 
     private void upKeyPressed() {
-        mQuakeAmount++;
+        mQuakeSpeed++;
     }
 
     private void spaceKeyPressed() {
@@ -154,12 +154,12 @@ public class TerrainCookerScreen extends BaseScreen {
 
         SimpleShapesRenderer.renderAxes(100);
 
+
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
 
         //render water
         mWaterRenderer.renderTerrain(mWater);
-
 
 
         drawModel();
@@ -174,7 +174,7 @@ public class TerrainCookerScreen extends BaseScreen {
                 glLoadIdentity();
 
                 mTextRenderer.renderText(mCamera2D.getVisibleArea().getMinX(),
-                        mCamera2D.getVisibleArea().getLeftBottom().getY() + 0.1f, "Quakes Count " + mTerrainCookSteps);
+                        mCamera2D.getVisibleArea().getLeftBottom().getY() + 0.1f, "Quakes Count=" + mTerrainCookSteps + ",Speed=" + mQuakeSpeed);
                 mTextRenderer.renderText(mCamera2D.getVisibleArea().getMinX(),
                         mCamera2D.getVisibleArea().getLeftBottom().getY() + 0.2f, "Press \"Space\" To Stop ");
                 mTextRenderer.renderText(mCamera2D.getVisibleArea().getMinX(),
@@ -207,7 +207,7 @@ public class TerrainCookerScreen extends BaseScreen {
         //cook
         if (mTerrainCookSteps < 50000) {
 
-            mTerrain.quake(Terrain.DEFAULT_QUAKE_DELTA * mQuakeAmount);
+            mTerrain.quake(Terrain.DEFAULT_QUAKE_DELTA * mQuakeSpeed);
             mTerrainCookSteps++;
         }
     }
