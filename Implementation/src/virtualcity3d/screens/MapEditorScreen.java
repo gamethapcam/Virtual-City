@@ -18,6 +18,7 @@ import virtualcity3d.models.hud.SidePanelIconsFactory;
 import virtualcity3d.models.hud.icons.ColorSquare;
 import virtualcity3d.models.hud.icons.FinishIcon;
 import virtualcity3d.models.hud.icons.Icon;
+import virtualcity3d.models.mapeditor.MapEditorBuilder;
 
 import java.util.ArrayList;
 
@@ -42,6 +43,7 @@ public class MapEditorScreen extends BaseScreen {
     private TextRenderer mTextRenderer = new TextRenderer();
     private MouseInputProcessorListener mInputProcessorListener;
     private String mRenderedText = "Select Icon";
+    private MapEditorBuilder mMapEditorBuilder = new MapEditorBuilder();
 
     public MapEditorScreen(Program program) {
         super(program);
@@ -60,6 +62,11 @@ public class MapEditorScreen extends BaseScreen {
         double visibleAreaHeight = mCamera.getVisibleArea().getHeight();
         double editorAreaWidth = 0.95 * visibleAreaWidth;
         double editorAreaHeight = 0.95 * visibleAreaHeight;
+
+        //add data to map editor
+        mMapEditorBuilder.setEditorAreaWidth(editorAreaWidth).setEditorAreaHeight(editorAreaHeight)
+        .setTotalScreenWIdth(visibleAreaWidth).setTotalScreenHeight(visibleAreaHeight);
+
         mEditorAreaSquare = new ColorSquare(ReadableColor.GREY, editorAreaWidth, editorAreaHeight);
         mEditorAreaSquare.setPosition(
                 new Vector3f((float) (visibleAreaWidth - editorAreaWidth),
@@ -71,8 +78,8 @@ public class MapEditorScreen extends BaseScreen {
         //init finish icon
         mFinishIcon = new FinishIcon();
         mFinishIcon.setBackGroundColor(ReadableColor.WHITE);
-        mFinishIcon.setPosition(new Vector3f((float) (visibleAreaWidth/2 - mFinishIcon.getX_Size()/2),
-                (float) (visibleAreaHeight/2 - mFinishIcon.getY_Size()/2), 0f));
+        mFinishIcon.setPosition(new Vector3f((float) (visibleAreaWidth / 2 - mFinishIcon.getX_Size() / 2),
+                (float) (visibleAreaHeight / 2 - mFinishIcon.getY_Size() / 2), 0f));
         mFinishIcon.setClickListener(new Icon.IconClickListener() {
             @Override
             public void onIconClicked() {
@@ -85,7 +92,12 @@ public class MapEditorScreen extends BaseScreen {
     }
 
     private void goToNextScreen() {
-        getProgram().setScreen(new TerrainCookerScreen(getProgram()));
+
+        //add collected data to map editor builder
+        mMapEditorBuilder.setIconsArray(mMapDrawnIcons);
+
+        //go to next screen
+        getProgram().setScreen(new TerrainCookerScreen(getProgram(),mMapEditorBuilder));
     }
 
     private void initSidePanelIcons(float editorAreaWidth, float editorAreaHeight) {

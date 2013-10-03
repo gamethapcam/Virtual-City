@@ -2,25 +2,26 @@ package virtualcity3d.screens;
 
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
-import framework.core.camera.Camera2D;
 import framework.core.camera.FirstPersonCamera;
-import framework.core.input.keyboard.KeyboardInputProcessor;
-import framework.core.input.keyboard.KeyboardKeyListener;
-import framework.core.input.keyboard.KeyboardKeys;
 import framework.light.LightUtils;
 import framework.light.SunLight;
+import framework.models.models3d.Model3D;
 import framework.terrain.implementation.HeighColoredTerrainRenderer;
-import framework.terrain.implementation.SimpleTerrain;
 import framework.terrain.implementation.SolidTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
-import framework.text.TextRenderer;
 import framework.utills.GLUT;
 import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import virtualcity3d.models.hud.icons.*;
+import virtualcity3d.models.mapeditor.MapEditorBuilder;
+import virtualcity3d.models.models3d.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -33,6 +34,8 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class VirtualCityScreen extends BaseScreen {
 
+    private final List<Model3D> mModelsList;
+    private final MapEditorBuilder mMapEditorBuilder;
     private FirstPersonCamera mCamera3D;
     private Terrain mTerrain;
     private Terrain mWater;
@@ -41,10 +44,74 @@ public class VirtualCityScreen extends BaseScreen {
     private SunLight mSunLight;
 
 
-    public VirtualCityScreen(Program program, Terrain terrain, Terrain water) {
+    public VirtualCityScreen(Program program, Terrain terrain, Terrain water, MapEditorBuilder mapEditorBuilder) {
         super(program);
         mTerrain = terrain;
         mWater = water;
+        mMapEditorBuilder =  mapEditorBuilder;
+
+        //build models list from mapEditorBuilder
+        mModelsList = buildModelsFromMapEditorBuilder(mapEditorBuilder);
+    }
+
+    private List<Model3D> buildModelsFromMapEditorBuilder(MapEditorBuilder mapEditorBuilder) {
+
+        //array to return
+        ArrayList<Model3D> model3Ds = new ArrayList<Model3D>();
+
+        //go through icons
+        for (Icon icon : mapEditorBuilder.getIconsArray()) {
+            Model3D model3D = createModelFromIcon(icon);
+            model3D.setPosition(translatePositionFromIconToModel(model3D, icon));
+            model3Ds.add(model3D);
+        }
+
+        return model3Ds;
+    }
+
+    private Vector3f translatePositionFromIconToModel(Model3D model3D, Icon icon) {
+
+        float x = mMapEditorBuilder.getX3DCoordinate(icon.getPosition().getX(),mTerrain.getX_Length());
+        float z = mMapEditorBuilder.getZ3DCoordinate(icon.getPosition().getY(),mTerrain.getZ_Length());
+
+        //always the same level
+        //TODO : flatten area and stuff...
+        float y = 3;
+
+        return new Vector3f(x, y, z);
+    }
+
+
+
+    private Model3D createModelFromIcon(Icon icon) {
+
+        //small house
+        if (icon instanceof SmallHouseIcon)
+            return new HouseModelSmall();
+
+        //big house
+        if (icon instanceof BigHouseIcon)
+            return new HouseModelMedium();
+
+        //tree
+        if (icon instanceof TreeIcon) {
+            throw new UnsupportedOperationException();
+        }
+
+        //plain road
+        if (icon instanceof PlainRoadIcon)
+            return new RoadTilePlainModel();
+
+        //corner road
+        if (icon instanceof CornerRoadIcon)
+            return new RoadTileCornerModel();
+
+        //junction road
+        if (icon instanceof JunctionRoadIcon)
+            return new RoadTileJunctionModel();
+
+        //default
+        throw new IllegalArgumentException();
     }
 
     @Override
@@ -104,11 +171,29 @@ public class VirtualCityScreen extends BaseScreen {
         //render water
         mWaterRenderer.renderTerrain(mWater);
 
-        drawModel();
+
+        mModelsList.get(0).enableRenderGLStates();
+
+        //render models
+        for (Model3D model3D : mModelsList) {
+            glPushMatrix();
+            {
+                glTranslated(model3D.getPosition().x,
+                        model3D.getPosition().y,
+                        model3D.getPosition().z);
+                model3D.render();
+            }
+            glPopMatrix();
+        }
+
+        mModelsList.get(0).disableRenderGLStates();
+
+
+//        drawLightTestSphereModel();
 
     }
 
-    private void drawModel() {
+    private void drawLightTestSphereModel() {
 
         glPushMatrix();
         {

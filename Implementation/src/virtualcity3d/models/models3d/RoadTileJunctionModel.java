@@ -11,14 +11,14 @@ import resources.Assets3D;
  * Time: 11:35
  * To change this template use File | Settings | File Templates.
  */
-public class RoadTileJunction extends Model3DBase {
+public class RoadTileJunctionModel extends Model3DBase {
 
     //approximated size
     private static final int X_SIZE = 12;
     private static final int Y_SIZE = 1;
     private static final int Z_SIZE = 12;
 
-    public RoadTileJunction() {
+    public RoadTileJunctionModel() {
         super(AssetManager.getAsset3D(Assets3D.ROAD_TILE_JUNCTION));
     }
 

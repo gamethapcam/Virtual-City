@@ -21,6 +21,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import virtualcity3d.models.mapeditor.MapEditorBuilder;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -38,6 +39,7 @@ public class TerrainCookerScreen extends BaseScreen {
     public static final int TERRAIN_MAX_HEIGHT = 15;
     public static final int TERRAIN_MIN_HEIGHT = -5;
     public static final int WATER_SPAN_AFTER_TERRAIN_ENDS = 100;
+    private final MapEditorBuilder mMapEditorBuilder;
     private FirstPersonCamera mCamera3D;
     private Camera2D mCamera2D;
     private Terrain mTerrain;
@@ -77,8 +79,9 @@ public class TerrainCookerScreen extends BaseScreen {
     };
 
 
-    public TerrainCookerScreen(Program program) {
+    public TerrainCookerScreen(Program program, MapEditorBuilder mapEditorBuilder) {
         super(program);
+        mMapEditorBuilder = mapEditorBuilder;
     }
 
     @Override
@@ -123,7 +126,7 @@ public class TerrainCookerScreen extends BaseScreen {
         KeyboardInputProcessor.removeKeyListener(mKeyboardKeyListener);
 
         //switch to next screen
-        getProgram().setScreen(new VirtualCityScreen(getProgram(),mTerrain,mWater));
+        getProgram().setScreen(new VirtualCityScreen(getProgram(),mTerrain,mWater,mMapEditorBuilder));
     }
 
     private void initCamera() {

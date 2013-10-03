@@ -11,7 +11,7 @@ import resources.Assets3D;
  * Time: 11:35
  * To change this template use File | Settings | File Templates.
  */
-public class RoadTileStraight extends Model3DBase {
+public class RoadTilePlainModel extends Model3DBase {
 
     //approximated size
     //TODO : Need to measure
@@ -19,7 +19,7 @@ public class RoadTileStraight extends Model3DBase {
     private static final int Y_SIZE = 1;
     private static final int Z_SIZE = 12;
 
-    public RoadTileStraight() {
+    public RoadTilePlainModel() {
         super(AssetManager.getAsset3D(Assets3D.ROAD_TILE_STRAIGHT));
     }
 

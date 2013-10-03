@@ -18,9 +18,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import virtualcity3d.models.models3d.CarJeep;
-import virtualcity3d.models.models3d.RoadTileCorner;
-import virtualcity3d.models.models3d.RoadTileJunction;
-import virtualcity3d.models.models3d.RoadTileStraight;
+import virtualcity3d.models.models3d.RoadTileCornerModel;
+import virtualcity3d.models.models3d.RoadTileJunctionModel;
+import virtualcity3d.models.models3d.RoadTilePlainModel;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -64,9 +64,9 @@ public class RoadsTestScreen extends BaseScreen {
 
 
         //init road tile
-        mRoadTileStraight = new RoadTileStraight();
-        mRoadTileCorner = new RoadTileCorner();
-        mRoadTileJunction = new RoadTileJunction();
+        mRoadTileStraight = new RoadTilePlainModel();
+        mRoadTileCorner = new RoadTileCornerModel();
+        mRoadTileJunction = new RoadTileJunctionModel();
         mJeep = new CarJeep();
 
         mRoadTileStraight.setPosition(new Vector3f(0f, 0.1f, 0f));
