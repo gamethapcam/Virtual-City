@@ -49,6 +49,32 @@ public class TerrainCookerScreen extends BaseScreen {
     private TextRenderer mTextRenderer = new TextRenderer();
     private int mQuakeSpeed = 1;
     private boolean mQuakeStopped;
+    private KeyboardKeyListener mKeyboardKeyListener = new KeyboardKeyListener() {
+        @Override
+        public void onKeyPressed(KeyboardKeys key) {
+        }
+
+        @Override
+        public void onKeyReleased(KeyboardKeys key) {
+            switch (key) {
+                case SPACE:
+                    spaceKeyPressed();
+                    break;
+                case ARROW_UP:
+                    upKeyPressed();
+                    break;
+                case ARROW_DOWN:
+                    downKeyPressed();
+                    break;
+                case M:
+                    mKeyPressed();
+                    break;
+                case N:
+                    nKeyPressed();
+                    break;
+            }
+        }
+    };
 
 
     public TerrainCookerScreen(Program program) {
@@ -71,32 +97,7 @@ public class TerrainCookerScreen extends BaseScreen {
         mWater = new SimpleTerrain(TERRAIN_X_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, TERRAIN_Z_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, -1, -1);
         mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE, 0.6f);
 
-        KeyboardInputProcessor.addKeyboardKeyListener(new KeyboardKeyListener() {
-            @Override
-            public void onKeyPressed(KeyboardKeys key) {
-            }
-
-            @Override
-            public void onKeyReleased(KeyboardKeys key) {
-                switch (key) {
-                    case SPACE:
-                        spaceKeyPressed();
-                        break;
-                    case ARROW_UP:
-                        upKeyPressed();
-                        break;
-                    case ARROW_DOWN:
-                        downKeyPressed();
-                        break;
-                    case M:
-                        mKeyPressed();
-                        break;
-                    case N:
-                        nKeyPressed();
-                        break;
-                }
-            }
-        });
+        KeyboardInputProcessor.addKeyboardKeyListener(mKeyboardKeyListener);
     }
 
     private void nKeyPressed() {
@@ -117,8 +118,12 @@ public class TerrainCookerScreen extends BaseScreen {
     }
 
     private void spaceKeyPressed() {
-        //TODO : implement
-        throw new UnsupportedOperationException();
+
+        //remove additional key listeners
+        KeyboardInputProcessor.removeKeyListener(mKeyboardKeyListener);
+
+        //switch to next screen
+        getProgram().setScreen(new VirtualCityScreen(getProgram(),mTerrain,mWater));
     }
 
     private void initCamera() {

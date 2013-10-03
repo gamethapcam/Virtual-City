@@ -129,4 +129,8 @@ public class KeyboardInputProcessor extends FrameworkObject {
     public static void addKeyboardKeyListener(KeyboardKeyListener keyboardKeyListener) {
         keyboardKeyListeners.add(keyboardKeyListener);
     }
+
+    public static void removeKeyListener(KeyboardKeyListener keyboardKeyListener) {
+        keyboardKeyListeners.remove(keyboardKeyListener);
+    }
 }
