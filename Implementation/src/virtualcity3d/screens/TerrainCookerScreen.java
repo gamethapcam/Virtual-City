@@ -35,7 +35,7 @@ public class TerrainCookerScreen extends BaseScreen {
 
     public static final int TERRAIN_X_LENGTH = 150;
     public static final int TERRAIN_Z_LENGTH = 150;
-    public static final int TERRAIN_MAX_HEIGHT = 10;
+    public static final int TERRAIN_MAX_HEIGHT = 15;
     public static final int TERRAIN_MIN_HEIGHT = -5;
     public static final int WATER_SPAN_AFTER_TERRAIN_ENDS = 100;
     private FirstPersonCamera mCamera3D;
@@ -48,6 +48,7 @@ public class TerrainCookerScreen extends BaseScreen {
     private int mTerrainCookSteps;
     private TextRenderer mTextRenderer = new TextRenderer();
     private int mQuakeSpeed = 1;
+    private boolean mQuakeStopped;
 
 
     public TerrainCookerScreen(Program program) {
@@ -90,10 +91,16 @@ public class TerrainCookerScreen extends BaseScreen {
                     case M:
                         mKeyPressed();
                         break;
+                    case N:
+                        nKeyPressed();
+                        break;
                 }
             }
         });
+    }
 
+    private void nKeyPressed() {
+        mQuakeStopped = !mQuakeStopped;
     }
 
     private void mKeyPressed() {
@@ -205,7 +212,7 @@ public class TerrainCookerScreen extends BaseScreen {
         mSunLight.setPosition(mSunLight.getInitialPosition());
 
         //cook
-        if (mTerrainCookSteps < 50000) {
+        if (!mQuakeStopped && mTerrainCookSteps < 50000) {
 
             mTerrain.quake(Terrain.DEFAULT_QUAKE_DELTA * mQuakeSpeed);
             mTerrainCookSteps++;

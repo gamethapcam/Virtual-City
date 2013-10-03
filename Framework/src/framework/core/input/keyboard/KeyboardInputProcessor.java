@@ -50,6 +50,9 @@ public class KeyboardInputProcessor extends FrameworkObject {
             case Keyboard.KEY_M:
                 onKeyReleased(KeyboardKeys.M);
                 break;
+            case Keyboard.KEY_N:
+                onKeyReleased(KeyboardKeys.N);
+                break;
             case Keyboard.KEY_SPACE:
                 onKeyReleased(KeyboardKeys.SPACE);
                 break;
@@ -87,6 +90,8 @@ public class KeyboardInputProcessor extends FrameworkObject {
                 break;
             case Keyboard.KEY_M:
                 onKeyPressed(KeyboardKeys.M);
+            case Keyboard.KEY_N:
+                onKeyPressed(KeyboardKeys.N);
             case Keyboard.KEY_SPACE:
                 onKeyPressed(KeyboardKeys.SPACE);
                 break;
