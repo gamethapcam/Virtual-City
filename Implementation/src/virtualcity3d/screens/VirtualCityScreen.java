@@ -6,8 +6,6 @@ import framework.core.camera.FirstPersonCamera;
 import framework.core.input.keyboard.KeyboardInputProcessor;
 import framework.core.input.keyboard.KeyboardKeyListener;
 import framework.core.input.keyboard.KeyboardKeys;
-import framework.geometry.Point;
-import framework.geometry.Rectangle;
 import framework.light.LightUtils;
 import framework.light.SunLight;
 import framework.models.models3D.Model3D;
@@ -73,7 +71,7 @@ public class VirtualCityScreen extends BaseScreen {
 
             //set rotation for roads
             if (model3D instanceof RotatableModel) {
-                ((RotatableModel) model3D).setRotationAngle(((RotatableModel) icon).getRotationAngle());
+                ((RotatableModel) model3D).setRotationAngle(-((RotatableModel) icon).getRotationAngle());
             }
 
             model3Ds.add(model3D);
@@ -86,6 +84,10 @@ public class VirtualCityScreen extends BaseScreen {
 
         float x = mMapEditorBuilder.getX3DCoordinate(icon.getPosition().getX(), mTerrain.getX_Length());
         float z = mMapEditorBuilder.getZ3DCoordinate(icon.getPosition().getY(), mTerrain.getZ_Length());
+
+        //approximate correction offset
+        x *= 1.6;
+        z *= 1.1;
 
         //always the same level
         float y = MODEL_LEVEL;
@@ -162,21 +164,21 @@ public class VirtualCityScreen extends BaseScreen {
         mTerrainRenderer = new HeighColoredTerrainRenderer();
         mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE, 0.4f);
 
-        //flat area for houses and other models
-        for (Model3D model3D : mModelsList) {
-
-            float modelX = model3D.getPosition().getX();
-            float modelZ = model3D.getPosition().getZ();
-
-            int offsetX = (int) (model3D.getX_Size() / 2);
-            int offsetZ = (int) model3D.getX_Size() / 2;
-
-            Point lBottom = new Point((modelX - offsetX), (modelZ - offsetX));
-            Point rTop = new Point((modelX + offsetZ), (modelZ + offsetZ));
-
-            Rectangle rec = new Rectangle(lBottom, rTop);
-            mTerrain.flattenArea(rec);
-        }
+//        //flat area for houses and other models
+//        for (Model3D model3D : mModelsList) {
+//
+//            float modelX = model3D.getPosition().getX();
+//            float modelZ = model3D.getPosition().getZ();
+//
+//            int offsetX = (int) (model3D.getX_Size() / 2);
+//            int offsetZ = (int) model3D.getX_Size() / 2;
+//
+//            Point lBottom = new Point((modelX - offsetX), (modelZ - offsetX));
+//            Point rTop = new Point((modelX + offsetZ), (modelZ + offsetZ));
+//
+//            Rectangle rec = new Rectangle(lBottom, rTop);
+//            mTerrain.flattenArea(rec);
+//        }
     }
 
     private void initCamera() {

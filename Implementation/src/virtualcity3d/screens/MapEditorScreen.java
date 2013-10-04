@@ -100,7 +100,7 @@ public class MapEditorScreen extends BaseScreen {
                 ic = SidePanelIconsFactory.createJunctionRoadIcon(this, 0, 0);
             } else if (memorizedIcon.clazz.equals(CarIcon.class)) {
                 ic = SidePanelIconsFactory.createCarIcon(this, 0, 0);
-            }  else if (memorizedIcon.clazz.equals(TreeIcon.class)) {
+            } else if (memorizedIcon.clazz.equals(TreeIcon.class)) {
                 ic = SidePanelIconsFactory.createTreeIcon(this, 0, 0);
             }
 
@@ -167,7 +167,11 @@ public class MapEditorScreen extends BaseScreen {
 
         //set listeners
         MouseInputProcessor.setMouseInputProcessorListener(mMouseInputProcessorListener);
-        initKeyBoard();
+
+        //load example map
+        mMapDrawnIcons = createIconsFromMemorizedObjects((ArrayList<MemorizedIcon>) FileUtils.readObjectFromFile(FILE_NAME));
+
+//        initKeyBoard();
     }
 
     private void goToNextScreen() {
