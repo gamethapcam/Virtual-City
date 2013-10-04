@@ -3,9 +3,13 @@ package virtualcity3d.screens;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.Camera2D;
+import framework.core.input.keyboard.KeyboardInputProcessor;
+import framework.core.input.keyboard.KeyboardKeyListener;
+import framework.core.input.keyboard.KeyboardKeys;
 import framework.core.input.mouse.MouseInputProcessor;
 import framework.core.input.mouse.MouseInputProcessorListener;
 import framework.text.TextRenderer;
+import framework.utills.FileUtils;
 import framework.utills.IntersectionUtils;
 import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.input.Mouse;
@@ -15,11 +19,11 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import virtualcity3d.listeners.MapEditorMouseListener;
 import virtualcity3d.models.hud.SidePanelIconsFactory;
-import virtualcity3d.models.hud.icons.ColorSquare;
-import virtualcity3d.models.hud.icons.FinishIcon;
-import virtualcity3d.models.hud.icons.Icon;
+import virtualcity3d.models.hud.icons.*;
 import virtualcity3d.models.mapeditor.MapEditorBuilder;
+import virtualcity3d.models.models3d.RotatableModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -33,6 +37,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class MapEditorScreen extends BaseScreen {
 
+    public static final String FILE_NAME = "file.txt";
     Camera2D mCamera;
     private ColorSquare mEditorAreaSquare;
     private Icon mCurrentlySelectedIcon;
@@ -41,14 +46,84 @@ public class MapEditorScreen extends BaseScreen {
     private ArrayList<Icon> mMapDrawnIcons = new ArrayList<Icon>();
     private ArrayList<Icon> mSidePanelIcons = new ArrayList<Icon>();
     private TextRenderer mTextRenderer = new TextRenderer();
-    private MouseInputProcessorListener mInputProcessorListener;
+    private MouseInputProcessorListener mMouseInputProcessorListener;
     private String mRenderedText = "Select Icon";
     private MapEditorBuilder mMapEditorBuilder = new MapEditorBuilder();
 
     public MapEditorScreen(Program program) {
         super(program);
-        mInputProcessorListener = new MapEditorMouseListener(this);
+        mMouseInputProcessorListener = new MapEditorMouseListener(this);
+
     }
+
+    private void initKeyBoard() {
+
+        KeyboardInputProcessor.clearAllListeners();
+
+        KeyboardInputProcessor.addKeyboardKeyListener(new KeyboardKeyListener() {
+            @Override
+            public void onKeyPressed(KeyboardKeys key) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onKeyReleased(KeyboardKeys key) {
+                switch (key) {
+                    case S:
+                        FileUtils.writeObjectToFile(createMemorizedIcons(), FILE_NAME);
+                        break;
+                    case D:
+                        mMapDrawnIcons = createIconsFromMemorizedObjects((ArrayList<MemorizedIcon>) FileUtils.readObjectFromFile(FILE_NAME));
+                        break;
+                }
+            }
+
+
+        });
+    }
+
+    private ArrayList<Icon> createIconsFromMemorizedObjects(ArrayList<MemorizedIcon> memorizedIcons) {
+        ArrayList<Icon> icons = new ArrayList<Icon>();
+
+        for (MemorizedIcon memorizedIcon : memorizedIcons) {
+            Icon ic = null;
+            if (memorizedIcon.clazz.equals(SmallHouseIcon.class)) {
+                ic = SidePanelIconsFactory.createSmallHouseIcon(this, 0, 0);
+            } else if (memorizedIcon.clazz.equals(BigHouseIcon.class)) {
+                ic = SidePanelIconsFactory.createBigHouseIcon(this, 0, 0);
+            } else if (memorizedIcon.clazz.equals(PlainRoadIcon.class)) {
+                ic = SidePanelIconsFactory.createPlainRoadIcon(this, memorizedIcon.rotationAngle, 0, 0);
+            } else if (memorizedIcon.clazz.equals(CornerRoadIcon.class)) {
+                ic = SidePanelIconsFactory.createCornerRoadIcon(this, memorizedIcon.rotationAngle, 0, 0);
+            } else if (memorizedIcon.clazz.equals(JunctionRoadIcon.class)) {
+                ic = SidePanelIconsFactory.createJunctionRoadIcon(this, 0, 0);
+            } else if (memorizedIcon.clazz.equals(CarIcon.class)) {
+                ic = SidePanelIconsFactory.createCarIcon(this, 0, 0);
+            }
+
+            //set position
+            ic.setPosition(memorizedIcon.position);
+            icons.add(ic);
+        }
+
+        return icons;
+    }
+
+    private Serializable createMemorizedIcons() {
+
+        ArrayList<MemorizedIcon> memorizedIconses = new ArrayList<MemorizedIcon>();
+
+        for (Icon mapDrawnIcon : mMapDrawnIcons) {
+            MemorizedIcon memIcon = new MemorizedIcon(mapDrawnIcon.getClass(), mapDrawnIcon.getPosition());
+            if (mapDrawnIcon instanceof RotatableModel) {
+                memIcon.setRotationAngle(((RotatableModel) mapDrawnIcon).getRotationAngle());
+            }
+            memorizedIconses.add(memIcon);
+        }
+
+        return memorizedIconses;
+    }
+
 
     @Override
     public void init() {
@@ -65,7 +140,7 @@ public class MapEditorScreen extends BaseScreen {
 
         //add data to map editor
         mMapEditorBuilder.setEditorAreaWidth(editorAreaWidth).setEditorAreaHeight(editorAreaHeight)
-        .setTotalScreenWIdth(visibleAreaWidth).setTotalScreenHeight(visibleAreaHeight);
+                .setTotalScreenWIdth(visibleAreaWidth).setTotalScreenHeight(visibleAreaHeight);
 
         mEditorAreaSquare = new ColorSquare(ReadableColor.GREY, editorAreaWidth, editorAreaHeight);
         mEditorAreaSquare.setPosition(
@@ -88,7 +163,8 @@ public class MapEditorScreen extends BaseScreen {
         });
 
         //set listeners
-        MouseInputProcessor.setMouseInputProcessorListener(mInputProcessorListener);
+        MouseInputProcessor.setMouseInputProcessorListener(mMouseInputProcessorListener);
+        initKeyBoard();
     }
 
     private void goToNextScreen() {
@@ -97,7 +173,7 @@ public class MapEditorScreen extends BaseScreen {
         mMapEditorBuilder.setIconsArray(mMapDrawnIcons);
 
         //go to next screen
-        getProgram().setScreen(new TerrainCookerScreen(getProgram(),mMapEditorBuilder));
+        getProgram().setScreen(new TerrainCookerScreen(getProgram(), mMapEditorBuilder));
     }
 
     private void initSidePanelIcons(float editorAreaWidth, float editorAreaHeight) {

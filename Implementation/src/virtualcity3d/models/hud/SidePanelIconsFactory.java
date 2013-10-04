@@ -118,18 +118,18 @@ public class SidePanelIconsFactory {
     }
 
     public static Icon createCarIcon(final MapEditorScreen screen, float x, float y) {
-        final CarIcon carIcon = new CarIcon();
-        carIcon.setBackGroundColor(ReadableColor.LTGREY);
+        final CarIcon smallHouseIconGreen = new CarIcon();
+        smallHouseIconGreen.setBackGroundColor(ReadableColor.LTGREY);
 
-        carIcon.setPosition(new Vector3f(x, y, 0f));
-        carIcon.setClickListener(new Icon.IconClickListener() {
+        smallHouseIconGreen.setPosition(new Vector3f(x, y, 0f));
+        smallHouseIconGreen.setClickListener(new Icon.IconClickListener() {
             @Override
             public void onIconClicked() {
                 screen.setRenderedText("Car Icon Selected");
-                screen.setCurrentlySelectedIcon(carIcon.clone());
+                screen.setCurrentlySelectedIcon(smallHouseIconGreen.clone());
             }
         });
 
-        return carIcon;
+        return smallHouseIconGreen;
     }
 }

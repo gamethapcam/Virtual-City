@@ -133,4 +133,8 @@ public class KeyboardInputProcessor extends FrameworkObject {
     public static void removeKeyListener(KeyboardKeyListener keyboardKeyListener) {
         keyboardKeyListeners.remove(keyboardKeyListener);
     }
+
+    public static void clearAllListeners() {
+        keyboardKeyListeners.clear();
+    }
 }

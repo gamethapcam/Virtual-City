@@ -3,6 +3,9 @@ package virtualcity3d.screens;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
+import framework.core.input.keyboard.KeyboardInputProcessor;
+import framework.core.input.keyboard.KeyboardKeyListener;
+import framework.core.input.keyboard.KeyboardKeys;
 import framework.geometry.Point;
 import framework.geometry.Rectangle;
 import framework.light.LightUtils;
@@ -45,6 +48,7 @@ public class VirtualCityScreen extends BaseScreen {
     private TerrainRenderer mWaterRenderer;
     private TerrainRenderer mTerrainRenderer;
     private SunLight mSunLight;
+    private int mTerrainHeight;
 
 
     public VirtualCityScreen(Program program, Terrain terrain, Terrain water, MapEditorBuilder mapEditorBuilder) {
@@ -129,6 +133,28 @@ public class VirtualCityScreen extends BaseScreen {
         initCamera();
         initTerrain();
         initLight();
+        initKeyBoard();
+    }
+
+    private void initKeyBoard() {
+        KeyboardInputProcessor.addKeyboardKeyListener(new KeyboardKeyListener() {
+            @Override
+            public void onKeyPressed(KeyboardKeys key) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onKeyReleased(KeyboardKeys key) {
+                switch (key) {
+                    case ARROW_UP:
+                        mTerrainHeight++;
+                        break;
+                    case ARROW_DOWN:
+                        mTerrainHeight--;
+                        break;
+                }
+            }
+        });
     }
 
     private void initTerrain() {
@@ -195,6 +221,7 @@ public class VirtualCityScreen extends BaseScreen {
         glPushMatrix();
         {
             glRotated(180, 0, 1, 0);
+            glTranslated(0, mTerrainHeight, 0);
             //draw terrain at it's current state
             mTerrainRenderer.renderTerrain(mTerrain);
         }

@@ -1,5 +1,7 @@
 package framework.geometry;
 
+import java.io.Serializable;
+
 /**
  * Created with IntelliJ IDEA.
  * User: yan
@@ -7,7 +9,7 @@ package framework.geometry;
  * Time: 09:15
  * To change this template use File | Settings | File Templates.
  */
-public class Point {
+public class Point implements Serializable {
 
     private double x;
     private double y;

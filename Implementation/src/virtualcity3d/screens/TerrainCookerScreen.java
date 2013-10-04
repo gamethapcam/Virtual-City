@@ -124,11 +124,11 @@ public class TerrainCookerScreen extends BaseScreen {
 
     private void spaceKeyPressed() {
 
-        //remove additional key listeners
-        KeyboardInputProcessor.removeKeyListener(mKeyboardKeyListener);
+        //remove all key listeners
+        KeyboardInputProcessor.clearAllListeners();
 
         //switch to next screen
-        getProgram().setScreen(new VirtualCityScreen(getProgram(),mTerrain,mWater,mMapEditorBuilder));
+        getProgram().setScreen(new VirtualCityScreen(getProgram(), mTerrain, mWater, mMapEditorBuilder));
     }
 
     private void initCamera() {
