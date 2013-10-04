@@ -179,8 +179,6 @@ public class TerrainCookerScreen extends BaseScreen {
         mWaterRenderer.renderTerrain(mWater);
 
 
-        drawModel();
-
         //HUD draw
         mCamera3D.saveProjection();
         {

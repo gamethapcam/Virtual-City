@@ -2,6 +2,7 @@ package virtualcity3d.screens;
 
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
+import framework.core.camera.Camera2D;
 import framework.core.camera.FirstPersonCamera;
 import framework.core.input.keyboard.KeyboardInputProcessor;
 import framework.core.input.keyboard.KeyboardKeyListener;
@@ -13,8 +14,8 @@ import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SolidTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
+import framework.text.TextRenderer;
 import framework.utills.GLUT;
-import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
 import org.lwjgl.util.vector.Vector2f;
@@ -38,6 +39,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class VirtualCityScreen extends BaseScreen {
 
     public static final int MODEL_LEVEL = 5;
+    public static final String PRESS_ARROW_UP_DOWN_TO_CHANGE_TERRAIN_HEIGHT_LEVEL = "Press Arrow UP/DOWN to change terrain height level";
     private final List<Model3D> mModelsList;
     private final MapEditorBuilder mMapEditorBuilder;
     private FirstPersonCamera mCamera3D;
@@ -47,6 +49,8 @@ public class VirtualCityScreen extends BaseScreen {
     private TerrainRenderer mTerrainRenderer;
     private SunLight mSunLight;
     private int mTerrainHeight;
+    private Camera2D mCamera2D;
+    private TextRenderer mTextRenderer;
 
 
     public VirtualCityScreen(Program program, Terrain terrain, Terrain water, MapEditorBuilder mapEditorBuilder) {
@@ -136,6 +140,8 @@ public class VirtualCityScreen extends BaseScreen {
         initTerrain();
         initLight();
         initKeyBoard();
+
+        mTextRenderer = new TextRenderer();
     }
 
     private void initKeyBoard() {
@@ -164,21 +170,6 @@ public class VirtualCityScreen extends BaseScreen {
         mTerrainRenderer = new HeighColoredTerrainRenderer();
         mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE, 0.4f);
 
-//        //flat area for houses and other models
-//        for (Model3D model3D : mModelsList) {
-//
-//            float modelX = model3D.getPosition().getX();
-//            float modelZ = model3D.getPosition().getZ();
-//
-//            int offsetX = (int) (model3D.getX_Size() / 2);
-//            int offsetZ = (int) model3D.getX_Size() / 2;
-//
-//            Point lBottom = new Point((modelX - offsetX), (modelZ - offsetX));
-//            Point rTop = new Point((modelX + offsetZ), (modelZ + offsetZ));
-//
-//            Rectangle rec = new Rectangle(lBottom, rTop);
-//            mTerrain.flattenArea(rec);
-//        }
     }
 
     private void initCamera() {
@@ -192,6 +183,7 @@ public class VirtualCityScreen extends BaseScreen {
 
         //increase movement speed
         mCamera3D.setMovementSpeed(10);
+        mCamera2D = new Camera2D();
     }
 
     private void initLight() {
@@ -217,7 +209,7 @@ public class VirtualCityScreen extends BaseScreen {
         //translate view according to 3D camera
         mCamera3D.lookThrough();
 
-        SimpleShapesRenderer.renderAxes(100);
+//        SimpleShapesRenderer.renderAxes(100);
 
         //need to rotate terrain , it's rendered upside down
         glPushMatrix();
@@ -250,6 +242,22 @@ public class VirtualCityScreen extends BaseScreen {
         }
 
         mModelsList.get(0).disableRenderGLStates();
+
+        //HUD draw
+        mCamera3D.saveProjection();
+        {
+            mCamera2D.lookThrough();
+            glPushMatrix();
+            {
+                //Reset ModelView Matrix
+                glLoadIdentity();
+                (new TextRenderer()).renderText(mCamera2D.getVisibleArea().getMinX(),
+                        mCamera2D.getVisibleArea().getRightTop().getY(),
+                        PRESS_ARROW_UP_DOWN_TO_CHANGE_TERRAIN_HEIGHT_LEVEL);
+            }
+            glPopMatrix();
+        }
+        mCamera3D.restoreProjection();
 
 
     }
