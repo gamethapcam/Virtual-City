@@ -1,5 +1,6 @@
 package virtualcity3d.screens;
 
+import framework.configurations.Configs;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.Camera2D;
@@ -37,7 +38,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class MapEditorScreen extends BaseScreen {
 
-    public static final String FILE_NAME = "file.txt";
+    public static final String FILE_NAME = Configs.RESOURCES_PATH + "example_map.txt";
     Camera2D mCamera;
     private ColorSquare mEditorAreaSquare;
     private Icon mCurrentlySelectedIcon;
@@ -99,6 +100,8 @@ public class MapEditorScreen extends BaseScreen {
                 ic = SidePanelIconsFactory.createJunctionRoadIcon(this, 0, 0);
             } else if (memorizedIcon.clazz.equals(CarIcon.class)) {
                 ic = SidePanelIconsFactory.createCarIcon(this, 0, 0);
+            }  else if (memorizedIcon.clazz.equals(TreeIcon.class)) {
+                ic = SidePanelIconsFactory.createTreeIcon(this, 0, 0);
             }
 
             //set position
@@ -171,6 +174,8 @@ public class MapEditorScreen extends BaseScreen {
 
         //add collected data to map editor builder
         mMapEditorBuilder.setIconsArray(mMapDrawnIcons);
+
+        KeyboardInputProcessor.clearAllListeners();
 
         //go to next screen
         getProgram().setScreen(new TerrainCookerScreen(getProgram(), mMapEditorBuilder));

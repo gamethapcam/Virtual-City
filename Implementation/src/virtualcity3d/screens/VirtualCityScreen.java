@@ -106,7 +106,7 @@ public class VirtualCityScreen extends BaseScreen {
 
         //tree
         if (icon instanceof TreeIcon) {
-            throw new UnsupportedOperationException();
+            return new TreeModel();
         }
 
         //plain road
