@@ -120,8 +120,9 @@ public class SimpleTerrain implements Terrain {
     public void flattenArea(Rectangle flattedArea, int heightLevel) {
 
         //first make sure provided area is exist in terrain
-        ensureAreaExist(flattedArea);
+//        ensureAreaExist(flattedArea);
 
+        //neeed offset cause array indexes are positive
         int xOffset = mX_Length / 2;
         int zOffset = mZ_Length / 2;
 
@@ -143,7 +144,7 @@ public class SimpleTerrain implements Terrain {
     @Override
     public void flattenArea(Rectangle flattedArea) {
         //first make sure provided area is exist in terrain
-        ensureAreaExist(flattedArea);
+//        ensureAreaExist(flattedArea);
 
         int xOffset = mX_Length / 2;
         int zOffset = mZ_Length / 2;
@@ -177,6 +178,37 @@ public class SimpleTerrain implements Terrain {
                 mHeightMap[x][z] = averageHeight;
             }
         }
+    }
+
+    @Override
+    public double getHeightLevelAtArea(Rectangle area) {
+        int xOffset = mX_Length / 2;
+        int zOffset = mZ_Length / 2;
+
+        //calculate  X coordinates
+        int initialX = (int) area.getLeftBottom().getX() + xOffset;
+        double finalX = area.getRightTop().getX() + xOffset;
+
+        //calculate Z coordinates
+        int initialZ = (int) area.getLeftBottom().getY() + zOffset;
+        double finalZ = area.getRightTop().getY() + zOffset;
+
+        double lowestPoint = mHeightMap[initialX][initialZ];
+        double highestPoint = mHeightMap[initialX][initialZ];
+
+        //find highest and lowest points
+        for (int x = initialX; x < finalX - 1; x++) {
+            for (int z = initialZ; z < finalZ - 1; z++) {
+                lowestPoint = (mHeightMap[x][z] < lowestPoint) ? mHeightMap[x][z] : lowestPoint;
+                highestPoint = (mHeightMap[x][z] > highestPoint) ? mHeightMap[x][z] : highestPoint;
+            }
+        }
+
+
+        //find average of heights
+        double averageHeight = lowestPoint + Math.abs(highestPoint - lowestPoint) / 2;
+
+        return averageHeight;
     }
 
     private void ensureAreaExist(Rectangle flattedArea) {

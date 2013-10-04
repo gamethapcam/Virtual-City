@@ -17,6 +17,7 @@ public abstract class Model3DBase implements Model3D {
     private GLModel mWrappedGLModel;
     Vector3f mPosition;
 
+
     protected Model3DBase(GLModel wrappedGLModel) {
         mWrappedGLModel = wrappedGLModel;
         mPosition = new Vector3f(0, 0, 0);

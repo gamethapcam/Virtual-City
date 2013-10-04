@@ -18,6 +18,7 @@ public interface Terrain {
      * and change heights map
      */
     void quake(double delta);
+
     void quake();
 
     int getX_Length();
@@ -49,4 +50,6 @@ public interface Terrain {
      * @param flattedArea area of landscape
      */
     void flattenArea(Rectangle flattedArea);
+
+    double getHeightLevelAtArea(Rectangle area);
 }

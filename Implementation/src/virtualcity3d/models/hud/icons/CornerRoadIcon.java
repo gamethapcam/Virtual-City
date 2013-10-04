@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
 import resources.AssetManager;
 import resources.Assets2D;
+import virtualcity3d.models.models3d.RotatableModel;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -18,7 +19,7 @@ import static org.lwjgl.opengl.GL11.*;
  * Date: 29/09/13
  * Time: 18:48
  */
-public class CornerRoadIcon extends Model2dBase implements Icon {
+public class CornerRoadIcon extends Model2dBase implements Icon, RotatableModel {
 
     private static final double HALF_SIZE = 0.05;
     ColorSquare mColorSquare;
@@ -70,7 +71,7 @@ public class CornerRoadIcon extends Model2dBase implements Icon {
 
             //translate to position
             glTranslated(mPosition.x, mPosition.y, mPosition.z);
-            glRotated(mRotationAngle,0,0,1);
+            glRotated(mRotationAngle, 0, 0, 1);
 
             GL11.glBegin(GL11.GL_QUADS);
             {

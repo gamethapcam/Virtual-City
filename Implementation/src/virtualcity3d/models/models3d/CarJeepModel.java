@@ -11,7 +11,7 @@ import resources.Assets3D;
  * Time: 11:35
  * To change this template use File | Settings | File Templates.
  */
-public class CarJeep extends Model3DBase {
+public class CarJeepModel extends Model3DBase {
 
     //approximated size
     //TODO : Need to measure
@@ -19,7 +19,7 @@ public class CarJeep extends Model3DBase {
     private static final int Y_SIZE = 5;
     private static final int Z_SIZE = 3;
 
-    public CarJeep() {
+    public CarJeepModel() {
         super(AssetManager.getAsset3D(Assets3D.CAR_JEEP));
     }
 

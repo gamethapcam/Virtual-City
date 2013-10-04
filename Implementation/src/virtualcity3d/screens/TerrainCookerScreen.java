@@ -39,6 +39,7 @@ public class TerrainCookerScreen extends BaseScreen {
     public static final int TERRAIN_MAX_HEIGHT = 15;
     public static final int TERRAIN_MIN_HEIGHT = -5;
     public static final int WATER_SPAN_AFTER_TERRAIN_ENDS = 100;
+    public static final int WATER_HEIGHT_LEVEL = -3;
     private final MapEditorBuilder mMapEditorBuilder;
     private FirstPersonCamera mCamera3D;
     private Camera2D mCamera2D;
@@ -97,7 +98,8 @@ public class TerrainCookerScreen extends BaseScreen {
         mTerrainRenderer = new HeighColoredTerrainRenderer();
 
         //init water
-        mWater = new SimpleTerrain(TERRAIN_X_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, TERRAIN_Z_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, -1, -1);
+        mWater = new SimpleTerrain(TERRAIN_X_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS, TERRAIN_Z_LENGTH + WATER_SPAN_AFTER_TERRAIN_ENDS,
+                WATER_HEIGHT_LEVEL, WATER_HEIGHT_LEVEL);
         mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE, 0.6f);
 
         KeyboardInputProcessor.addKeyboardKeyListener(mKeyboardKeyListener);

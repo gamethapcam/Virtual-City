@@ -17,7 +17,7 @@ import framework.utills.SimpleShapesRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import virtualcity3d.models.models3d.CarJeep;
+import virtualcity3d.models.models3d.CarJeepModel;
 import virtualcity3d.models.models3d.RoadTileCornerModel;
 import virtualcity3d.models.models3d.RoadTileJunctionModel;
 import virtualcity3d.models.models3d.RoadTilePlainModel;
@@ -67,7 +67,7 @@ public class RoadsTestScreen extends BaseScreen {
         mRoadTileStraight = new RoadTilePlainModel();
         mRoadTileCorner = new RoadTileCornerModel();
         mRoadTileJunction = new RoadTileJunctionModel();
-        mJeep = new CarJeep();
+        mJeep = new CarJeepModel();
 
         mRoadTileStraight.setPosition(new Vector3f(0f, 0.1f, 0f));
         mRoadTileCorner.setPosition(new Vector3f(0f, 0.1f, 0f));

@@ -165,6 +165,11 @@ public class MapEditorScreen extends BaseScreen {
                 initX + padding,
                 (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
                         mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
+
+        mSidePanelIcons.add(SidePanelIconsFactory.createCarIcon(this,
+                initX + padding,
+                (float) (mSidePanelIcons.get(mSidePanelIcons.size() - 1).getPosition().getY() -
+                        mSidePanelIcons.get(mSidePanelIcons.size() - 1).getY_Size() - 2 * padding)));
     }
 
     @Override

@@ -47,7 +47,6 @@ public class SidePanelIconsFactory {
     }
 
 
-
     public static Icon createTreeIcon(final MapEditorScreen screen, float x, float y) {
 
         final TreeIcon treeIcon = new TreeIcon();
@@ -116,5 +115,21 @@ public class SidePanelIconsFactory {
         });
 
         return cornerRoadIcon;
+    }
+
+    public static Icon createCarIcon(final MapEditorScreen screen, float x, float y) {
+        final CarIcon carIcon = new CarIcon();
+        carIcon.setBackGroundColor(ReadableColor.LTGREY);
+
+        carIcon.setPosition(new Vector3f(x, y, 0f));
+        carIcon.setClickListener(new Icon.IconClickListener() {
+            @Override
+            public void onIconClicked() {
+                screen.setRenderedText("Car Icon Selected");
+                screen.setCurrentlySelectedIcon(carIcon.clone());
+            }
+        });
+
+        return carIcon;
     }
 }

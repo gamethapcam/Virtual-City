@@ -36,6 +36,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class VirtualCityScreen extends BaseScreen {
 
+    public static final int MODEL_LEVEL = 5;
     private final List<Model3D> mModelsList;
     private final MapEditorBuilder mMapEditorBuilder;
     private FirstPersonCamera mCamera3D;
@@ -65,6 +66,12 @@ public class VirtualCityScreen extends BaseScreen {
         for (Icon icon : mapEditorBuilder.getIconsArray()) {
             Model3D model3D = createModelFromIcon(icon);
             model3D.setPosition(translatePositionFromIconToModel(model3D, icon));
+
+            //set rotation for roads
+            if (model3D instanceof RotatableModel) {
+                ((RotatableModel) model3D).setRotationAngle(((RotatableModel) icon).getRotationAngle());
+            }
+
             model3Ds.add(model3D);
         }
 
@@ -77,8 +84,7 @@ public class VirtualCityScreen extends BaseScreen {
         float z = mMapEditorBuilder.getZ3DCoordinate(icon.getPosition().getY(), mTerrain.getZ_Length());
 
         //always the same level
-        //TODO : flatten area and stuff...
-        float y = 3;
+        float y = MODEL_LEVEL;
 
         return new Vector3f(x, y, z);
     }
@@ -111,6 +117,9 @@ public class VirtualCityScreen extends BaseScreen {
         if (icon instanceof JunctionRoadIcon)
             return new RoadTileJunctionModel();
 
+        if (icon instanceof CarIcon)
+            return new CarJeepModel();
+
         //default
         throw new IllegalArgumentException();
     }
@@ -123,7 +132,7 @@ public class VirtualCityScreen extends BaseScreen {
     }
 
     private void initTerrain() {
-        //create Terrain  renderreers
+        //create Terrain  renderer
         mTerrainRenderer = new HeighColoredTerrainRenderer();
         mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE, 0.4f);
 
@@ -133,10 +142,14 @@ public class VirtualCityScreen extends BaseScreen {
             float modelX = model3D.getPosition().getX();
             float modelZ = model3D.getPosition().getZ();
 
-            Point lBottom = new Point(modelX - model3D.getX_Size() / 2, modelZ - model3D.getZ_Size() / 2);
-            Point rTop = new Point(modelX + model3D.getX_Size() / 2, modelZ + model3D.getZ_Size() / 2);
+            int offsetX = (int) (model3D.getX_Size() / 2);
+            int offsetZ = (int) model3D.getX_Size() / 2;
+
+            Point lBottom = new Point((modelX - offsetX), (modelZ - offsetX));
+            Point rTop = new Point((modelX + offsetZ), (modelZ + offsetZ));
+
             Rectangle rec = new Rectangle(lBottom, rTop);
-            mTerrain.flattenArea(rec, (int) model3D.getPosition().getY());
+            mTerrain.flattenArea(rec);
         }
     }
 
@@ -178,8 +191,14 @@ public class VirtualCityScreen extends BaseScreen {
 
         SimpleShapesRenderer.renderAxes(100);
 
-        //draw terrain at it's current state
-        mTerrainRenderer.renderTerrain(mTerrain);
+        //need to rotate terrain , it's rendered upside down
+        glPushMatrix();
+        {
+            glRotated(180, 0, 1, 0);
+            //draw terrain at it's current state
+            mTerrainRenderer.renderTerrain(mTerrain);
+        }
+        glPopMatrix();
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
