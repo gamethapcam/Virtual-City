@@ -1,6 +1,6 @@
 package virtualcity3d.models.models3d;
 
-import framework.models.models3d.Model3DBase;
+import framework.models.models3D.Model3DBase;
 import resources.AssetManager;
 import resources.Assets3D;
 
@@ -14,7 +14,6 @@ import resources.Assets3D;
 public class RoadTilePlainModel extends Model3DBase {
 
     //approximated size
-    //TODO : Need to measure
     private static final int X_SIZE = 12;
     private static final int Y_SIZE = 1;
     private static final int Z_SIZE = 12;

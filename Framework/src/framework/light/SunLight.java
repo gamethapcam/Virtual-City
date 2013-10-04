@@ -19,8 +19,7 @@ public class SunLight extends BaseLight {
         //set some colors
         setDiffuseColor(0.6f, 0.9f, 1.0f, 1.0f);
         setSpecularColor(0.9f, 0.2f, 0.4f, 1.0f);
-        setAmbientColor(0.01f, 0.01f, 0.01f, 0.1f);
-
+        setAmbientColor(0.02f, 0.02f, 0.02f, 0.2f);
     }
 
 }

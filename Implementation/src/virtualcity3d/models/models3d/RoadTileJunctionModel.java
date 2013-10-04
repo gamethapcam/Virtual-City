@@ -1,6 +1,6 @@
 package virtualcity3d.models.models3d;
 
-import framework.models.models3d.Model3DBase;
+import framework.models.models3D.Model3DBase;
 import resources.AssetManager;
 import resources.Assets3D;
 

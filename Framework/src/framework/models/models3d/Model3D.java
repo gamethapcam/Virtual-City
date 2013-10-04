@@ -1,4 +1,4 @@
-package framework.models.models3d;
+package framework.models.models3D;
 
 import framework.models.Model;
 

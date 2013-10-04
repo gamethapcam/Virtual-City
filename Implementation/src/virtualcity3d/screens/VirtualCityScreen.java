@@ -5,7 +5,7 @@ import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
 import framework.light.LightUtils;
 import framework.light.SunLight;
-import framework.models.models3d.Model3D;
+import framework.models.models3D.Model3D;
 import framework.terrain.implementation.HeighColoredTerrainRenderer;
 import framework.terrain.implementation.SolidTerrainRenderer;
 import framework.terrain.interfaces.Terrain;
@@ -48,7 +48,7 @@ public class VirtualCityScreen extends BaseScreen {
         super(program);
         mTerrain = terrain;
         mWater = water;
-        mMapEditorBuilder =  mapEditorBuilder;
+        mMapEditorBuilder = mapEditorBuilder;
 
         //build models list from mapEditorBuilder
         mModelsList = buildModelsFromMapEditorBuilder(mapEditorBuilder);
@@ -71,8 +71,8 @@ public class VirtualCityScreen extends BaseScreen {
 
     private Vector3f translatePositionFromIconToModel(Model3D model3D, Icon icon) {
 
-        float x = mMapEditorBuilder.getX3DCoordinate(icon.getPosition().getX(),mTerrain.getX_Length());
-        float z = mMapEditorBuilder.getZ3DCoordinate(icon.getPosition().getY(),mTerrain.getZ_Length());
+        float x = mMapEditorBuilder.getX3DCoordinate(icon.getPosition().getX(), mTerrain.getX_Length());
+        float z = mMapEditorBuilder.getZ3DCoordinate(icon.getPosition().getY(), mTerrain.getZ_Length());
 
         //always the same level
         //TODO : flatten area and stuff...
@@ -80,7 +80,6 @@ public class VirtualCityScreen extends BaseScreen {
 
         return new Vector3f(x, y, z);
     }
-
 
 
     private Model3D createModelFromIcon(Icon icon) {
@@ -124,7 +123,7 @@ public class VirtualCityScreen extends BaseScreen {
     private void initTerrain() {
         //create Terrain  renderreers
         mTerrainRenderer = new HeighColoredTerrainRenderer();
-        mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE, 0.6f);
+        mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE, 0.4f);
     }
 
     private void initCamera() {
@@ -165,11 +164,20 @@ public class VirtualCityScreen extends BaseScreen {
 
         SimpleShapesRenderer.renderAxes(100);
 
+
+//        glEnable(GL_BLEND);
+//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         //render water
         mWaterRenderer.renderTerrain(mWater);
+
+//        glDisable(GL_BLEND);
 
 
         mModelsList.get(0).enableRenderGLStates();
@@ -188,8 +196,6 @@ public class VirtualCityScreen extends BaseScreen {
 
         mModelsList.get(0).disableRenderGLStates();
 
-
-//        drawLightTestSphereModel();
 
     }
 

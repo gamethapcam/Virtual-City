@@ -2,6 +2,7 @@ package framework.terrain.implementation;
 
 import framework.terrain.interfaces.Terrain;
 import framework.terrain.interfaces.TerrainRenderer;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.ReadableColor;
 
@@ -49,8 +50,12 @@ public class SolidTerrainRenderer implements TerrainRenderer {
         //store color
         glPushAttrib(GL_CURRENT_BIT);
 
+        //define material
+        defineMaterial();
+
         //use terrain color
         glColor4ub(mSolidColor.getRedByte(), mSolidColor.getGreenByte(), mSolidColor.getBlueByte(), alpha);
+
 
         //go over height map
         drawHeighMap(XLength, ZLength, heightMap);
@@ -60,6 +65,31 @@ public class SolidTerrainRenderer implements TerrainRenderer {
 
         glDisable(GL_BLEND);
 
+    }
+
+    private void defineMaterial() {
+
+        //those parameters for plastic material
+        FloatBuffer ambient = floatBuffer(0, 0, 0, 1.0f);
+        FloatBuffer diffuse = floatBuffer(0.01f, 0.01f, 0.01f, 1.0f);
+        FloatBuffer specular = floatBuffer(0.50f, 0.50f, 0.50f, 1.0f);
+
+        float shininess = 32f;
+
+        //use material
+        glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_AMBIENT_AND_DIFFUSE, ambient);
+        glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_DIFFUSE, diffuse);
+        glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_SPECULAR, specular);
+        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
+
+    }
+
+    public FloatBuffer floatBuffer(float a, float b, float c, float d) {
+        float[] data = new float[]{a, b, c, d};
+        FloatBuffer fb = BufferUtils.createFloatBuffer(data.length);
+        fb.put(data);
+        fb.flip();
+        return fb;
     }
 
     private void drawHeighMap(int XLength, int ZLength, double[][] heightMap) {

@@ -3,9 +3,7 @@ package framework.configurations;
 import java.io.File;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Yan
- * Date: 05/07/13
+ * Created with IntelliJ IDEA.d
  * Time: 16:58
  * To change this template use File | Settings | File Templates.
  */
