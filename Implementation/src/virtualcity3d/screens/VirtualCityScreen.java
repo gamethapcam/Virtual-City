@@ -3,6 +3,8 @@ package virtualcity3d.screens;
 import framework.core.architecture.BaseScreen;
 import framework.core.architecture.Program;
 import framework.core.camera.FirstPersonCamera;
+import framework.geometry.Point;
+import framework.geometry.Rectangle;
 import framework.light.LightUtils;
 import framework.light.SunLight;
 import framework.models.models3D.Model3D;
@@ -124,11 +126,23 @@ public class VirtualCityScreen extends BaseScreen {
         //create Terrain  renderreers
         mTerrainRenderer = new HeighColoredTerrainRenderer();
         mWaterRenderer = new SolidTerrainRenderer(ReadableColor.BLUE, 0.4f);
+
+        //flat area for houses and other models
+        for (Model3D model3D : mModelsList) {
+
+            float modelX = model3D.getPosition().getX();
+            float modelZ = model3D.getPosition().getZ();
+
+            Point lBottom = new Point(modelX - model3D.getX_Size() / 2, modelZ - model3D.getZ_Size() / 2);
+            Point rTop = new Point(modelX + model3D.getX_Size() / 2, modelZ + model3D.getZ_Size() / 2);
+            Rectangle rec = new Rectangle(lBottom, rTop);
+            mTerrain.flattenArea(rec, (int) model3D.getPosition().getY());
+        }
     }
 
     private void initCamera() {
         //create instance of 3D camera and position it
-        mCamera3D = new FirstPersonCamera(0, 15, -30);
+        mCamera3D = new FirstPersonCamera(0, 70, -160);
 
         //enable 3D projection
         mCamera3D.initializePerspective();
@@ -164,10 +178,6 @@ public class VirtualCityScreen extends BaseScreen {
 
         SimpleShapesRenderer.renderAxes(100);
 
-
-//        glEnable(GL_BLEND);
-//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
         //draw terrain at it's current state
         mTerrainRenderer.renderTerrain(mTerrain);
 
@@ -176,9 +186,6 @@ public class VirtualCityScreen extends BaseScreen {
 
         //render water
         mWaterRenderer.renderTerrain(mWater);
-
-//        glDisable(GL_BLEND);
-
 
         mModelsList.get(0).enableRenderGLStates();
 

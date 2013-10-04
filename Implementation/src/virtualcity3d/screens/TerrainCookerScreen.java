@@ -131,7 +131,7 @@ public class TerrainCookerScreen extends BaseScreen {
 
     private void initCamera() {
         //create instance of 3D camera and position it
-        mCamera3D = new FirstPersonCamera(0, 15, -30);
+        mCamera3D = new FirstPersonCamera(0, 70, -160);
 
         //enable 3D projection
         mCamera3D.initializePerspective();
