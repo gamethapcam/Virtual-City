@@ -10,3 +10,6 @@ IntelliJ Configurations
 -------------------------
 *VM OPTIONS :*
 -Djava.library.path=lib\native
+
+![alt tag](https://github.com/ivelius/Virtual-City/blob/master/executable-windows/virtual%20city%20snapshoot.png?raw=true)
+
